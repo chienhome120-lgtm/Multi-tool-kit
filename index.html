@@ -1106,6 +1106,22 @@ body.home-card-dragging{
   touch-action:manipulation;
 }
 
+
+/* ===== v33 出生時間改十二時辰選單 ===== */
+#lotteryBirthTime{
+  font-size:16px;
+  line-height:1.4;
+}
+
+
+/* ===== v34 GPS 餐廳搜尋結果立即顯示 ===== */
+#nearbyRestaurantList.nearby-ready{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  content-visibility:visible;
+}
+
 </style>
 </head>
 <body>
@@ -1113,28 +1129,28 @@ body.home-card-dragging{
   <section id="home" class="page active">
     <div class="hero">
       <h1>我的生活工具箱</h1>
-      <p>把每天的小事，變得更簡單。</p>
+      <p>動點頭腦把每天的小事，變得更簡單。     CHIEN HUNG</p>
     </div>
     <div class="today-card" id="adminSecretTrigger" aria-label="今日資訊">
       <div class="date" id="todayText">2026年9月12日星期六</div>
       <div class="quote"><span id="dailyMotto">今天的第一個勝利：先把最煩的那件事情打勾 ✔️</span></div>
     </div>
     <div class="grid">
-      <button class="tool" onclick="openPage('todo')"><span class="icon">✅</span><b>待辦事項</b><small>今天、明天、重要任務</small></button>
-      <button class="tool" onclick="openPage('countdown')"><span class="icon">📅</span><b>行程倒數</b><small>旅行、生日、重要日期</small></button>
-      <button class="tool" onclick="openPage('money')"><span class="icon">💰</span><b>收支記帳</b><small>快速記錄收入與支出</small></button>
-      <button class="tool" onclick="openPage('split')"><span class="icon">👥</span><b>AA 分帳</b><small>聚餐平均分攤</small></button>
-      <button class="tool" onclick="openPage('food')"><span class="icon">🍜</span><b>今天吃什麼</b><small>轉盤幫你決定</small></button>
-      <button class="tool" onclick="openPage('parking')"><span class="icon">🅿️</span><b>停車位置</b><small>時間、位置與備註</small></button>
-      <button class="tool" onclick="openPage('shopping')"><span class="icon">🛒</span><b>購物清單</b><small>買完直接勾掉</small></button>
-      <button class="tool" onclick="openPage('calc')"><span class="icon">🧮</span><b>萬用計算器</b><small>折扣、百分比、坪數、匯率</small></button>
-      <button class="tool" onclick="openPage('decision')"><span class="icon">🎭</span><b>困難選擇器</b><small>要不要？買不買？宇宙幫你決定</small></button>
-      <button class="tool" onclick="openPage('lottery')"><span class="icon">🧧</span><b>祝您發大財</b><small>大樂透・威力彩・539 選號靈感</small></button>
-      <button class="tool" onclick="openPage('packing')"><span class="icon">🧳</span><b>旅行打包助手</b><small>範本清單、勾選與進度</small></button>
-      <button class="tool" onclick="openPage('quoteTax')"><span class="icon">🧾</span><b>報價／稅額計算器</b><small>稅額、毛利率與淨利率</small></button>
-      <button class="tool" onclick="openPage('password')"><span class="icon">🔐</span><b>金庫密碼</b><small>密碼產生、紀錄與登入保護</small></button>
       
-    </div>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    <button class="tool" onclick="openPage('todo')"><span class="icon">✅</span><b>待辦事項</b><small>今天、明天、重要任務</small></button><button class="tool" onclick="openPage('countdown')"><span class="icon">📅</span><b>行程倒數</b><small>旅行、生日、重要日期</small></button><button class="tool" onclick="openPage('money')"><span class="icon">💰</span><b>收支記帳</b><small>快速記錄收入與支出</small></button><button class="tool" onclick="openPage('split')"><span class="icon">👥</span><b>AA 分帳</b><small>聚餐平均分攤</small></button><button class="tool" onclick="openPage('food')"><span class="icon">🍜</span><b>今天吃什麼</b><small>轉盤幫你決定</small></button><button class="tool" onclick="openPage('parking')"><span class="icon">🅿️</span><b>停車位置</b><small>時間、位置與備註</small></button><button class="tool" onclick="openPage('shopping')"><span class="icon">🛒</span><b>購物清單</b><small>買完直接勾掉</small></button><button class="tool" onclick="openPage('calc')"><span class="icon">🧮</span><b>萬用計算器</b><small>折扣、百分比、坪數、匯率</small></button><button class="tool" onclick="openPage('decision')"><span class="icon">🎭</span><b>困難選擇器</b><small>要不要？買不買？宇宙幫你決定</small></button><button class="tool" onclick="openPage('lottery')"><span class="icon">🧧</span><b>祝您發大財</b><small>大樂透・威力彩・539 選號靈感</small></button><button class="tool" onclick="openPage('packing')"><span class="icon">🧳</span><b>旅行打包助手</b><small>範本清單、勾選與進度</small></button><button class="tool" onclick="openPage('quoteTax')"><span class="icon">🧾</span><b>報價／稅額計算器</b><small>稅額、毛利率與淨利率</small></button><button class="tool" onclick="openPage('password')"><span class="icon">🔐</span><b>金庫密碼</b><small>密碼產生、紀錄與登入保護</small></button></div>
     <footer>資料只儲存在這台裝置的瀏覽器中</footer>
   </section>
 
@@ -1351,7 +1367,21 @@ body.home-card-dragging{
           </div>
           <div>
             <label>出生時間</label>
-            <input id="lotteryBirthTime" type="time">
+            <select id="lotteryBirthTime">
+              <option value="">請選擇出生時辰</option>
+              <option value="23:00">子時　23:00–01:00</option>
+              <option value="01:00">丑時　01:00–03:00</option>
+              <option value="03:00">寅時　03:00–05:00</option>
+              <option value="05:00">卯時　05:00–07:00</option>
+              <option value="07:00">辰時　07:00–09:00</option>
+              <option value="09:00">巳時　09:00–11:00</option>
+              <option value="11:00">午時　11:00–13:00</option>
+              <option value="13:00">未時　13:00–15:00</option>
+              <option value="15:00">申時　15:00–17:00</option>
+              <option value="17:00">酉時　17:00–19:00</option>
+              <option value="19:00">戌時　19:00–21:00</option>
+              <option value="21:00">亥時　21:00–23:00</option>
+            </select>
           </div>
           <div class="lottery-now-row">
             <div>
@@ -1778,7 +1808,7 @@ const store = {
   get(k, d){ try{return JSON.parse(localStorage.getItem("lifeBox_"+k)) ?? d}catch{return d} },
   set(k, v){ localStorage.setItem("lifeBox_"+k, JSON.stringify(v)) }
 };
-const ADMIN_DEFAULTS = {"homeTitle":"我的生活工具箱","homeSubtitle":"把每天的小事，變得更簡單。","cardOverrides":{"lottery":{"icon":"🧧","title":"祝您發大財","subtitle":"大樂透・威力彩・539 選號靈感"}},"customCards":[],"homeOrder":["todo","countdown","money","split","food","parking","shopping","calc","decision","lottery","packing","quoteTax","password"],"deletedBuiltinCards":[]};
+const ADMIN_DEFAULTS = {"homeTitle":"我的生活工具箱","homeSubtitle":"動點頭腦把每天的小事，變得更簡單。     CHIEN HUNG","cardOverrides":{"lottery":{"icon":"🧧","title":"祝您發大財","subtitle":"大樂透・威力彩・539 選號靈感"}},"customCards":[],"homeOrder":["todo","countdown","money","split","food","parking","shopping","calc","decision","lottery","packing","quoteTax","password"],"deletedBuiltinCards":[]};
 const fmt = n => new Intl.NumberFormat('zh-TW',{maximumFractionDigits:2}).format(Number(n)||0);
 const pad = n => String(n).padStart(2,'0');
 const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
@@ -1793,7 +1823,10 @@ function openPage(id){
   if(id==='todo') renderTodos();
   if(id==='countdown') renderCountdowns();
   if(id==='money') renderMoney();
-  if(id==='food') loadFood();
+  if(id==='food'){
+    loadFood();
+    if(nearbyRestaurants.length) refreshNearbyRestaurantsNow(false);
+  }
   if(id==='parking') renderParking();
   if(id==='shopping') renderShop();
   if(id==='decision') renderDecisionHistory();
@@ -2266,7 +2299,9 @@ out center tags;`;
       return;
     }
     status.textContent=`找到 ${nearbyRestaurants.length} 間附近餐飲，依距離由近到遠排列。`;
-    renderNearbyRestaurants();
+
+    // 搜尋成功後立即刷新，不必返回首頁再重新進入。
+    refreshNearbyRestaurantsNow(true);
     addAll.style.display='block';
   }catch(e){
     let msg='無法取得附近餐廳。';
@@ -2287,10 +2322,13 @@ out center tags;`;
 function renderNearbyRestaurants(){
   const el=$('#nearbyRestaurantList');
   if(!el)return;
+
   if(!nearbyRestaurants.length){
     el.innerHTML='';
+    el.classList.remove('nearby-ready');
     return;
   }
+
   el.innerHTML=nearbyRestaurants.map((r,i)=>{
     const dist=r.distance<1000?`${Math.round(r.distance)} 公尺`:`${(r.distance/1000).toFixed(1)} 公里`;
     const cuisine=r.cuisine?` · ${esc(r.cuisine)}`:'';
@@ -2304,6 +2342,42 @@ function renderNearbyRestaurants(){
       </div>
     </div>`;
   }).join('');
+
+  el.classList.add('nearby-ready');
+  el.style.display='block';
+
+  // 強制瀏覽器立即計算版面，避免部分手機瀏覽器延後繪製。
+  void el.offsetHeight;
+}
+
+function refreshNearbyRestaurantsNow(scrollToResults=false){
+  const el=$('#nearbyRestaurantList');
+  if(!el)return;
+
+  // 先立即畫一次
+  renderNearbyRestaurants();
+
+  // 下一個 repaint 週期再確認一次
+  requestAnimationFrame(()=>{
+    renderNearbyRestaurants();
+
+    // 少數手機瀏覽器在 async fetch 後仍可能延遲 paint，
+    // 再補一次短延遲更新可避免必須離開頁面再回來。
+    setTimeout(()=>{
+      renderNearbyRestaurants();
+
+      if(scrollToResults && nearbyRestaurants.length){
+        try{
+          el.scrollIntoView({
+            behavior:'smooth',
+            block:'nearest'
+          });
+        }catch(e){
+          el.scrollIntoView();
+        }
+      }
+    },60);
+  });
 }
 
 function mergeFoodOptions(names){
@@ -2330,7 +2404,7 @@ function addNearbyToWheel(index){
   // 原本設定不會被刪除，重新開啟後會自動恢復。
   renderFoodTags();
   renderFoodWheelLabels();
-  renderNearbyRestaurants();
+  refreshNearbyRestaurantsNow(false);
 
   $('#nearbyStatus').textContent=`已將「${r.name}」加入轉盤；本次轉盤暫時只顯示 GPS 餐廳。`;
 
@@ -2352,7 +2426,7 @@ function addAllNearbyToWheel(){
   nearbyRestaurants=[];
   renderFoodTags();
   renderFoodWheelLabels();
-  renderNearbyRestaurants();
+  refreshNearbyRestaurantsNow(false);
 
   $('#nearbyStatus').textContent=added
     ? `已將 ${added} 間餐廳加入轉盤；本次轉盤暫時只顯示 GPS 餐廳。`
