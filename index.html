@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#8d6e63" />
+<html lang="zh-Hant"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#8d6e63">
 <title>我的生活工具箱</title>
 <style>
 :root{
@@ -1001,6 +1000,112 @@ body.home-card-dragging{
 .sync-warn{color:#9a684b!important}
 .sync-error{color:#9a5555!important}
 
+
+/* ===== v29 Google Sheet 實際上傳修正 ===== */
+.vault-sheet-mini details{
+  width:100%;
+}
+.vault-sheet-mini summary{
+  cursor:pointer;
+  font-weight:800;
+  color:var(--ink);
+  list-style:none;
+}
+.vault-sheet-mini summary::-webkit-details-marker{
+  display:none;
+}
+.vault-sheet-mini summary::after{
+  content:"＋";
+  float:right;
+  font-weight:900;
+  color:var(--muted);
+}
+.vault-sheet-mini details[open] summary::after{
+  content:"－";
+}
+.vault-sheet-ok{color:#4d7459!important}
+.vault-sheet-warn{color:#9a684b!important}
+.vault-sheet-error{color:#9a5555!important}
+
+
+/* ===== v30 隱藏後台管理 ===== */
+#adminSecretTrigger{
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-touch-callout:none;
+}
+
+.admin-card-editor-grid{
+  display:grid;
+  grid-template-columns:100px minmax(0,1fr);
+  gap:10px;
+}
+
+.admin-custom-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.admin-custom-item{
+  display:flex;
+  gap:9px;
+  align-items:center;
+  padding:10px;
+  border-radius:14px;
+  background:linear-gradient(145deg,#fffdfa,#eee6df);
+  border:1px solid rgba(255,255,255,.82);
+  box-shadow:0 3px 7px rgba(71,56,48,.09);
+}
+
+.admin-custom-item .admin-custom-icon{
+  font-size:24px;
+  width:34px;
+  text-align:center;
+  flex:0 0 34px;
+}
+
+.admin-custom-main{
+  min-width:0;
+  flex:1;
+}
+
+.admin-custom-main b,
+.admin-custom-main small{
+  display:block;
+  overflow-wrap:anywhere;
+}
+
+.admin-custom-main small{
+  color:var(--muted);
+  margin-top:2px;
+}
+
+.admin-custom-actions{
+  display:flex;
+  gap:5px;
+}
+
+.admin-custom-actions button{
+  border:0;
+  border-radius:9px;
+  padding:7px 8px;
+  font-weight:800;
+}
+
+.admin-edit-btn{background:#e5ece6;color:#405147}
+.admin-delete-btn{background:#f2dfdf;color:#8a4b4b}
+
+@media(max-width:420px){
+  .admin-card-editor-grid{grid-template-columns:82px minmax(0,1fr)}
+}
+
+
+/* ===== v32 匯出後台入口相容性修正 ===== */
+#adminSecretTrigger{
+  touch-action:manipulation;
+}
+
 </style>
 </head>
 <body>
@@ -1010,9 +1115,9 @@ body.home-card-dragging{
       <h1>我的生活工具箱</h1>
       <p>把每天的小事，變得更簡單。</p>
     </div>
-    <div class="today-card">
-      <div class="date" id="todayText"></div>
-      <div class="quote"><span id="dailyMotto">今天先處理最重要的一件事 ☀️</span></div>
+    <div class="today-card" id="adminSecretTrigger" aria-label="今日資訊">
+      <div class="date" id="todayText">2026年9月12日星期六</div>
+      <div class="quote"><span id="dailyMotto">今天的第一個勝利：先把最煩的那件事情打勾 ✔️</span></div>
     </div>
     <div class="grid">
       <button class="tool" onclick="openPage('todo')"><span class="icon">✅</span><b>待辦事項</b><small>今天、明天、重要任務</small></button>
@@ -1024,7 +1129,7 @@ body.home-card-dragging{
       <button class="tool" onclick="openPage('shopping')"><span class="icon">🛒</span><b>購物清單</b><small>買完直接勾掉</small></button>
       <button class="tool" onclick="openPage('calc')"><span class="icon">🧮</span><b>萬用計算器</b><small>折扣、百分比、坪數、匯率</small></button>
       <button class="tool" onclick="openPage('decision')"><span class="icon">🎭</span><b>困難選擇器</b><small>要不要？買不買？宇宙幫你決定</small></button>
-      <button class="tool" onclick="openPage('lottery')"><span class="icon">🧧</span><b>讓您發大財</b><small>大樂透・威力彩・539 選號靈感</small></button>
+      <button class="tool" onclick="openPage('lottery')"><span class="icon">🧧</span><b>祝您發大財</b><small>大樂透・威力彩・539 選號靈感</small></button>
       <button class="tool" onclick="openPage('packing')"><span class="icon">🧳</span><b>旅行打包助手</b><small>範本清單、勾選與進度</small></button>
       <button class="tool" onclick="openPage('quoteTax')"><span class="icon">🧾</span><b>報價／稅額計算器</b><small>稅額、毛利率與淨利率</small></button>
       <button class="tool" onclick="openPage('password')"><span class="icon">🔐</span><b>金庫密碼</b><small>密碼產生、紀錄與登入保護</small></button>
@@ -1127,7 +1232,7 @@ body.home-card-dragging{
           <label>搜尋半徑</label>
           <select id="nearbyRadius">
             <option value="500">500 公尺</option>
-            <option value="1000" selected>1 公里</option>
+            <option value="1000" selected="">1 公里</option>
             <option value="2000">2 公里</option>
             <option value="3000">3 公里</option>
           </select>
@@ -1211,7 +1316,7 @@ body.home-card-dragging{
 
     <div class="card">
       <div class="row"><strong class="col">最近的命運紀錄</strong><button id="decisionClearAllBtn" type="button" class="iconbtn" title="清除全部紀錄">🗑️</button></div>
-      <div id="decisionHistory" class="decision-history" style="margin-top:10px"></div>
+      <div id="decisionHistory" class="decision-history" style="margin-top:10px"><div class="empty" style="padding:10px 4px">還沒有紀錄。你的糾結目前仍然很純潔。</div></div>
     </div>
   </section>
 
@@ -1320,13 +1425,13 @@ body.home-card-dragging{
     <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>報價／稅額計算器</h2></div>
     <div class="card">
       <div class="quote-grid">
-        <div><label>單價基準</label><select id="quoteMode"><option value="before">未稅單價</option><option value="after">含稅單價</option></select></div>
-        <div><label>單價</label><input id="quoteUnit" type="number" inputmode="decimal" min="0" placeholder="例如：1000"></div>
-        <div><label>數量</label><input id="quoteQty" type="number" inputmode="decimal" min="0" value="1"></div>
-        <div><label>折扣 %</label><input id="quoteDiscount" type="number" inputmode="decimal" min="0" max="100" value="0"></div>
-        <div><label>稅率 %</label><input id="quoteTaxRate" type="number" inputmode="decimal" min="0" value="5"></div>
-        <div><label>單位成本</label><input id="quoteCost" type="number" inputmode="decimal" min="0" placeholder="例如：600"></div>
-        <div><label>其他費用</label><input id="quoteOtherExpense" type="number" inputmode="decimal" min="0" value="0" placeholder="運費、平台費等"></div>
+        <div><label>單價基準</label><select id="quoteMode" data-live-bound="1"><option value="before">未稅單價</option><option value="after">含稅單價</option></select></div>
+        <div><label>單價</label><input id="quoteUnit" type="number" inputmode="decimal" min="0" placeholder="例如：1000" data-live-bound="1"></div>
+        <div><label>數量</label><input id="quoteQty" type="number" inputmode="decimal" min="0" value="1" data-live-bound="1"></div>
+        <div><label>折扣 %</label><input id="quoteDiscount" type="number" inputmode="decimal" min="0" max="100" value="0" data-live-bound="1"></div>
+        <div><label>稅率 %</label><input id="quoteTaxRate" type="number" inputmode="decimal" min="0" value="5" data-live-bound="1"></div>
+        <div><label>單位成本</label><input id="quoteCost" type="number" inputmode="decimal" min="0" placeholder="例如：600" data-live-bound="1"></div>
+        <div><label>其他費用</label><input id="quoteOtherExpense" type="number" inputmode="decimal" min="0" value="0" placeholder="運費、平台費等" data-live-bound="1"></div>
       </div>
       <div class="note" style="margin-top:10px">輸入數字後會自動計算。毛利率＝（未稅銷售額－商品成本）÷未稅銷售額；淨利率＝（毛利－其他費用）÷未稅銷售額。此處的 5% 為營業稅試算，不等同所得稅。</div>
 
@@ -1344,47 +1449,122 @@ body.home-card-dragging{
   </section>
 
   
-  <section id="sheetSync" class="page">
-    <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>☁️ Google Sheet 同步</h2></div>
+  
 
-    <div class="card">
-      <strong style="font-size:18px">Google Apps Script Web App</strong>
-      <div class="note" style="margin-top:6px">
-        將 Google Sheet 裡部署完成的 Apps Script Web App URL 貼在下方。設定只保存在目前瀏覽器。
-      </div>
-
-      <label style="margin-top:13px">Web App URL</label>
-      <input id="sheetSyncUrl" type="url" inputmode="url"
-             placeholder="https://script.google.com/macros/s/......../exec">
-
-      <label style="margin-top:12px">同步密鑰（選填）</label>
-      <input id="sheetSyncKey" type="password" autocomplete="off"
-             placeholder="若 Apps Script 有設定 SYNC_KEY，兩邊需相同">
-
-      <label class="check-line" style="margin-top:12px">
-        <input id="sheetSyncEnabled" type="checkbox"> 啟用自動同步
-      </label>
-
-      <div class="row" style="margin-top:12px">
-        <button class="primary col" onclick="saveSheetSyncSettings()">儲存設定</button>
-        <button class="secondary col" onclick="sendSheetSyncTest()">測試送出</button>
-      </div>
-
-      <div id="sheetSyncStatus" class="note" style="margin-top:10px"></div>
+  
+  <section id="admin" class="page">
+    <div class="topbar">
+      <button class="back" onclick="leaveAdmin()">←</button>
+      <h2>⚙️ 後台管理</h2>
     </div>
 
     <div class="card">
-      <strong style="font-size:18px">自動上傳項目</strong>
-      <div class="sync-feature-list">
-        <div>✅ 待辦事項：新增待辦時上傳</div>
-        <div>✅ 收支記帳：新增收入／支出時上傳</div>
-        <div>✅ 讓您發大財：每次產生號碼時上傳</div>
-        <div>✅ 金庫密碼：保存一筆密碼紀錄時，帳號與實際密碼內容一起上傳</div>
+      <strong style="font-size:18px">☁️ Google Sheet 連線設定</strong>
+      <div class="note" style="margin-top:6px">
+        直接貼上部署完成、以 <b>/exec</b> 結尾的 Google Apps Script Web App 網址。
       </div>
-      <div class="note" style="margin-top:10px">
-        因瀏覽器直接傳送到 Apps Script 採用 no-cors 模式，頁面能確認「已送出請求」，
-        但無法從瀏覽器讀取 Apps Script 回傳內容；是否成功寫入請以 Google Sheet 為準。
+
+      <label style="margin-top:12px">Web App /exec 網址</label>
+      <input id="sheetSyncUrl" type="url" inputmode="url" placeholder="https://script.google.com/macros/s/......../exec">
+
+      <label style="margin-top:10px">同步密鑰（選填）</label>
+      <input id="sheetSyncKey" type="password" autocomplete="off" placeholder="若 Apps Script 的 SYNC_KEY 留白，這裡也留白" value="">
+
+      <label class="check-line" style="margin-top:10px">
+        <input id="sheetSyncEnabled" type="checkbox"> 啟用待辦／收支／彩券自動同步
+      </label>
+
+      <div class="row" style="margin-top:11px">
+        <button class="primary col" onclick="saveSheetSyncSettings()">儲存連線</button>
+        <button class="secondary col" onclick="sendSheetSyncTest()">測試送出</button>
       </div>
+      <div id="sheetSyncStatus" class="note sync-ok" style="margin-top:9px">測試資料已送出，請到 Google Sheet 查看「同步測試」頁籤。</div>
+    </div>
+
+    <div class="card">
+      <strong style="font-size:18px">✏️ 首頁文字編輯</strong>
+      <label style="margin-top:12px">首頁標題</label>
+      <input id="adminHomeTitle" placeholder="我的生活工具箱">
+
+      <label style="margin-top:10px">首頁副標題</label>
+      <input id="adminHomeSubtitle" placeholder="把每天的小事，變得更簡單。">
+
+      <button class="primary full" style="margin-top:11px" onclick="saveAdminHomeText()">套用首頁文字</button>
+    </div>
+
+    <div class="card">
+      <strong style="font-size:18px">🧩 既有功能字卡編輯</strong>
+      <label style="margin-top:12px">選擇字卡</label>
+      <select id="adminBuiltinCardSelect" onchange="loadAdminBuiltinCardEditor()"><option value="todo">待辦事項</option><option value="countdown">行程倒數</option><option value="money">收支記帳</option><option value="split">AA 分帳</option><option value="food">今天吃什麼</option><option value="parking">停車位置</option><option value="shopping">購物清單</option><option value="calc">萬用計算器</option><option value="decision">困難選擇器</option><option value="lottery">祝您發大財</option><option value="packing">旅行打包助手</option><option value="quoteTax">報價／稅額計算器</option><option value="password">金庫密碼</option></select>
+
+      <div class="admin-card-editor-grid" style="margin-top:10px">
+        <div>
+          <label>圖示</label>
+          <input id="adminBuiltinIcon" maxlength="12" placeholder="✅">
+        </div>
+        <div>
+          <label>標題</label>
+          <input id="adminBuiltinTitle" maxlength="30">
+        </div>
+      </div>
+
+      <label style="margin-top:10px">說明文字</label>
+      <input id="adminBuiltinSubtitle" maxlength="60">
+
+      <div class="row" style="margin-top:11px">
+        <button class="primary col" onclick="saveAdminBuiltinCard()">儲存修改</button>
+        <button class="secondary col" onclick="resetAdminBuiltinCard()">恢復此字卡</button>
+      </div>
+
+      <button class="danger full" style="margin-top:9px" onclick="deleteAdminBuiltinCard()">刪除此功能字卡</button>
+
+      <div id="adminDeletedBuiltinWrap" style="display:none;margin-top:15px;padding-top:12px;border-top:1px dashed var(--line)">
+        <strong>🗑️ 已刪除功能字卡</strong>
+        <div id="adminDeletedBuiltinList" class="admin-custom-list" style="margin-top:9px"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <strong style="font-size:18px">➕ 新增連結字卡</strong>
+      <input id="adminCustomCardId" type="hidden">
+
+      <div class="admin-card-editor-grid" style="margin-top:12px">
+        <div>
+          <label>圖示</label>
+          <input id="adminCustomIcon" maxlength="12" placeholder="🌐">
+        </div>
+        <div>
+          <label>字卡標題</label>
+          <input id="adminCustomTitle" maxlength="30" placeholder="例如：公司網站">
+        </div>
+      </div>
+
+      <label style="margin-top:10px">說明文字</label>
+      <input id="adminCustomSubtitle" maxlength="60" placeholder="例如：快速開啟公司網站">
+
+      <label style="margin-top:10px">連結網址</label>
+      <input id="adminCustomUrl" type="url" inputmode="url" placeholder="https://example.com">
+
+      <div class="row" style="margin-top:11px">
+        <button id="adminCustomSaveBtn" class="primary col" onclick="saveAdminCustomCard()">新增字卡</button>
+        <button class="secondary col" onclick="clearAdminCustomEditor()">清空</button>
+      </div>
+
+      <div id="adminCustomCardList" class="admin-custom-list" style="margin-top:13px"><div class="empty" style="padding:8px 0">尚未新增外部連結字卡</div></div>
+    </div>
+
+    <div class="card">
+      <strong style="font-size:18px">💾 匯出修改後 HTML</strong>
+      <div class="note" style="margin-top:6px">
+        會把目前的首頁標題、字卡文字、外部連結字卡與目前排序寫進新的 HTML 檔。
+        Google Sheet 密鑰不會寫入匯出的 HTML。
+      </div>
+      <button class="primary full" style="margin-top:12px" onclick="exportModifiedHtml()">下載修改後 HTML</button>
+      <div id="adminExportStatus" class="note" style="margin-top:8px"></div>
+    </div>
+
+    <div class="pwd-warning">
+      後台密碼屬於前端隱藏入口保護；熟悉 HTML 原始碼的人仍可能查看到密碼，不等同伺服器端帳號權限。
     </div>
   </section>
 
@@ -1396,9 +1576,7 @@ body.home-card-dragging{
       <div class="note">請輸入登入密碼才能查看金庫內容。</div>
 
       <label style="margin-top:14px">登入密碼</label>
-      <input id="vaultLoginPassword" type="password" autocomplete="current-password"
-             placeholder="請輸入金庫登入密碼"
-             onkeydown="if(event.key==='Enter') verifyVaultPassword()">
+      <input id="vaultLoginPassword" type="password" autocomplete="current-password" placeholder="請輸入金庫登入密碼" onkeydown="if(event.key==='Enter') verifyVaultPassword()">
 
       <label class="check-line" style="margin-top:10px">
         <input id="vaultShowLoginPassword" type="checkbox" onchange="toggleVaultLoginPassword()"> 顯示密碼
@@ -1409,6 +1587,9 @@ body.home-card-dragging{
     </div>
 
     <div id="vaultContent">
+
+      
+
       <div class="card">
         <strong style="font-size:18px">🛡️ 金庫登入保護</strong>
         <div class="note" id="vaultProtectionStatus" style="margin-top:5px"></div>
@@ -1427,12 +1608,10 @@ body.home-card-dragging{
           <div class="vault-setup-title" id="vaultSetupTitle">設定金庫登入密碼</div>
 
           <label style="margin-top:10px">第一次輸入</label>
-          <input id="vaultSetupPassword1" type="password" autocomplete="new-password"
-                 placeholder="請輸入登入密碼">
+          <input id="vaultSetupPassword1" type="password" autocomplete="new-password" placeholder="請輸入登入密碼">
 
           <label style="margin-top:10px">第二次輸入</label>
-          <input id="vaultSetupPassword2" type="password" autocomplete="new-password"
-                 placeholder="請再次輸入相同密碼">
+          <input id="vaultSetupPassword2" type="password" autocomplete="new-password" placeholder="請再次輸入相同密碼">
 
           <label class="check-line" style="margin-top:10px">
             <input id="vaultShowSetupPassword" type="checkbox" onchange="toggleVaultSetupPassword()"> 顯示輸入內容
@@ -1461,24 +1640,24 @@ body.home-card-dragging{
 
     <div class="card">
       <label>密碼長度：<b id="pwdLenText">16</b> 字元</label>
-      <input id="pwdLength" type="range" min="8" max="64" value="16">
+      <input id="pwdLength" type="range" min="8" max="64" value="16" data-live-bound="1">
 
       <div class="check-grid">
-        <label class="check-line"><input id="pwdLower" type="checkbox" checked> 小寫 a-z</label>
-        <label class="check-line"><input id="pwdUpper" type="checkbox" checked> 大寫 A-Z</label>
-        <label class="check-line"><input id="pwdNumber" type="checkbox" checked> 數字 0-9</label>
-        <label class="check-line"><input id="pwdSymbol" type="checkbox" checked> 特殊符號</label>
+        <label class="check-line"><input id="pwdLower" type="checkbox" checked="" data-live-bound="1"> 小寫 a-z</label>
+        <label class="check-line"><input id="pwdUpper" type="checkbox" checked="" data-live-bound="1"> 大寫 A-Z</label>
+        <label class="check-line"><input id="pwdNumber" type="checkbox" checked="" data-live-bound="1"> 數字 0-9</label>
+        <label class="check-line"><input id="pwdSymbol" type="checkbox" checked="" data-live-bound="1"> 特殊符號</label>
       </div>
-      <label class="check-line" style="margin-top:10px"><input id="pwdAvoid" type="checkbox" checked> 排除容易混淆的 0/O、1/l/I</label>
+      <label class="check-line" style="margin-top:10px"><input id="pwdAvoid" type="checkbox" checked="" data-live-bound="1"> 排除容易混淆的 0/O、1/l/I</label>
 
       <label style="margin-top:14px">產生結果</label>
-      <textarea id="pwdOutput" class="password-output" rows="3" readonly></textarea>
+      <textarea id="pwdOutput" class="password-output" rows="3" readonly=""></textarea>
 
       <div class="row" style="margin-top:10px">
         <button class="primary col" onclick="generatePassword()">產生新密碼</button>
         <button class="secondary col" onclick="copyPassword()">複製密碼</button>
       </div>
-      <div class="note" id="pwdInfo" style="margin-top:10px">按下「保存這組密碼」後會立即保存本機，並在已設定 Google Sheet URL 時同步上傳。</div>
+      <div class="note" id="pwdInfo" style="margin-top:10px">長度 16 字元，使用 4 種字元類型；尚未保存。</div>
     </div>
 
     <div class="card">
@@ -1498,11 +1677,9 @@ body.home-card-dragging{
         <label>密碼</label>
         <div class="row">
           <div class="col">
-            <input id="pwdManualInput" type="password" autocomplete="new-password"
-                   placeholder="可手動輸入舊密碼；留白則使用上方產生的密碼">
+            <input id="pwdManualInput" type="password" autocomplete="new-password" placeholder="可手動輸入舊密碼；留白則使用上方產生的密碼">
           </div>
-          <button id="pwdManualToggleBtn" type="button" class="secondary"
-                  onclick="toggleManualPasswordVisibility()">👁️ 顯示</button>
+          <button id="pwdManualToggleBtn" type="button" class="secondary" onclick="toggleManualPasswordVisibility()">👁️ 顯示</button>
         </div>
         <div class="note" style="margin-top:7px">
           若要新增舊密碼，直接在這裡輸入；若留白，則會保存上方「產生結果」中的密碼。
@@ -1516,10 +1693,19 @@ body.home-card-dragging{
     <div class="card">
       <div class="pwd-history-head">
         <strong style="font-size:18px">🔐 密碼紀錄</strong>
-        <span class="pwd-history-count" id="pwdHistoryCount">0 筆</span>
+        <span class="pwd-history-count" id="pwdHistoryCount">1 筆</span>
       </div>
-      <div id="pwdHistoryList"></div>
-      <button id="pwdClearAllBtn" class="danger full" style="margin-top:12px;display:none" onclick="clearAllPasswordHistory()">清除全部密碼紀錄</button>
+      <div id="pwdHistoryList"><div class="pwd-history-item">
+      <div class="pwd-history-title">google</div>
+      <div class="pwd-history-meta">123654 · 2026/9/12 下午03:23</div>
+      <div class="pwd-history-secret">••••••••</div>
+      <div class="pwd-history-actions">
+        <button class="pwd-reveal" onclick="toggleSavedPassword(1789197796696)">👁️ 顯示</button>
+        <button class="pwd-copy" onclick="copySavedPassword(1789197796696)">📋 複製</button>
+        <button class="pwd-delete" onclick="deleteSavedPassword(1789197796696)">🗑️ 刪除</button>
+      </div>
+    </div></div>
+      <button id="pwdClearAllBtn" class="danger full" style="margin-top: 12px; display: block;" onclick="clearAllPasswordHistory()">清除全部密碼紀錄</button>
     </div>
   
     </div>
@@ -1535,26 +1721,26 @@ body.home-card-dragging{
         <button onclick="showCalc('fx',this)">匯率</button>
       </div>
       <div id="calc-discount" class="calc-panel active">
-        <label>原價</label><input id="discPrice" type="number" placeholder="1000">
-        <label style="margin-top:10px">折數（例如：7 = 7折、8.5 = 85折）</label><input id="discRate" type="number" value="7" step="0.1" min="0" max="10">
+        <label>原價</label><input id="discPrice" type="number" placeholder="1000" data-live-bound="1">
+        <label style="margin-top:10px">折數（例如：7 = 7折、8.5 = 85折）</label><input id="discRate" type="number" value="7" step="0.1" min="0" max="10" data-live-bound="1">
         <div class="note" style="margin-top:10px">輸入數字後會自動計算</div>
-        <div class="big-result" id="discResult"><div class="num">$0</div></div>
+        <div class="big-result" id="discResult"><div class="num">—</div><small>請輸入原價與折數</small></div>
       </div>
       <div id="calc-percent" class="calc-panel">
-        <label>數值</label><input id="pctBase" type="number" placeholder="1000">
-        <label style="margin-top:10px">百分比 %</label><input id="pctRate" type="number" placeholder="15">
+        <label>數值</label><input id="pctBase" type="number" placeholder="1000" data-live-bound="1">
+        <label style="margin-top:10px">百分比 %</label><input id="pctRate" type="number" placeholder="15" data-live-bound="1">
         <div class="note" style="margin-top:10px">輸入數字後會自動計算</div>
-        <div class="big-result" id="pctResult"><div class="num">0</div></div>
+        <div class="big-result" id="pctResult"><div class="num">—</div><small>請輸入數值與百分比</small></div>
       </div>
       <div id="calc-area" class="calc-panel">
-        <label>平方公尺</label><input id="sqm" type="number" placeholder="33">
+        <label>平方公尺</label><input id="sqm" type="number" placeholder="33" data-live-bound="1">
         <div class="note" style="margin-top:10px">輸入數字後會自動換算</div>
-        <div class="big-result" id="areaResult"><div class="num">0 坪</div></div>
+        <div class="big-result" id="areaResult"><div class="num">—</div><small>請輸入平方公尺</small></div>
       </div>
 
       <div id="calc-fx" class="calc-panel">
         <label>金額</label>
-        <input id="fxAmount" type="number" inputmode="decimal" value="1000" min="0" step="any">
+        <input id="fxAmount" type="number" inputmode="decimal" value="1000" min="0" step="any" data-live-bound="1">
 
         <div class="fx-select-row" style="margin-top:12px">
           <div>
@@ -1592,12 +1778,14 @@ const store = {
   get(k, d){ try{return JSON.parse(localStorage.getItem("lifeBox_"+k)) ?? d}catch{return d} },
   set(k, v){ localStorage.setItem("lifeBox_"+k, JSON.stringify(v)) }
 };
+const ADMIN_DEFAULTS = {"homeTitle":"我的生活工具箱","homeSubtitle":"把每天的小事，變得更簡單。","cardOverrides":{"lottery":{"icon":"🧧","title":"祝您發大財","subtitle":"大樂透・威力彩・539 選號靈感"}},"customCards":[],"homeOrder":["todo","countdown","money","split","food","parking","shopping","calc","decision","lottery","packing","quoteTax","password"],"deletedBuiltinCards":[]};
 const fmt = n => new Intl.NumberFormat('zh-TW',{maximumFractionDigits:2}).format(Number(n)||0);
 const pad = n => String(n).padStart(2,'0');
 const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 function esc(s=''){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 
 function openPage(id){
+  if(id==='admin' && !adminUnlocked)return;
   if(id!=='password') vaultUnlockedThisVisit=false;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   $('#'+id).classList.add('active');
@@ -1610,10 +1798,10 @@ function openPage(id){
   if(id==='shopping') renderShop();
   if(id==='decision') renderDecisionHistory();
   if(id==='lottery'){renderLotteryRule();ensureLotteryBuyTime();}
-  if(id==='sheetSync') loadSheetSyncSettings();
   if(id==='packing') renderPack();
   if(id==='quoteTax') calcQuoteTax();
   if(id==='password'){ensurePassword();openVaultGate();}
+  if(id==='admin') loadAdminPage();
   if(id==='calc') initFx();
 }
 function goHome(){openPage('home')}
@@ -2912,6 +3100,563 @@ function calcQuoteTax(){
 
 
 
+
+// ===== 隱藏後台管理與首頁編輯 =====
+let adminUnlocked=false;
+let adminOriginalBuiltinCards=null;
+let adminLongPressTimer=null;
+let adminLongPressStartX=0;
+let adminLongPressStartY=0;
+
+function getAdminConfig(){
+  const saved=store.get('adminConfig',null);
+  const base=JSON.parse(JSON.stringify(ADMIN_DEFAULTS));
+  if(!saved)return base;
+  return {
+    ...base,
+    ...saved,
+    cardOverrides:{...(base.cardOverrides||{}),...(saved.cardOverrides||{})},
+    customCards:Array.isArray(saved.customCards)?saved.customCards:(base.customCards||[]),
+    deletedBuiltinCards:Array.isArray(saved.deletedBuiltinCards)?saved.deletedBuiltinCards:(base.deletedBuiltinCards||[]),
+    homeOrder:Array.isArray(saved.homeOrder)?saved.homeOrder:(base.homeOrder||[])
+  };
+}
+
+function saveAdminConfig(cfg){
+  store.set('adminConfig',cfg);
+}
+
+function adminCardKeyFromButton(btn){
+  if(!btn)return '';
+  if(btn.dataset.adminCustomId)return 'custom:'+btn.dataset.adminCustomId;
+  const onclick=btn.getAttribute('onclick')||'';
+  const m=onclick.match(/openPage\(['"]([^'"]+)['"]\)/);
+  return m?m[1]:'';
+}
+
+function getBuiltinHomeButtons(){
+  return [...document.querySelectorAll('#home .grid > .tool')]
+    .filter(btn=>!btn.dataset.adminCustomCard);
+}
+
+function getBuiltinHomeCardSnapshot(){
+  const out={};
+  getBuiltinHomeButtons().forEach(btn=>{
+    const key=adminCardKeyFromButton(btn);
+    if(!key)return;
+    out[key]={
+      icon:(btn.querySelector('.icon')?.textContent||'').trim(),
+      title:(btn.querySelector('b')?.textContent||'').trim(),
+      subtitle:(btn.querySelector('small')?.textContent||'').trim()
+    };
+  });
+  return out;
+}
+
+function normalizeExternalUrl(url){
+  let v=String(url||'').trim();
+  if(!v)return '';
+  if(!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(v))v='https://'+v;
+  try{
+    const u=new URL(v);
+    if(!['http:','https:'].includes(u.protocol))return '';
+    return u.href;
+  }catch(e){
+    return '';
+  }
+}
+
+function openAdminCustomCard(id){
+  const cfg=getAdminConfig();
+  const card=(cfg.customCards||[]).find(x=>String(x.id)===String(id));
+  if(!card)return;
+  const url=normalizeExternalUrl(card.url);
+  if(!url){
+    alert('這張字卡的連結網址無效，請到後台修改。');
+    return;
+  }
+  window.open(url,'_blank','noopener');
+}
+
+function renderAdminCustomCards(){
+  const grid=document.querySelector('#home .grid');
+  if(!grid)return;
+
+  grid.querySelectorAll('[data-admin-custom-card="1"]').forEach(el=>el.remove());
+
+  const cfg=getAdminConfig();
+  (cfg.customCards||[]).forEach(card=>{
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.className='tool';
+    btn.dataset.adminCustomCard='1';
+    btn.dataset.adminCustomId=String(card.id);
+    btn.setAttribute('onclick',`openAdminCustomCard(${JSON.stringify(String(card.id))})`);
+    btn.innerHTML=
+      `<span class="icon">${esc(card.icon||'🌐')}</span>`+
+      `<b>${esc(card.title||'自訂連結')}</b>`+
+      `<small>${esc(card.subtitle||'開啟外部連結')}</small>`;
+    grid.appendChild(btn);
+  });
+}
+
+function applyAdminConfig(){
+  const cfg=getAdminConfig();
+
+  const h1=document.querySelector('#home .hero h1');
+  const p=document.querySelector('#home .hero p');
+  if(h1)h1.textContent=cfg.homeTitle||ADMIN_DEFAULTS.homeTitle;
+  if(p)p.textContent=cfg.homeSubtitle||ADMIN_DEFAULTS.homeSubtitle;
+
+  const buttons=getBuiltinHomeButtons();
+  const deletedSet=new Set(cfg.deletedBuiltinCards||[]);
+
+  buttons.forEach(btn=>{
+    const key=adminCardKeyFromButton(btn);
+
+    // 被後台刪除的既有功能字卡直接從首頁隱藏
+    btn.style.display=deletedSet.has(key)?'none':'';
+
+    const ov=cfg.cardOverrides?.[key];
+    if(!ov)return;
+    if(btn.querySelector('.icon') && ov.icon)btn.querySelector('.icon').textContent=ov.icon;
+    if(btn.querySelector('b') && ov.title)btn.querySelector('b').textContent=ov.title;
+    if(btn.querySelector('small') && ov.subtitle!==undefined)btn.querySelector('small').textContent=ov.subtitle;
+  });
+
+  renderAdminCustomCards();
+
+  // 只有全新環境還沒有使用者拖曳排序時，才套用匯出 HTML 內建的排序。
+  const existingOrder=store.get('homeToolOrderV1',[]);
+  if((!existingOrder || !existingOrder.length) && cfg.homeOrder?.length){
+    store.set('homeToolOrderV1',cfg.homeOrder);
+  }
+}
+
+function initHiddenAdminTrigger(){
+  const el=document.getElementById('adminSecretTrigger');
+  if(!el || el.__adminTriggerBound===true)return;
+
+  // 使用 JS 物件屬性記錄綁定狀態。
+  // 此屬性不會被 clone.outerHTML 序列化，因此匯出後重新開啟仍會重新綁定。
+  el.__adminTriggerBound=true;
+
+  // 相容舊版匯出檔：若曾留下 data-admin-trigger-bound，立即清除。
+  el.removeAttribute('data-admin-trigger-bound');
+
+  const cancel=()=>{
+    if(adminLongPressTimer){
+      clearTimeout(adminLongPressTimer);
+      adminLongPressTimer=null;
+    }
+  };
+
+  el.addEventListener('pointerdown',e=>{
+    if(e.pointerType==='mouse' && e.button!==0)return;
+    adminLongPressStartX=e.clientX;
+    adminLongPressStartY=e.clientY;
+    cancel();
+
+    adminLongPressTimer=setTimeout(()=>{
+      adminLongPressTimer=null;
+      try{if(navigator.vibrate)navigator.vibrate([45,30,45])}catch(_){}
+      const pwd=prompt('請輸入後台管理密碼');
+      if(pwd===null)return;
+      if(pwd==='11020405'){
+        adminUnlocked=true;
+        openPage('admin');
+      }else{
+        alert('後台密碼錯誤');
+      }
+    },2000);
+  });
+
+  el.addEventListener('pointermove',e=>{
+    if(!adminLongPressTimer)return;
+    if(Math.hypot(e.clientX-adminLongPressStartX,e.clientY-adminLongPressStartY)>14)cancel();
+  });
+
+  ['pointerup','pointercancel','pointerleave'].forEach(type=>{
+    el.addEventListener(type,cancel);
+  });
+
+  el.addEventListener('contextmenu',e=>e.preventDefault());
+}
+
+function leaveAdmin(){
+  adminUnlocked=false;
+  goHome();
+}
+
+function loadAdminPage(){
+  if(!adminUnlocked)return;
+
+  const cfg=getAdminConfig();
+  $('#adminHomeTitle').value=cfg.homeTitle||'';
+  $('#adminHomeSubtitle').value=cfg.homeSubtitle||'';
+
+  loadSheetSyncSettings();
+  updateVaultSheetStatus();
+  populateAdminBuiltinCardSelect();
+  renderAdminDeletedBuiltinList();
+  renderAdminCustomCardList();
+}
+
+function saveAdminHomeText(){
+  const cfg=getAdminConfig();
+  cfg.homeTitle=($('#adminHomeTitle').value||'').trim()||ADMIN_DEFAULTS.homeTitle;
+  cfg.homeSubtitle=($('#adminHomeSubtitle').value||'').trim()||ADMIN_DEFAULTS.homeSubtitle;
+  saveAdminConfig(cfg);
+  applyAdminConfig();
+}
+
+function populateAdminBuiltinCardSelect(){
+  const select=$('#adminBuiltinCardSelect');
+  if(!select)return;
+
+  const current=select.value;
+  const cfg=getAdminConfig();
+  const deletedSet=new Set(cfg.deletedBuiltinCards||[]);
+
+  const visibleButtons=getBuiltinHomeButtons().filter(btn=>!deletedSet.has(adminCardKeyFromButton(btn)));
+
+  select.innerHTML=visibleButtons.map(btn=>{
+    const key=adminCardKeyFromButton(btn);
+    const title=(btn.querySelector('b')?.textContent||key).trim();
+    return `<option value="${esc(key)}">${esc(title)}</option>`;
+  }).join('');
+
+  if(current && [...select.options].some(o=>o.value===current))select.value=current;
+  else if(select.options.length)select.selectedIndex=0;
+
+  loadAdminBuiltinCardEditor();
+  renderAdminDeletedBuiltinList();
+}
+
+function loadAdminBuiltinCardEditor(){
+  const key=$('#adminBuiltinCardSelect')?.value;
+
+  if(!key){
+    if($('#adminBuiltinIcon'))$('#adminBuiltinIcon').value='';
+    if($('#adminBuiltinTitle'))$('#adminBuiltinTitle').value='';
+    if($('#adminBuiltinSubtitle'))$('#adminBuiltinSubtitle').value='';
+    return;
+  }
+
+  const btn=getBuiltinHomeButtons().find(x=>adminCardKeyFromButton(x)===key);
+  if(!btn)return;
+
+  $('#adminBuiltinIcon').value=(btn.querySelector('.icon')?.textContent||'').trim();
+  $('#adminBuiltinTitle').value=(btn.querySelector('b')?.textContent||'').trim();
+  $('#adminBuiltinSubtitle').value=(btn.querySelector('small')?.textContent||'').trim();
+}
+
+function saveAdminBuiltinCard(){
+  const key=$('#adminBuiltinCardSelect')?.value;
+  if(!key)return;
+
+  const cfg=getAdminConfig();
+  cfg.cardOverrides=cfg.cardOverrides||{};
+  cfg.cardOverrides[key]={
+    icon:($('#adminBuiltinIcon').value||'').trim()||'🔹',
+    title:($('#adminBuiltinTitle').value||'').trim()||key,
+    subtitle:($('#adminBuiltinSubtitle').value||'').trim()
+  };
+
+  saveAdminConfig(cfg);
+  applyAdminConfig();
+  populateAdminBuiltinCardSelect();
+}
+
+
+function deleteAdminBuiltinCard(){
+  const key=$('#adminBuiltinCardSelect')?.value;
+  if(!key)return;
+
+  const btn=getBuiltinHomeButtons().find(x=>adminCardKeyFromButton(x)===key);
+  if(!btn)return;
+
+  const title=(btn.querySelector('b')?.textContent||key).trim();
+  if(!confirm(`確定刪除「${title}」功能字卡？\n\n功能程式仍會保留，可從後台「已刪除功能字卡」恢復。`))return;
+
+  const cfg=getAdminConfig();
+  cfg.deletedBuiltinCards=Array.isArray(cfg.deletedBuiltinCards)?cfg.deletedBuiltinCards:[];
+
+  if(!cfg.deletedBuiltinCards.includes(key)){
+    cfg.deletedBuiltinCards.push(key);
+  }
+
+  saveAdminConfig(cfg);
+  applyAdminConfig();
+  populateAdminBuiltinCardSelect();
+  saveHomeToolOrder();
+}
+
+function restoreAdminBuiltinCard(key){
+  const cfg=getAdminConfig();
+  cfg.deletedBuiltinCards=(cfg.deletedBuiltinCards||[]).filter(x=>x!==key);
+  saveAdminConfig(cfg);
+
+  applyAdminConfig();
+  populateAdminBuiltinCardSelect();
+  saveHomeToolOrder();
+}
+
+function renderAdminDeletedBuiltinList(){
+  const wrap=$('#adminDeletedBuiltinWrap');
+  const el=$('#adminDeletedBuiltinList');
+  if(!wrap || !el)return;
+
+  const cfg=getAdminConfig();
+  const deleted=cfg.deletedBuiltinCards||[];
+
+  if(!deleted.length){
+    wrap.style.display='none';
+    el.innerHTML='';
+    return;
+  }
+
+  wrap.style.display='block';
+
+  el.innerHTML=deleted.map(key=>{
+    const original=adminOriginalBuiltinCards?.[key];
+    const title=original?.title || key;
+    const icon=original?.icon || '🧩';
+
+    return `<div class="admin-custom-item">
+      <div class="admin-custom-icon">${esc(icon)}</div>
+      <div class="admin-custom-main">
+        <b>${esc(title)}</b>
+        <small>已從首頁隱藏</small>
+      </div>
+      <div class="admin-custom-actions">
+        <button class="admin-edit-btn" onclick="restoreAdminBuiltinCard('${esc(key)}')">恢復</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function resetAdminBuiltinCard(){
+  const key=$('#adminBuiltinCardSelect')?.value;
+  if(!key)return;
+
+  const original=adminOriginalBuiltinCards?.[key];
+  if(!original)return;
+
+  const cfg=getAdminConfig();
+  if(cfg.cardOverrides)delete cfg.cardOverrides[key];
+  saveAdminConfig(cfg);
+
+  const btn=getBuiltinHomeButtons().find(x=>adminCardKeyFromButton(x)===key);
+  if(btn){
+    if(btn.querySelector('.icon'))btn.querySelector('.icon').textContent=original.icon;
+    if(btn.querySelector('b'))btn.querySelector('b').textContent=original.title;
+    if(btn.querySelector('small'))btn.querySelector('small').textContent=original.subtitle;
+  }
+
+  populateAdminBuiltinCardSelect();
+}
+
+function clearAdminCustomEditor(){
+  $('#adminCustomCardId').value='';
+  $('#adminCustomIcon').value='🌐';
+  $('#adminCustomTitle').value='';
+  $('#adminCustomSubtitle').value='';
+  $('#adminCustomUrl').value='';
+  $('#adminCustomSaveBtn').textContent='新增字卡';
+}
+
+function saveAdminCustomCard(){
+  const id=($('#adminCustomCardId').value||'').trim();
+  const icon=($('#adminCustomIcon').value||'').trim()||'🌐';
+  const title=($('#adminCustomTitle').value||'').trim();
+  const subtitle=($('#adminCustomSubtitle').value||'').trim();
+  const url=normalizeExternalUrl($('#adminCustomUrl').value);
+
+  if(!title){
+    alert('請輸入字卡標題');
+    return;
+  }
+  if(!url){
+    alert('請輸入正確的 http:// 或 https:// 網址');
+    return;
+  }
+
+  const cfg=getAdminConfig();
+  cfg.customCards=cfg.customCards||[];
+
+  if(id){
+    const i=cfg.customCards.findIndex(x=>String(x.id)===String(id));
+    if(i>=0)cfg.customCards[i]={...cfg.customCards[i],icon,title,subtitle,url};
+  }else{
+    cfg.customCards.push({
+      id:'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+      icon,title,subtitle,url
+    });
+  }
+
+  saveAdminConfig(cfg);
+  renderAdminCustomCards();
+  clearAdminCustomEditor();
+  renderAdminCustomCardList();
+
+  // 新增後重新初始化拖曳監聽不需要重綁，grid 事件委派會自動支援；
+  // 將目前新字卡補到排序末端。
+  saveHomeToolOrder();
+}
+
+function editAdminCustomCard(id){
+  const cfg=getAdminConfig();
+  const card=(cfg.customCards||[]).find(x=>String(x.id)===String(id));
+  if(!card)return;
+
+  $('#adminCustomCardId').value=card.id;
+  $('#adminCustomIcon').value=card.icon||'🌐';
+  $('#adminCustomTitle').value=card.title||'';
+  $('#adminCustomSubtitle').value=card.subtitle||'';
+  $('#adminCustomUrl').value=card.url||'';
+  $('#adminCustomSaveBtn').textContent='儲存修改';
+  $('#adminCustomTitle').focus();
+}
+
+function deleteAdminCustomCard(id){
+  const cfg=getAdminConfig();
+  const card=(cfg.customCards||[]).find(x=>String(x.id)===String(id));
+  if(!card)return;
+  if(!confirm(`確定刪除「${card.title}」字卡？`))return;
+
+  cfg.customCards=(cfg.customCards||[]).filter(x=>String(x.id)!==String(id));
+  saveAdminConfig(cfg);
+  renderAdminCustomCards();
+  renderAdminCustomCardList();
+  saveHomeToolOrder();
+}
+
+function renderAdminCustomCardList(){
+  const el=$('#adminCustomCardList');
+  if(!el)return;
+  const cfg=getAdminConfig();
+  const cards=cfg.customCards||[];
+
+  if(!cards.length){
+    el.innerHTML='<div class="empty" style="padding:8px 0">尚未新增外部連結字卡</div>';
+    return;
+  }
+
+  el.innerHTML=cards.map(card=>`
+    <div class="admin-custom-item">
+      <div class="admin-custom-icon">${esc(card.icon||'🌐')}</div>
+      <div class="admin-custom-main">
+        <b>${esc(card.title||'')}</b>
+        <small>${esc(card.subtitle||card.url||'')}</small>
+      </div>
+      <div class="admin-custom-actions">
+        <button class="admin-edit-btn" onclick="editAdminCustomCard('${esc(card.id)}')">編輯</button>
+        <button class="admin-delete-btn" onclick="deleteAdminCustomCard('${esc(card.id)}')">刪除</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function getCurrentHomeOrderForExport(){
+  const grid=document.querySelector('#home .grid');
+  if(!grid)return [];
+  return [...grid.children]
+    .filter(el=>el.classList?.contains('tool'))
+    .filter(el=>el.style.display!=='none')
+    .map(adminCardKeyFromButton)
+    .filter(Boolean);
+}
+
+function exportModifiedHtml(){
+  const status=$('#adminExportStatus');
+  try{
+    const cfg=getAdminConfig();
+    cfg.homeOrder=getCurrentHomeOrderForExport();
+
+    // 先保存當下編輯狀態
+    saveAdminConfig(cfg);
+
+    const clone=document.documentElement.cloneNode(true);
+
+    // 匯出檔預設從首頁開啟，不停留在後台
+    clone.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    clone.querySelector('#home')?.classList.add('active');
+
+    // 清理拖曳執行期狀態
+    clone.querySelectorAll('.home-floating-drag,.home-longpress-confirm,.home-shift-animating')
+      .forEach(el=>el.classList.remove('home-floating-drag','home-longpress-confirm','home-shift-animating'));
+    clone.querySelectorAll('.home-drop-placeholder').forEach(el=>el.remove());
+    clone.querySelector('#home')?.classList.remove('home-reorder-mode');
+
+    // 關鍵修正：
+    // 事件監聽器不會被 cloneNode / outerHTML 匯出，
+    // 因此所有「已綁定」的 runtime data 標記也必須清掉，
+    // 否則新 HTML 會誤判事件已存在而不重新初始化。
+    const exportAdminTrigger=clone.querySelector('#adminSecretTrigger');
+    if(exportAdminTrigger){
+      exportAdminTrigger.removeAttribute('data-admin-trigger-bound');
+    }
+
+    const exportGrid=clone.querySelector('#home .grid');
+    if(exportGrid){
+      exportGrid.removeAttribute('data-touch-reorder-v18');
+      exportGrid.removeAttribute('data-mouse-reorder-v18');
+      exportGrid.removeAttribute('data-home-reorder-ready');
+      exportGrid.removeAttribute('data-touch-reorder-bound');
+      exportGrid.removeAttribute('data-mouse-reorder-bound');
+    }
+
+    // 不把後台表單中輸入的 Sheet 密鑰寫進 HTML attribute
+    const keyInput=clone.querySelector('#sheetSyncKey');
+    if(keyInput)keyInput.setAttribute('value','');
+
+    // 匯出前確認隱藏後台入口仍存在
+    if(!clone.querySelector('#adminSecretTrigger')){
+      throw new Error('找不到後台隱藏入口，無法安全匯出');
+    }
+
+    let out='<!DOCTYPE html>\n'+clone.outerHTML;
+
+    const safeDefaults=JSON.stringify(cfg)
+      .replace(/</g,'\\u003c')
+      .replace(/-->/g,'--\\>');
+
+    out=out.replace(
+      /const ADMIN_DEFAULTS\s*=\s*\{.*?\};/,
+      'const ADMIN_DEFAULTS = '+safeDefaults+';'
+    );
+
+    const blob=new Blob([out],{type:'text/html;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    const d=new Date();
+    a.href=url;
+    a.download=`我的生活工具箱_自訂版_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}.html`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
+
+    if(status){
+      status.className='note sync-ok';
+      status.textContent='修改後 HTML 已建立並開始下載。';
+    }
+  }catch(err){
+    if(status){
+      status.className='note sync-error';
+      status.textContent='匯出失敗：'+(err?.message||String(err));
+    }
+  }
+}
+
+function initAdminCustomization(){
+  adminOriginalBuiltinCards=getBuiltinHomeCardSnapshot();
+  applyAdminConfig();
+  initHiddenAdminTrigger();
+}
+
+
 // ===== 每日幽默勵志座右銘 =====
 const DAILY_MOTTOS=[
   '今天先處理最重要的一件事，剩下的先假裝沒看到 ☀️',
@@ -3041,7 +3786,10 @@ function saveSheetSyncSettings(){
   $('#sheetSyncStatus').className='note sync-ok';
   $('#sheetSyncStatus').textContent=enabled
     ? '設定已儲存，之後新增指定紀錄會自動送到 Google Sheet。'
-    : '設定已儲存，目前不會自動同步。';
+    : '設定已儲存，目前一般自動同步關閉；金庫密碼仍會立即送出。';
+
+  flushPendingSheetSyncRecords();
+  updateVaultSheetStatus();
 }
 
 
@@ -3052,7 +3800,57 @@ function setSheetSyncMessage(text,type=''){
   el.textContent=text;
 }
 
-async function sendRecordToGoogleSheet(recordType,data,options={}){
+function ensureSheetSyncTransport(){
+  let frame=document.getElementById('lifeBoxSheetSyncFrame');
+  if(!frame){
+    frame=document.createElement('iframe');
+    frame.id='lifeBoxSheetSyncFrame';
+    frame.name='lifeBoxSheetSyncFrame';
+    frame.style.display='none';
+    frame.setAttribute('aria-hidden','true');
+    document.body.appendChild(frame);
+  }
+  return frame;
+}
+
+function queueSheetSyncRecord(recordType,data){
+  const q=store.get('sheetSyncPending',[]);
+  q.push({
+    id:Date.now()+Math.random(),
+    recordType,
+    data,
+    queuedAt:new Date().toISOString()
+  });
+  store.set('sheetSyncPending',q.slice(-100));
+}
+
+function postPayloadToGoogleSheet(url,payload){
+  ensureSheetSyncTransport();
+
+  const form=document.createElement('form');
+  form.method='POST';
+  form.action=url;
+  form.target='lifeBoxSheetSyncFrame';
+  form.style.display='none';
+  form.acceptCharset='UTF-8';
+
+  const input=document.createElement('input');
+  input.type='hidden';
+  input.name='payload';
+  input.value=JSON.stringify(payload);
+
+  form.appendChild(input);
+  document.body.appendChild(form);
+
+  try{
+    form.submit();
+    return true;
+  }finally{
+    setTimeout(()=>form.remove(),0);
+  }
+}
+
+function sendRecordToGoogleSheet(recordType,data,options={}){
   const s=getSheetSyncSettings();
 
   if(!options.force && !options.always && !s.enabled){
@@ -3060,6 +3858,11 @@ async function sendRecordToGoogleSheet(recordType,data,options={}){
   }
 
   if(!s.url){
+    // 金庫等強制同步資料先排入待傳佇列，設定 URL 後自動補送。
+    if(options.always){
+      queueSheetSyncRecord(recordType,data);
+      updateVaultSheetStatus();
+    }
     if(options.force)setSheetSyncMessage('尚未設定 Web App URL。','error');
     return {skipped:true,reason:'no-url'};
   }
@@ -3073,28 +3876,93 @@ async function sendRecordToGoogleSheet(recordType,data,options={}){
   };
 
   try{
-    await fetch(s.url,{
-      method:'POST',
-      mode:'no-cors',
-      headers:{
-        'Content-Type':'text/plain;charset=utf-8'
-      },
-      body:JSON.stringify(payload),
-      cache:'no-store'
-    });
+    const sent=postPayloadToGoogleSheet(s.url,payload);
 
     if(options.force){
-      setSheetSyncMessage('測試同步請求已送出，請到 Google Sheet 查看是否新增「同步測試」資料。','ok');
+      setSheetSyncMessage(
+        sent
+          ? '測試資料已送出，請到 Google Sheet 查看「同步測試」頁籤。'
+          : '測試資料送出失敗。',
+        sent?'ok':'error'
+      );
     }
 
-    return {sent:true};
+    return {sent};
   }catch(err){
+    if(options.always){
+      queueSheetSyncRecord(recordType,data);
+      updateVaultSheetStatus();
+    }
     if(options.force){
-      setSheetSyncMessage('送出失敗：'+(err?.message||'網路或 Web App 設定錯誤'),'error');
+      setSheetSyncMessage('送出失敗：'+(err?.message||'Web App URL 設定錯誤'),'error');
     }
     return {sent:false,error:String(err)};
   }
 }
+
+
+function updateVaultSheetStatus(){
+  const s=getSheetSyncSettings();
+  const pending=store.get('sheetSyncPending',[]);
+  const el=$('#sheetSyncStatus');
+  if(!el)return;
+
+  if(!s.url){
+    el.className='note sync-warn';
+    el.textContent=pending.length
+      ? `尚未設定 /exec 網址；目前有 ${pending.length} 筆資料等待補送。`
+      : '尚未設定 Google Apps Script /exec 網址。';
+    return;
+  }
+
+  el.className='note sync-ok';
+  el.textContent=pending.length
+    ? `Sheet 連線已設定；另有 ${pending.length} 筆等待補送。`
+    : 'Sheet 連線已設定。金庫保存密碼時會立即上傳。';
+}
+
+
+
+function flushPendingSheetSyncRecords(){
+  const s=getSheetSyncSettings();
+  if(!s.url)return;
+
+  const pending=store.get('sheetSyncPending',[]);
+  if(!pending.length){
+    updateVaultSheetStatus();
+    return;
+  }
+
+  let sent=0;
+  const remain=[];
+
+  pending.forEach(item=>{
+    try{
+      const payload={
+        action:'append',
+        recordType:item.recordType,
+        syncKey:s.key,
+        deviceTime:new Date().toISOString(),
+        data:item.data
+      };
+      if(postPayloadToGoogleSheet(s.url,payload))sent++;
+      else remain.push(item);
+    }catch(e){
+      remain.push(item);
+    }
+  });
+
+  store.set('sheetSyncPending',remain);
+
+  const el=$('#vaultSheetStatus');
+  if(el){
+    el.className='note '+(remain.length?'vault-sheet-warn':'vault-sheet-ok');
+    el.textContent=remain.length
+      ? `已補送 ${sent} 筆，仍有 ${remain.length} 筆等待上傳。`
+      : `已補送 ${sent} 筆等待資料；目前同步佇列已清空。`;
+  }
+}
+
 
 function sendSheetSyncTest(){
   // 先儲存畫面上的最新設定
@@ -3786,6 +4654,7 @@ function getHomeToolGrid(){
 
 function getHomeToolKey(tool){
   if(!tool)return '';
+  if(tool.dataset.adminCustomId)return 'custom:'+tool.dataset.adminCustomId;
   const onclick=tool.getAttribute('onclick')||'';
   const match=onclick.match(/openPage\(['"]([^'"]+)['"]\)/);
   if(match)return match[1];
@@ -3795,7 +4664,9 @@ function getHomeToolKey(tool){
 function saveHomeToolOrder(){
   const grid=getHomeToolGrid();
   if(!grid)return;
-  const order=[...grid.children].filter(el=>el.classList&&el.classList.contains('tool'))
+  const order=[...grid.children]
+    .filter(el=>el.classList&&el.classList.contains('tool'))
+    .filter(el=>el.style.display!=='none')
     .map(getHomeToolKey)
     .filter(Boolean);
   store.set(HOME_ORDER_KEY,order);
@@ -3877,6 +4748,7 @@ function stopHomeReflowAnimations(){
 
   [...grid.children]
     .filter(el=>el.classList&&el.classList.contains('tool'))
+    .filter(el=>el.style.display!=='none')
     .forEach(el=>{
       try{
         el.getAnimations().forEach(anim=>anim.cancel());
@@ -3995,7 +4867,8 @@ function getHomeDropTarget(x,y){
 
   const tools=[...grid.children]
     .filter(el=>el.classList&&el.classList.contains('tool'))
-    .filter(el=>el!==homeDragState.item);
+    .filter(el=>el!==homeDragState.item)
+    .filter(el=>el.style.display!=='none');
 
   let inside=null;
   let nearest=null;
@@ -4168,8 +5041,9 @@ function cancelPendingHomeDrag(){
 /* ---------- 手機觸控 ---------- */
 function initHomeTouchReorder(){
   const grid=getHomeToolGrid();
-  if(!grid || grid.dataset.touchReorderV18==='1')return;
-  grid.dataset.touchReorderV18='1';
+  if(!grid || grid.__touchReorderV18Bound===true)return;
+  grid.__touchReorderV18Bound=true;
+  grid.removeAttribute('data-touch-reorder-v18');
 
   grid.addEventListener('touchstart',e=>{
     const tool=e.target.closest('.tool');
@@ -4244,8 +5118,9 @@ function initHomeTouchReorder(){
 /* ---------- 電腦滑鼠 ---------- */
 function initHomeMouseReorder(){
   const grid=getHomeToolGrid();
-  if(!grid || grid.dataset.mouseReorderV18==='1')return;
-  grid.dataset.mouseReorderV18='1';
+  if(!grid || grid.__mouseReorderV18Bound===true)return;
+  grid.__mouseReorderV18Bound=true;
+  grid.removeAttribute('data-mouse-reorder-v18');
 
   grid.addEventListener('mousedown',e=>{
     if(e.button!==0)return;
@@ -4324,11 +5199,15 @@ function initHomeReorder(){
 
   // 顯示拖曳功能已正常完成初始化，避免靜默失敗
   const grid=getHomeToolGrid();
-  if(grid)grid.dataset.homeReorderReady='1';
+  if(grid){
+    grid.removeAttribute('data-home-reorder-ready');
+    grid.dataset.homeReorderReady='1';
+  }
 }
 
 // 所有拖曳相關 const / let / function 都建立完成後才初始化。
 // 這是上一版無法移動的核心修正。
+initAdminCustomization();
 updateDailyMotto();
 initHomeReorder();
 
@@ -4426,5 +5305,5 @@ document.addEventListener('touchstart', function unlockAudio(){
 }, {passive:true});
 
 </script>
-</body>
-</html>
+
+<iframe id="lifeBoxSheetSyncFrame" name="lifeBoxSheetSyncFrame" aria-hidden="true" style="display: none;"></iframe></body></html>
