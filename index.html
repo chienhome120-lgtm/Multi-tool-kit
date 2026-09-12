@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#8d6e63" />
+<html lang="zh-Hant" data-life-box-build="v38"><head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="life-box-build" content="v37">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#8d6e63">
 <title>我的生活工具箱</title>
 <style>
 :root{
@@ -1129,7 +1132,7 @@ body.home-card-dragging{
   -webkit-user-select:none !important;
   user-select:none !important;
   -webkit-touch-callout:none !important;
-  touch-action:pan-y;
+  touch-action:none !important;
 }
 
 .admin-login-modal{
@@ -1196,18 +1199,32 @@ body.admin-modal-open{
   overflow:hidden;
 }
 
+
+/* ===== v38 手機後台長按最終相容修正 ===== */
+#adminSecretTrigger,
+#adminSecretTrigger *{
+  -webkit-user-select:none !important;
+  user-select:none !important;
+  -webkit-touch-callout:none !important;
+}
+
+#adminSecretTrigger{
+  touch-action:none !important;
+  cursor:default;
+}
+
 </style>
 </head>
-<body>
+<body class="">
 <div class="app">
   <section id="home" class="page active">
     <div class="hero">
       <h1>我的生活工具箱</h1>
-      <p>把每天的小事，變得更簡單。</p>
+      <p>動點頭腦把每天的小事，變得更簡單。 Chien hung</p>
     </div>
     <div class="today-card" id="adminSecretTrigger" aria-label="今日資訊">
-      <div class="date" id="todayText"></div>
-      <div class="quote"><span id="dailyMotto">今天先處理最重要的一件事 ☀️</span></div>
+      <div class="date" id="todayText">2026年9月12日星期六</div>
+      <div class="quote"><span id="dailyMotto">今天先處理最重要的一件事，剩下的先假裝沒看到 ☀️</span></div>
     </div>
     <div class="grid">
       <button class="tool" onclick="openPage('todo')"><span class="icon">✅</span><b>待辦事項</b><small>今天、明天、重要任務</small></button>
@@ -1322,7 +1339,7 @@ body.admin-modal-open{
           <label>搜尋半徑</label>
           <select id="nearbyRadius">
             <option value="500">500 公尺</option>
-            <option value="1000" selected>1 公里</option>
+            <option value="1000" selected="">1 公里</option>
             <option value="2000">2 公里</option>
             <option value="3000">3 公里</option>
           </select>
@@ -1406,7 +1423,7 @@ body.admin-modal-open{
 
     <div class="card">
       <div class="row"><strong class="col">最近的命運紀錄</strong><button id="decisionClearAllBtn" type="button" class="iconbtn" title="清除全部紀錄">🗑️</button></div>
-      <div id="decisionHistory" class="decision-history" style="margin-top:10px"></div>
+      <div id="decisionHistory" class="decision-history" style="margin-top:10px"><div class="empty" style="padding:10px 4px">還沒有紀錄。你的糾結目前仍然很純潔。</div></div>
     </div>
   </section>
 
@@ -1529,13 +1546,13 @@ body.admin-modal-open{
     <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>報價／稅額計算器</h2></div>
     <div class="card">
       <div class="quote-grid">
-        <div><label>單價基準</label><select id="quoteMode"><option value="before">未稅單價</option><option value="after">含稅單價</option></select></div>
-        <div><label>單價</label><input id="quoteUnit" type="number" inputmode="decimal" min="0" placeholder="例如：1000"></div>
-        <div><label>數量</label><input id="quoteQty" type="number" inputmode="decimal" min="0" value="1"></div>
-        <div><label>折扣 %</label><input id="quoteDiscount" type="number" inputmode="decimal" min="0" max="100" value="0"></div>
-        <div><label>稅率 %</label><input id="quoteTaxRate" type="number" inputmode="decimal" min="0" value="5"></div>
-        <div><label>單位成本</label><input id="quoteCost" type="number" inputmode="decimal" min="0" placeholder="例如：600"></div>
-        <div><label>其他費用</label><input id="quoteOtherExpense" type="number" inputmode="decimal" min="0" value="0" placeholder="運費、平台費等"></div>
+        <div><label>單價基準</label><select id="quoteMode" data-live-bound="1"><option value="before">未稅單價</option><option value="after">含稅單價</option></select></div>
+        <div><label>單價</label><input id="quoteUnit" type="number" inputmode="decimal" min="0" placeholder="例如：1000" data-live-bound="1"></div>
+        <div><label>數量</label><input id="quoteQty" type="number" inputmode="decimal" min="0" value="1" data-live-bound="1"></div>
+        <div><label>折扣 %</label><input id="quoteDiscount" type="number" inputmode="decimal" min="0" max="100" value="0" data-live-bound="1"></div>
+        <div><label>稅率 %</label><input id="quoteTaxRate" type="number" inputmode="decimal" min="0" value="5" data-live-bound="1"></div>
+        <div><label>單位成本</label><input id="quoteCost" type="number" inputmode="decimal" min="0" placeholder="例如：600" data-live-bound="1"></div>
+        <div><label>其他費用</label><input id="quoteOtherExpense" type="number" inputmode="decimal" min="0" value="0" placeholder="運費、平台費等" data-live-bound="1"></div>
       </div>
       <div class="note" style="margin-top:10px">輸入數字後會自動計算。毛利率＝（未稅銷售額－商品成本）÷未稅銷售額；淨利率＝（毛利－其他費用）÷未稅銷售額。此處的 5% 為營業稅試算，不等同所得稅。</div>
 
@@ -1562,11 +1579,9 @@ body.admin-modal-open{
     <div class="admin-login-dialog" role="dialog" aria-modal="true" aria-labelledby="adminLoginTitle">
       <div class="admin-login-icon">⚙️</div>
       <h3 id="adminLoginTitle">後台管理登入</h3>
-      <div class="note">請輸入後台密碼</div>
+      <div class="note">請輸入後台密碼</div><div class="note" style="font-size:10px;opacity:.55;margin-top:3px">後台入口 v38</div>
 
-      <input id="adminLoginPassword" type="password" inputmode="numeric"
-             autocomplete="off" placeholder="輸入密碼"
-             onkeydown="if(event.key==='Enter') submitAdminLogin()">
+      <input id="adminLoginPassword" type="password" inputmode="numeric" autocomplete="off" placeholder="輸入密碼" onkeydown="if(event.key==='Enter') submitAdminLogin()">
 
       <label class="check-line" style="margin-top:10px">
         <input id="adminShowPassword" type="checkbox" onchange="toggleAdminLoginPassword()"> 顯示密碼
@@ -1594,12 +1609,10 @@ body.admin-modal-open{
       </div>
 
       <label style="margin-top:12px">Web App /exec 網址</label>
-      <input id="sheetSyncUrl" type="url" inputmode="url"
-             placeholder="https://script.google.com/macros/s/......../exec">
+      <input id="sheetSyncUrl" type="url" inputmode="url" placeholder="https://script.google.com/macros/s/......../exec">
 
       <label style="margin-top:10px">同步密鑰（選填）</label>
-      <input id="sheetSyncKey" type="password" autocomplete="off"
-             placeholder="若 Apps Script 的 SYNC_KEY 留白，這裡也留白">
+      <input id="sheetSyncKey" type="password" autocomplete="off" placeholder="若 Apps Script 的 SYNC_KEY 留白，這裡也留白" value="">
 
       <label class="check-line" style="margin-top:10px">
         <input id="sheetSyncEnabled" type="checkbox"> 啟用待辦／收支／彩券自動同步
@@ -1609,7 +1622,7 @@ body.admin-modal-open{
         <button class="primary col" onclick="saveSheetSyncSettings()">儲存連線</button>
         <button class="secondary col" onclick="sendSheetSyncTest()">測試送出</button>
       </div>
-      <div id="sheetSyncStatus" class="note" style="margin-top:9px"></div>
+      <div id="sheetSyncStatus" class="note sync-warn" style="margin-top:9px">尚未設定 Google Apps Script /exec 網址。</div>
     </div>
 
     <div class="card">
@@ -1626,7 +1639,7 @@ body.admin-modal-open{
     <div class="card">
       <strong style="font-size:18px">🧩 既有功能字卡編輯</strong>
       <label style="margin-top:12px">選擇字卡</label>
-      <select id="adminBuiltinCardSelect" onchange="loadAdminBuiltinCardEditor()"></select>
+      <select id="adminBuiltinCardSelect" onchange="loadAdminBuiltinCardEditor()"><option value="todo">待辦事項</option><option value="countdown">行程倒數</option><option value="money">收支記帳</option><option value="split">AA 分帳</option><option value="food">今天吃什麼</option><option value="parking">停車位置</option><option value="shopping">購物清單</option><option value="calc">萬用計算器</option><option value="decision">困難選擇器</option><option value="lottery">讓您發大財</option><option value="packing">旅行打包助手</option><option value="quoteTax">報價／稅額計算器</option><option value="password">金庫密碼</option></select>
 
       <div class="admin-card-editor-grid" style="margin-top:10px">
         <div>
@@ -1674,15 +1687,14 @@ body.admin-modal-open{
       <input id="adminCustomSubtitle" maxlength="60" placeholder="例如：快速開啟公司網站">
 
       <label style="margin-top:10px">連結網址</label>
-      <input id="adminCustomUrl" type="url" inputmode="url"
-             placeholder="https://example.com">
+      <input id="adminCustomUrl" type="url" inputmode="url" placeholder="https://example.com">
 
       <div class="row" style="margin-top:11px">
         <button id="adminCustomSaveBtn" class="primary col" onclick="saveAdminCustomCard()">新增字卡</button>
         <button class="secondary col" onclick="clearAdminCustomEditor()">清空</button>
       </div>
 
-      <div id="adminCustomCardList" class="admin-custom-list" style="margin-top:13px"></div>
+      <div id="adminCustomCardList" class="admin-custom-list" style="margin-top:13px"><div class="empty" style="padding:8px 0">尚未新增外部連結字卡</div></div>
     </div>
 
     <div class="card">
@@ -1708,9 +1720,7 @@ body.admin-modal-open{
       <div class="note">請輸入登入密碼才能查看金庫內容。</div>
 
       <label style="margin-top:14px">登入密碼</label>
-      <input id="vaultLoginPassword" type="password" autocomplete="current-password"
-             placeholder="請輸入金庫登入密碼"
-             onkeydown="if(event.key==='Enter') verifyVaultPassword()">
+      <input id="vaultLoginPassword" type="password" autocomplete="current-password" placeholder="請輸入金庫登入密碼" onkeydown="if(event.key==='Enter') verifyVaultPassword()">
 
       <label class="check-line" style="margin-top:10px">
         <input id="vaultShowLoginPassword" type="checkbox" onchange="toggleVaultLoginPassword()"> 顯示密碼
@@ -1742,12 +1752,10 @@ body.admin-modal-open{
           <div class="vault-setup-title" id="vaultSetupTitle">設定金庫登入密碼</div>
 
           <label style="margin-top:10px">第一次輸入</label>
-          <input id="vaultSetupPassword1" type="password" autocomplete="new-password"
-                 placeholder="請輸入登入密碼">
+          <input id="vaultSetupPassword1" type="password" autocomplete="new-password" placeholder="請輸入登入密碼">
 
           <label style="margin-top:10px">第二次輸入</label>
-          <input id="vaultSetupPassword2" type="password" autocomplete="new-password"
-                 placeholder="請再次輸入相同密碼">
+          <input id="vaultSetupPassword2" type="password" autocomplete="new-password" placeholder="請再次輸入相同密碼">
 
           <label class="check-line" style="margin-top:10px">
             <input id="vaultShowSetupPassword" type="checkbox" onchange="toggleVaultSetupPassword()"> 顯示輸入內容
@@ -1776,24 +1784,24 @@ body.admin-modal-open{
 
     <div class="card">
       <label>密碼長度：<b id="pwdLenText">16</b> 字元</label>
-      <input id="pwdLength" type="range" min="8" max="64" value="16">
+      <input id="pwdLength" type="range" min="8" max="64" value="16" data-live-bound="1">
 
       <div class="check-grid">
-        <label class="check-line"><input id="pwdLower" type="checkbox" checked> 小寫 a-z</label>
-        <label class="check-line"><input id="pwdUpper" type="checkbox" checked> 大寫 A-Z</label>
-        <label class="check-line"><input id="pwdNumber" type="checkbox" checked> 數字 0-9</label>
-        <label class="check-line"><input id="pwdSymbol" type="checkbox" checked> 特殊符號</label>
+        <label class="check-line"><input id="pwdLower" type="checkbox" checked="" data-live-bound="1"> 小寫 a-z</label>
+        <label class="check-line"><input id="pwdUpper" type="checkbox" checked="" data-live-bound="1"> 大寫 A-Z</label>
+        <label class="check-line"><input id="pwdNumber" type="checkbox" checked="" data-live-bound="1"> 數字 0-9</label>
+        <label class="check-line"><input id="pwdSymbol" type="checkbox" checked="" data-live-bound="1"> 特殊符號</label>
       </div>
-      <label class="check-line" style="margin-top:10px"><input id="pwdAvoid" type="checkbox" checked> 排除容易混淆的 0/O、1/l/I</label>
+      <label class="check-line" style="margin-top:10px"><input id="pwdAvoid" type="checkbox" checked="" data-live-bound="1"> 排除容易混淆的 0/O、1/l/I</label>
 
       <label style="margin-top:14px">產生結果</label>
-      <textarea id="pwdOutput" class="password-output" rows="3" readonly></textarea>
+      <textarea id="pwdOutput" class="password-output" rows="3" readonly=""></textarea>
 
       <div class="row" style="margin-top:10px">
         <button class="primary col" onclick="generatePassword()">產生新密碼</button>
         <button class="secondary col" onclick="copyPassword()">複製密碼</button>
       </div>
-      <div class="note" id="pwdInfo" style="margin-top:10px">按下「保存這組密碼」後會立即保存本機，並在已設定 Google Sheet URL 時同步上傳。</div>
+      <div class="note" id="pwdInfo" style="margin-top:10px">長度 16 字元，使用 4 種字元類型；尚未保存。</div>
     </div>
 
     <div class="card">
@@ -1813,11 +1821,9 @@ body.admin-modal-open{
         <label>密碼</label>
         <div class="row">
           <div class="col">
-            <input id="pwdManualInput" type="password" autocomplete="new-password"
-                   placeholder="可手動輸入舊密碼；留白則使用上方產生的密碼">
+            <input id="pwdManualInput" type="password" autocomplete="new-password" placeholder="可手動輸入舊密碼；留白則使用上方產生的密碼">
           </div>
-          <button id="pwdManualToggleBtn" type="button" class="secondary"
-                  onclick="toggleManualPasswordVisibility()">👁️ 顯示</button>
+          <button id="pwdManualToggleBtn" type="button" class="secondary" onclick="toggleManualPasswordVisibility()">👁️ 顯示</button>
         </div>
         <div class="note" style="margin-top:7px">
           若要新增舊密碼，直接在這裡輸入；若留白，則會保存上方「產生結果」中的密碼。
@@ -1833,7 +1839,7 @@ body.admin-modal-open{
         <strong style="font-size:18px">🔐 密碼紀錄</strong>
         <span class="pwd-history-count" id="pwdHistoryCount">0 筆</span>
       </div>
-      <div id="pwdHistoryList"></div>
+      <div id="pwdHistoryList"><div class="empty">目前沒有保存的密碼紀錄</div></div>
       <button id="pwdClearAllBtn" class="danger full" style="margin-top:12px;display:none" onclick="clearAllPasswordHistory()">清除全部密碼紀錄</button>
     </div>
   
@@ -1850,26 +1856,26 @@ body.admin-modal-open{
         <button onclick="showCalc('fx',this)">匯率</button>
       </div>
       <div id="calc-discount" class="calc-panel active">
-        <label>原價</label><input id="discPrice" type="number" placeholder="1000">
-        <label style="margin-top:10px">折數（例如：7 = 7折、8.5 = 85折）</label><input id="discRate" type="number" value="7" step="0.1" min="0" max="10">
+        <label>原價</label><input id="discPrice" type="number" placeholder="1000" data-live-bound="1">
+        <label style="margin-top:10px">折數（例如：7 = 7折、8.5 = 85折）</label><input id="discRate" type="number" value="7" step="0.1" min="0" max="10" data-live-bound="1">
         <div class="note" style="margin-top:10px">輸入數字後會自動計算</div>
-        <div class="big-result" id="discResult"><div class="num">$0</div></div>
+        <div class="big-result" id="discResult"><div class="num">—</div><small>請輸入原價與折數</small></div>
       </div>
       <div id="calc-percent" class="calc-panel">
-        <label>數值</label><input id="pctBase" type="number" placeholder="1000">
-        <label style="margin-top:10px">百分比 %</label><input id="pctRate" type="number" placeholder="15">
+        <label>數值</label><input id="pctBase" type="number" placeholder="1000" data-live-bound="1">
+        <label style="margin-top:10px">百分比 %</label><input id="pctRate" type="number" placeholder="15" data-live-bound="1">
         <div class="note" style="margin-top:10px">輸入數字後會自動計算</div>
-        <div class="big-result" id="pctResult"><div class="num">0</div></div>
+        <div class="big-result" id="pctResult"><div class="num">—</div><small>請輸入數值與百分比</small></div>
       </div>
       <div id="calc-area" class="calc-panel">
-        <label>平方公尺</label><input id="sqm" type="number" placeholder="33">
+        <label>平方公尺</label><input id="sqm" type="number" placeholder="33" data-live-bound="1">
         <div class="note" style="margin-top:10px">輸入數字後會自動換算</div>
-        <div class="big-result" id="areaResult"><div class="num">0 坪</div></div>
+        <div class="big-result" id="areaResult"><div class="num">—</div><small>請輸入平方公尺</small></div>
       </div>
 
       <div id="calc-fx" class="calc-panel">
         <label>金額</label>
-        <input id="fxAmount" type="number" inputmode="decimal" value="1000" min="0" step="any">
+        <input id="fxAmount" type="number" inputmode="decimal" value="1000" min="0" step="any" data-live-bound="1">
 
         <div class="fx-select-row" style="margin-top:12px">
           <div>
@@ -1907,7 +1913,8 @@ const store = {
   get(k, d){ try{return JSON.parse(localStorage.getItem("lifeBox_"+k)) ?? d}catch{return d} },
   set(k, v){ localStorage.setItem("lifeBox_"+k, JSON.stringify(v)) }
 };
-const ADMIN_DEFAULTS = {"homeTitle":"我的生活工具箱","homeSubtitle":"把每天的小事，變得更簡單。","cardOverrides":{},"customCards":[],"homeOrder":[],"deletedBuiltinCards":[]};
+const ADMIN_DEFAULTS = {"homeTitle":"我的生活工具箱","homeSubtitle":"動點頭腦把每天的小事，變得更簡單。 Chien hung","cardOverrides":{},"customCards":[],"homeOrder":["todo","countdown","money","split","food","parking","shopping","calc","decision","lottery","packing","quoteTax","password"],"deletedBuiltinCards":[]};
+const ADMIN_EXPORT_REVISION = 'exp-mty8tbqa-hnq96';
 const fmt = n => new Intl.NumberFormat('zh-TW',{maximumFractionDigits:2}).format(Number(n)||0);
 const pad = n => String(n).padStart(2,'0');
 const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
@@ -3275,6 +3282,39 @@ function calcQuoteTax(){
 
 
 // ===== 隱藏後台管理與首頁編輯 =====
+
+function syncAdminDefaultsFromExport(){
+  const seen=String(store.get('adminExportRevision','')||'');
+  if(seen===ADMIN_EXPORT_REVISION)return;
+
+  // 新匯出的 HTML 視為新的「介面基準」。
+  // 只更新後台版面設定與首頁排序，不清除待辦、收支、密碼等資料。
+  const next=JSON.parse(JSON.stringify(ADMIN_DEFAULTS));
+  store.set('adminConfig',next);
+
+  if(Array.isArray(next.homeOrder) && next.homeOrder.length){
+    store.set('homeToolOrderV1',next.homeOrder);
+  }else{
+    localStorage.removeItem('lifeBox_homeToolOrderV1');
+  }
+
+  store.set('adminExportRevision',ADMIN_EXPORT_REVISION);
+}
+
+function handleAdminRefreshQuery(){
+  try{
+    const u=new URL(location.href);
+    if(u.searchParams.get('refresh')!=='1')return;
+
+    localStorage.removeItem('lifeBox_adminConfig');
+    localStorage.removeItem('lifeBox_homeToolOrderV1');
+    localStorage.removeItem('lifeBox_adminExportRevision');
+
+    u.searchParams.delete('refresh');
+    history.replaceState(null,'',u.pathname+(u.search||'')+u.hash);
+  }catch(e){}
+}
+
 let adminUnlocked=false;
 let adminOriginalBuiltinCards=null;
 
@@ -3467,102 +3507,207 @@ function submitAdminLogin(){
 }
 
 function initHiddenAdminTrigger(){
-  const el=document.getElementById('adminSecretTrigger');
-  if(!el || el.__adminTriggerBound===true)return;
+  if(document.__lifeBoxAdminTriggerBound===true)return;
+  document.__lifeBoxAdminTriggerBound=true;
 
-  el.__adminTriggerBound=true;
-  el.removeAttribute('data-admin-trigger-bound');
-
-  let timer=null;
+  let pressActive=false;
+  let pressStartedAt=0;
   let startX=0;
   let startY=0;
-  let touchActive=false;
-  let mouseActive=false;
+  let moved=false;
+  let opened=false;
+  let longTimer=null;
+  let source='';
 
-  const clearTimer=()=>{
-    if(timer){
-      clearTimeout(timer);
-      timer=null;
-    }
+  const targetIsAdminTrigger=(target)=>{
+    if(!target || !target.closest)return false;
+    return !!target.closest('#adminSecretTrigger');
   };
 
-  const armLongPress=(x,y)=>{
-    clearTimer();
+  const resetPress=()=>{
+    if(longTimer){
+      clearTimeout(longTimer);
+      longTimer=null;
+    }
+    pressActive=false;
+    pressStartedAt=0;
+    moved=false;
+    source='';
+  };
+
+  const openAdminOnce=()=>{
+    if(opened)return;
+    opened=true;
+    resetPress();
+
+    try{
+      if(navigator.vibrate)navigator.vibrate([55,30,55]);
+    }catch(e){}
+
+    openAdminLoginModal();
+
+    // 避免同一次 touchend/click 再觸發其他事件
+    setTimeout(()=>{opened=false},500);
+  };
+
+  const beginPress=(x,y,inputSource)=>{
+    resetPress();
+    pressActive=true;
+    pressStartedAt=Date.now();
     startX=x;
     startY=y;
+    moved=false;
+    source=inputSource;
 
-    timer=setTimeout(()=>{
-      timer=null;
-      touchActive=false;
-      mouseActive=false;
-
-      try{
-        if(navigator.vibrate)navigator.vibrate([45,30,45]);
-      }catch(e){}
-
-      // 不再使用 prompt()。
-      // GitHub Pages / 手機瀏覽器對 setTimeout 後的 JS 對話框可能會阻擋，
-      // 改用頁面內建 Modal 可穩定運作。
-      openAdminLoginModal();
+    // 路徑 A：正常情況 2 秒一到直接開啟
+    longTimer=setTimeout(()=>{
+      if(pressActive && !moved){
+        openAdminOnce();
+      }
     },2000);
   };
 
-  // 手機：直接使用 touch 事件，避免 pointercancel / 瀏覽器手勢造成長按失效
-  el.addEventListener('touchstart',e=>{
+  const updateMove=(x,y)=>{
+    if(!pressActive)return;
+
+    // 手機自然微抖允許 48px
+    if(Math.hypot(x-startX,y-startY)>48){
+      moved=true;
+      resetPress();
+    }
+  };
+
+  const finishPress=()=>{
+    if(!pressActive)return false;
+
+    const duration=Date.now()-pressStartedAt;
+    const shouldOpen=!moved && duration>=1850;
+
+    // 路徑 B：
+    // Android/WebView 若長按期間 timer 被節流，
+    // 放開時依「實際按住時間」補判斷。
+    if(shouldOpen){
+      openAdminOnce();
+      return true;
+    }
+
+    resetPress();
+    return false;
+  };
+
+  // -------------------------------------------------------
+  // document CAPTURE：最早攔截，不怕子元素 stopPropagation
+  // -------------------------------------------------------
+  document.addEventListener('touchstart',e=>{
+    if(!targetIsAdminTrigger(e.target))return;
     if(e.touches.length!==1)return;
 
     const t=e.touches[0];
-    touchActive=true;
-    armLongPress(t.clientX,t.clientY);
-  },{passive:true});
 
-  el.addEventListener('touchmove',e=>{
-    if(!touchActive || !timer || e.touches.length!==1)return;
+    // 只在秘密入口阻止瀏覽器長按選單/文字選取
+    e.preventDefault();
+    beginPress(t.clientX,t.clientY,'touch');
+  },{capture:true,passive:false});
+
+  document.addEventListener('touchmove',e=>{
+    if(!pressActive || source!=='touch')return;
+    if(e.touches.length!==1)return;
 
     const t=e.touches[0];
-    if(Math.hypot(t.clientX-startX,t.clientY-startY)>18){
-      touchActive=false;
-      clearTimer();
+    updateMove(t.clientX,t.clientY);
+
+    if(pressActive){
+      e.preventDefault();
     }
-  },{passive:true});
+  },{capture:true,passive:false});
 
-  el.addEventListener('touchend',()=>{
-    touchActive=false;
-    clearTimer();
-  },{passive:true});
+  document.addEventListener('touchend',e=>{
+    if(source!=='touch')return;
 
-  el.addEventListener('touchcancel',()=>{
-    touchActive=false;
-    clearTimer();
-  },{passive:true});
-
-  // 電腦滑鼠
-  el.addEventListener('mousedown',e=>{
-    if(e.button!==0)return;
-    mouseActive=true;
-    armLongPress(e.clientX,e.clientY);
-  });
-
-  window.addEventListener('mousemove',e=>{
-    if(!mouseActive || !timer)return;
-    if(Math.hypot(e.clientX-startX,e.clientY-startY)>18){
-      mouseActive=false;
-      clearTimer();
+    const didOpen=finishPress();
+    if(didOpen || opened){
+      e.preventDefault();
+      e.stopPropagation();
     }
-  });
+  },{capture:true,passive:false});
 
-  window.addEventListener('mouseup',()=>{
-    if(!mouseActive)return;
-    mouseActive=false;
-    clearTimer();
-  });
+  document.addEventListener('touchcancel',()=>{
+    if(source==='touch')resetPress();
+  },{capture:true,passive:true});
 
-  // 避免手機長按跳出文字選取、圖片選單等原生 UI
-  el.addEventListener('contextmenu',e=>{
+  // -------------------------------------------------------
+  // Pointer / mouse 備援
+  // -------------------------------------------------------
+  document.addEventListener('pointerdown',e=>{
+    if(!targetIsAdminTrigger(e.target))return;
+
+    // touch 已由 touch events 處理，避免同一手勢重複
+    if(e.pointerType==='touch')return;
+    if(e.pointerType==='mouse' && e.button!==0)return;
+
     e.preventDefault();
-    clearTimer();
-  });
+    beginPress(e.clientX,e.clientY,'pointer');
+  },true);
+
+  document.addEventListener('pointermove',e=>{
+    if(!pressActive || source!=='pointer')return;
+    updateMove(e.clientX,e.clientY);
+  },true);
+
+  document.addEventListener('pointerup',e=>{
+    if(source!=='pointer')return;
+    const didOpen=finishPress();
+    if(didOpen || opened){
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  },true);
+
+  document.addEventListener('pointercancel',()=>{
+    if(source==='pointer')resetPress();
+  },true);
+
+  // 原生 context menu 只阻止，不再取消我們的長按計時
+  document.addEventListener('contextmenu',e=>{
+    if(targetIsAdminTrigger(e.target)){
+      e.preventDefault();
+    }
+  },true);
+
+  // -------------------------------------------------------
+  // 最後備援：3 秒內連點日期卡 5 次
+  // -------------------------------------------------------
+  let tapCount=0;
+  let tapResetTimer=null;
+
+  document.addEventListener('click',e=>{
+    if(!targetIsAdminTrigger(e.target))return;
+    if(opened)return;
+
+    tapCount++;
+    clearTimeout(tapResetTimer);
+    tapResetTimer=setTimeout(()=>{tapCount=0},3000);
+
+    if(tapCount>=5){
+      tapCount=0;
+      clearTimeout(tapResetTimer);
+
+      e.preventDefault();
+      e.stopPropagation();
+      openAdminLoginModal();
+    }
+  },true);
 }
+
+// 後台入口採獨立初始化。
+// 即使後續其他功能初始化出錯，日期卡的後台手勢仍已先完成綁定。
+try{
+  document.documentElement.dataset.lifeBoxBuild='v38';
+  initHiddenAdminTrigger();
+}catch(e){
+  console.error('Admin trigger init failed:',e);
+}
+
 
 function leaveAdmin(){
   adminUnlocked=false;
@@ -3916,6 +4061,14 @@ function exportModifiedHtml(){
       'const ADMIN_DEFAULTS = '+safeDefaults+';'
     );
 
+    // 每次匯出產生新的版面版本碼。
+    // 手機 GitHub 端讀到新版 HTML 後，就會自動套用這次匯出的設定。
+    const exportRevision='exp-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);
+    out=out.replace(
+      /const ADMIN_EXPORT_REVISION\s*=\s*['"][^'"]*['"];/,
+      `const ADMIN_EXPORT_REVISION = '${exportRevision}';`
+    );
+
     // 將目前 Google Sheet 連線一起寫入新匯出的 HTML。
     // 這樣新檔案即使是不同 file:// 路徑、沒有原 localStorage，仍可直接上傳。
     const currentSheet=getSheetSyncSettings();
@@ -3938,7 +4091,7 @@ function exportModifiedHtml(){
     const a=document.createElement('a');
     const d=new Date();
     a.href=url;
-    a.download=`我的生活工具箱_自訂版_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}.html`;
+    a.download=`我的生活工具箱_自訂版_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.html`;
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -3958,6 +4111,10 @@ function exportModifiedHtml(){
 
 function initAdminCustomization(){
   adminOriginalBuiltinCards=getBuiltinHomeCardSnapshot();
+
+  handleAdminRefreshQuery();
+  syncAdminDefaultsFromExport();
+
   applyAdminConfig();
   initHiddenAdminTrigger();
 
@@ -4061,7 +4218,7 @@ const SHEET_SYNC_KEYS={
   key:'sheetSyncKey',
   enabled:'sheetSyncEnabled'
 };
-const SHEET_SYNC_DEFAULTS = {url:'',key:'',enabled:false};
+const SHEET_SYNC_DEFAULTS = {"url":"","key":"","enabled":false};
 
 function getSheetSyncSettings(){
   const localUrl=store.get(SHEET_SYNC_KEYS.url,null);
@@ -5658,5 +5815,5 @@ document.addEventListener('touchstart', function unlockAudio(){
 }, {passive:true});
 
 </script>
-</body>
-</html>
+
+</body></html>
