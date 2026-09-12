@@ -874,6 +874,133 @@ body.home-card-dragging{
   transition:box-shadow .10s ease, filter .10s ease !important;
 }
 
+
+/* ===== v21 今天吃什麼：轉盤顯示實際選項文字 ===== */
+#foodWheel{position:relative;overflow:hidden}
+.food-wheel-labels{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+.food-wheel-label{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:42%;
+  transform-origin:0 0;
+  font-size:11px;
+  font-weight:900;
+  color:#4c403b;
+  text-shadow:0 1px 1px rgba(255,255,255,.95);
+  line-height:1.15;
+  text-align:center;
+}
+@media(max-width:390px){
+  .food-wheel-label{font-size:10px}
+}
+
+
+/* ===== v22 彩色分格轉盤 ===== */
+#foodWheel{
+  position:relative;
+  overflow:hidden;
+  background:none !important;
+}
+
+.food-wheel-svg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  z-index:1;
+  border-radius:50%;
+}
+
+#foodWheel .food-sector{
+  stroke:rgba(255,255,255,.86);
+  stroke-width:1.8;
+  stroke-linejoin:round;
+}
+
+#foodWheel .food-sector-text{
+  fill:#3f3632;
+  font-family:inherit;
+  font-weight:900;
+  text-anchor:middle;
+  dominant-baseline:middle;
+  paint-order:stroke;
+  stroke:rgba(255,255,255,.82);
+  stroke-width:2.2px;
+  stroke-linejoin:round;
+  pointer-events:none;
+}
+
+#foodWheel .food-sector-text.light-text{
+  fill:#fff;
+  stroke:rgba(73,55,50,.42);
+}
+
+#foodWheel:before{
+  z-index:3 !important;
+  border:1px solid rgba(141,116,102,.14);
+  background:
+    radial-gradient(circle at 35% 28%,#fff 0%,#fffaf6 42%,#e5d9d0 100%) !important;
+  box-shadow:
+    inset 2px 2px 4px rgba(255,255,255,.92),
+    inset -3px -3px 6px rgba(91,69,59,.12),
+    0 4px 10px rgba(60,45,40,.16) !important;
+}
+
+.wheel-wrap .pointer{
+  position:relative;
+  z-index:5;
+}
+
+/* 舊版 DIV 標籤不再使用 */
+.food-wheel-labels,
+.food-wheel-label{
+  display:none !important;
+}
+
+
+/* ===== v23 轉盤文字固定於各自扇形中心 ===== */
+#foodWheel .food-sector-text{
+  font-weight:900;
+  text-anchor:middle;
+  dominant-baseline:middle;
+  letter-spacing:.2px;
+}
+
+#foodWheel .food-label-bg{
+  fill:rgba(255,255,255,.38);
+  stroke:rgba(255,255,255,.28);
+  stroke-width:.8;
+}
+
+
+/* ===== v24 Google Sheet 同步 ===== */
+.sync-feature-list{
+  margin-top:12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.sync-feature-list>div{
+  padding:10px 11px;
+  border-radius:13px;
+  background:linear-gradient(145deg,#fffdfa,#eee7e0);
+  border:1px solid rgba(255,255,255,.82);
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.92),
+    0 3px 6px rgba(73,57,49,.08);
+  font-size:13px;
+  line-height:1.4;
+}
+.sync-ok{color:#4d7459!important}
+.sync-warn{color:#9a684b!important}
+.sync-error{color:#9a5555!important}
+
 </style>
 </head>
 <body>
@@ -885,7 +1012,7 @@ body.home-card-dragging{
     </div>
     <div class="today-card">
       <div class="date" id="todayText"></div>
-      <div class="quote">今天先處理最重要的一件事 ☀️</div>
+      <div class="quote"><span id="dailyMotto">今天先處理最重要的一件事 ☀️</span></div>
     </div>
     <div class="grid">
       <button class="tool" onclick="openPage('todo')"><span class="icon">✅</span><b>待辦事項</b><small>今天、明天、重要任務</small></button>
@@ -901,6 +1028,7 @@ body.home-card-dragging{
       <button class="tool" onclick="openPage('packing')"><span class="icon">🧳</span><b>旅行打包助手</b><small>範本清單、勾選與進度</small></button>
       <button class="tool" onclick="openPage('quoteTax')"><span class="icon">🧾</span><b>報價／稅額計算器</b><small>稅額、毛利率與淨利率</small></button>
       <button class="tool" onclick="openPage('password')"><span class="icon">🔐</span><b>金庫密碼</b><small>密碼產生、紀錄與登入保護</small></button>
+      
     </div>
     <footer>資料只儲存在這台裝置的瀏覽器中</footer>
   </section>
@@ -931,6 +1059,9 @@ body.home-card-dragging{
     <div class="card">
       <label>事件名稱</label><input id="cdTitle" placeholder="例如：日本旅行">
       <label style="margin-top:10px">日期</label><input id="cdDate" type="date">
+      
+      <label style="margin-top:10px">備註</label>
+      <textarea id="countNote" rows="2" placeholder="例如：訂房編號、集合地點、航班、要帶的東西（可不填）"></textarea>
       <button class="primary full" style="margin-top:12px" onclick="addCountdown()">新增倒數</button>
     </div>
     <div class="card" id="countdownList"></div>
@@ -976,7 +1107,9 @@ body.home-card-dragging{
     <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>今天吃什麼</h2></div>
     <div class="card wheel-wrap">
       <div class="pointer"></div>
-      <div class="wheel" id="foodWheel"></div>
+      <div class="wheel" id="foodWheel">
+        <svg id="foodWheelSvg" class="food-wheel-svg" viewBox="0 0 300 300" aria-label="餐廳選擇轉盤"></svg>
+      </div>
       <button class="primary" onclick="spinFood()">開始轉盤</button>
       <div class="big-result" style="width:100%" id="foodResult"><div>今天就吃</div><div class="num" style="font-size:28px">？</div></div>
     </div>
@@ -1210,6 +1343,51 @@ body.home-card-dragging{
     </div>
   </section>
 
+  
+  <section id="sheetSync" class="page">
+    <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>☁️ Google Sheet 同步</h2></div>
+
+    <div class="card">
+      <strong style="font-size:18px">Google Apps Script Web App</strong>
+      <div class="note" style="margin-top:6px">
+        將 Google Sheet 裡部署完成的 Apps Script Web App URL 貼在下方。設定只保存在目前瀏覽器。
+      </div>
+
+      <label style="margin-top:13px">Web App URL</label>
+      <input id="sheetSyncUrl" type="url" inputmode="url"
+             placeholder="https://script.google.com/macros/s/......../exec">
+
+      <label style="margin-top:12px">同步密鑰（選填）</label>
+      <input id="sheetSyncKey" type="password" autocomplete="off"
+             placeholder="若 Apps Script 有設定 SYNC_KEY，兩邊需相同">
+
+      <label class="check-line" style="margin-top:12px">
+        <input id="sheetSyncEnabled" type="checkbox"> 啟用自動同步
+      </label>
+
+      <div class="row" style="margin-top:12px">
+        <button class="primary col" onclick="saveSheetSyncSettings()">儲存設定</button>
+        <button class="secondary col" onclick="sendSheetSyncTest()">測試送出</button>
+      </div>
+
+      <div id="sheetSyncStatus" class="note" style="margin-top:10px"></div>
+    </div>
+
+    <div class="card">
+      <strong style="font-size:18px">自動上傳項目</strong>
+      <div class="sync-feature-list">
+        <div>✅ 待辦事項：新增待辦時上傳</div>
+        <div>✅ 收支記帳：新增收入／支出時上傳</div>
+        <div>✅ 讓您發大財：每次產生號碼時上傳</div>
+        <div>✅ 金庫密碼：保存一筆密碼紀錄時，帳號與實際密碼內容一起上傳</div>
+      </div>
+      <div class="note" style="margin-top:10px">
+        因瀏覽器直接傳送到 Apps Script 採用 no-cors 模式，頁面能確認「已送出請求」，
+        但無法從瀏覽器讀取 Apps Script 回傳內容；是否成功寫入請以 Google Sheet 為準。
+      </div>
+    </div>
+  </section>
+
   <section id="password" class="page"><div class="topbar"><button class="back" onclick="leaveVault()">←</button><h2>🔐 金庫密碼</h2></div>
 
     <div id="vaultLoginPanel" class="card vault-access-card" style="display:none">
@@ -1432,6 +1610,7 @@ function openPage(id){
   if(id==='shopping') renderShop();
   if(id==='decision') renderDecisionHistory();
   if(id==='lottery'){renderLotteryRule();ensureLotteryBuyTime();}
+  if(id==='sheetSync') loadSheetSyncSettings();
   if(id==='packing') renderPack();
   if(id==='quoteTax') calcQuoteTax();
   if(id==='password'){ensurePassword();openVaultGate();}
@@ -1449,9 +1628,29 @@ if($('#lotteryBuyTime')) $('#lotteryBuyTime').value = toLocalDateTimeInput(now);
 let todoFilter='all';
 function addTodo(){
   const text=$('#todoText').value.trim(); if(!text)return;
+  const item={
+    id:Date.now(),
+    text,
+    date:$('#todoDate').value,
+    important:$('#todoImportant').checked,
+    done:false
+  };
   const list=store.get('todos',[]);
-  list.unshift({id:Date.now(),text,date:$('#todoDate').value,important:$('#todoImportant').checked,done:false});
-  store.set('todos',list); $('#todoText').value=''; $('#todoImportant').checked=false; renderTodos();
+  list.unshift(item);
+  store.set('todos',list);
+
+  sendRecordToGoogleSheet('todo',{
+    id:item.id,
+    content:item.text,
+    dueDate:item.date,
+    important:item.important,
+    done:item.done,
+    createdAt:new Date(item.id).toISOString()
+  });
+
+  $('#todoText').value='';
+  $('#todoImportant').checked=false;
+  renderTodos();
 }
 function setTodoFilter(f,el){
   todoFilter=f; document.querySelectorAll('#todo .pill').forEach(x=>x.classList.remove('active')); el.classList.add('active'); renderTodos();
@@ -1471,8 +1670,9 @@ function renderTodos(){
 // Countdown
 function addCountdown(){
   const title=$('#cdTitle').value.trim(),date=$('#cdDate').value;if(!title||!date)return;
-  const l=store.get('countdowns',[]);l.push({id:Date.now(),title,date});store.set('countdowns',l);
+  const l=store.get('countdowns',[]);l.push({id:Date.now(),note:($('#countNote')?.value||'').trim(),title,date});store.set('countdowns',l);
   $('#cdTitle').value='';$('#cdDate').value='';renderCountdowns();
+  if($('#countNote')) $('#countNote').value='';
 }
 function delCountdown(id){store.set('countdowns',store.get('countdowns',[]).filter(x=>x.id!==id));renderCountdowns()}
 function dayDiff(date){
@@ -1496,9 +1696,30 @@ function getMoneyCategory(){
 }
 function addMoney(){
   const amount=Number($('#moneyAmount').value);if(!(amount>0))return;
+
+  const item={
+    id:Date.now(),
+    type:$('#moneyType').value,
+    amount,
+    cat:getMoneyCategory(),
+    date:$('#moneyDate').value,
+    note:$('#moneyNote').value.trim()
+  };
+
   const l=store.get('money',[]);
-  l.unshift({id:Date.now(),type:$('#moneyType').value,amount,cat:getMoneyCategory(),date:$('#moneyDate').value,note:$('#moneyNote').value.trim()});
+  l.unshift(item);
   store.set('money',l);
+
+  sendRecordToGoogleSheet('money',{
+    id:item.id,
+    type:item.type,
+    amount:item.amount,
+    category:item.cat,
+    recordDate:item.date,
+    note:item.note,
+    createdAt:new Date(item.id).toISOString()
+  });
+
   $('#moneyAmount').value='';
   $('#moneyNote').value='';
   $('#moneyCustomCat').value='';
@@ -1524,22 +1745,232 @@ function calcSplit(){
 let currentRotation=0;
 function getFoodOptions(){return store.get('foodOptions',['便當','麵食','火鍋','燒肉','日式','小吃'])}
 function saveFoodOptions(){
+  sessionGpsFoodOptions=[];
   const arr=$('#foodOptions').value.split(/[,，\n]/).map(s=>s.trim()).filter(Boolean).slice(0,30);
   if(arr.length<2)return alert('至少需要 2 個選項');
   store.set('foodOptions',arr);loadFood();
 }
+
+function renderFoodTags(){
+  const el=$('#foodTags');
+  if(!el)return;
+  const arr=getWheelFoodOptions();
+  el.innerHTML=arr.map(x=>`<span class="tag">${esc(x)}</span>`).join('');
+}
+
 function loadFood(){
   const arr=getFoodOptions();$('#foodOptions').value=arr.join(',');
-  $('#foodTags').innerHTML=arr.map(x=>`<span class="tag">${esc(x)}</span>`).join('');
+  renderFoodTags();
+  renderFoodWheelLabels();
 }
+
+function polarPoint(cx,cy,r,deg){
+  const rad=deg*Math.PI/180;
+  return {
+    x:cx+r*Math.cos(rad),
+    y:cy+r*Math.sin(rad)
+  };
+}
+
+function foodSectorPath(cx,cy,r,startDeg,endDeg){
+  const p1=polarPoint(cx,cy,r,startDeg);
+  const p2=polarPoint(cx,cy,r,endDeg);
+  const largeArc=(endDeg-startDeg)>180?1:0;
+  return [
+    `M ${cx} ${cy}`,
+    `L ${p1.x.toFixed(3)} ${p1.y.toFixed(3)}`,
+    `A ${r} ${r} 0 ${largeArc} 1 ${p2.x.toFixed(3)} ${p2.y.toFixed(3)}`,
+    'Z'
+  ].join(' ');
+}
+
+function foodWheelColor(index,count){
+  // 黃金角分散色相，選項增加時會自動產生更多不同顏色。
+  // 降低飽和度，維持莫蘭迪柔和感。
+  const hue=(346 + index*137.508) % 360;
+  const sat=24 + (index%3)*4;
+  const light=70 + ((index*2)%3)*3;
+  return `hsl(${hue.toFixed(1)} ${sat}% ${light}%)`;
+}
+
+function foodWheelTextColor(index){
+  // 目前使用的莫蘭迪色都偏亮，因此主要使用深色字。
+  return 'food-sector-text';
+}
+
+function shortenFoodWheelName(name,maxChars){
+  const text=String(name||'').trim();
+  if(text.length<=maxChars)return text;
+  return text.slice(0,Math.max(1,maxChars-1))+'…';
+}
+
+function splitFoodWheelLabel(name,count){
+  const text=String(name||'').trim();
+
+  // 選項少時盡量完整顯示；選項多時適度縮短。
+  let maxTotal=14;
+  let perLine=7;
+
+  if(count<=6){
+    maxTotal=12;
+    perLine=6;
+  }else if(count<=8){
+    maxTotal=10;
+    perLine=5;
+  }else if(count<=12){
+    maxTotal=8;
+    perLine=4;
+  }else if(count<=18){
+    maxTotal=6;
+    perLine=3;
+  }else{
+    maxTotal=5;
+    perLine=3;
+  }
+
+  let value=text;
+  if(value.length>maxTotal){
+    value=value.slice(0,Math.max(1,maxTotal-1))+'…';
+  }
+
+  if(value.length<=perLine)return [value];
+
+  const first=value.slice(0,perLine);
+  const second=value.slice(perLine);
+  return [first,second].filter(Boolean);
+}
+
+function foodWheelLabelConfig(count){
+  if(count<=4)return {radius:106,font:15.5,boxW:70,boxH:34};
+  if(count<=6)return {radius:108,font:14.5,boxW:62,boxH:32};
+  if(count<=8)return {radius:110,font:12.5,boxW:56,boxH:31};
+  if(count<=12)return {radius:112,font:10.5,boxW:48,boxH:30};
+  if(count<=18)return {radius:114,font:8.8,boxW:41,boxH:28};
+  return {radius:116,font:7.5,boxW:34,boxH:25};
+}
+
+function renderFoodWheelLabels(){
+  const svg=$('#foodWheelSvg');
+  if(!svg)return;
+
+  const arr=getWheelFoodOptions();
+  if(!arr.length){
+    svg.innerHTML='';
+    return;
+  }
+
+  const count=arr.length;
+  const cx=150;
+  const cy=150;
+  const r=147;
+  const step=360/count;
+  const cfg=foodWheelLabelConfig(count);
+
+  const parts=[];
+
+  arr.forEach((name,i)=>{
+    // 每一個選項固定對應自己的扇形，不再用自由座標判斷。
+    const start=-90+i*step;
+    const end=start+step;
+    const mid=start+step/2;
+
+    const color=foodWheelColor(i,count);
+    const path=foodSectorPath(cx,cy,r,start,end);
+
+    parts.push(
+      `<path class="food-sector" d="${path}" fill="${color}"></path>`
+    );
+
+    // 先把整個文字群組轉到該扇形的「中心軸線」，
+    // 文字固定放在中心軸線半徑 cfg.radius 的位置。
+    const labelX=cx+cfg.radius;
+    const labelY=cy;
+
+    const normalized=((mid%360)+360)%360;
+    const flip=(normalized>90 && normalized<270);
+    const innerRotate=flip?180:0;
+
+    const lines=splitFoodWheelLabel(name,count);
+
+    // 選項較少時加半透明小底板，讓文字與所屬格子更清楚。
+    if(count<=8){
+      const bgH=lines.length>1?cfg.boxH+8:cfg.boxH;
+      parts.push(
+        `<g transform="rotate(${mid.toFixed(3)} ${cx} ${cy})">`+
+          `<g transform="rotate(${innerRotate} ${labelX} ${labelY})">`+
+            `<rect class="food-label-bg" `+
+              `x="${(labelX-cfg.boxW/2).toFixed(2)}" `+
+              `y="${(labelY-bgH/2).toFixed(2)}" `+
+              `width="${cfg.boxW}" height="${bgH}" rx="8"></rect>`+
+          `</g>`+
+        `</g>`
+      );
+    }
+
+    parts.push(
+      `<g transform="rotate(${mid.toFixed(3)} ${cx} ${cy})">`+
+        `<text class="food-sector-text" `+
+          `x="${labelX}" y="${labelY}" `+
+          `font-size="${cfg.font}" `+
+          `transform="rotate(${innerRotate} ${labelX} ${labelY})">`+
+          (lines.length===1
+            ? `${esc(lines[0])}`
+            : `<tspan x="${labelX}" dy="-6">${esc(lines[0])}</tspan>`+
+              `<tspan x="${labelX}" dy="13">${esc(lines[1])}</tspan>`
+          )+
+        `</text>`+
+      `</g>`
+    );
+  });
+
+  svg.innerHTML=parts.join('');
+}
+
 function spinFood(){
-  const arr=getFoodOptions(),idx=Math.floor(Math.random()*arr.length);
-  currentRotation += 1440 + Math.floor(Math.random()*720);
-  $('#foodWheel').style.transform=`rotate(${currentRotation}deg)`;
-  setTimeout(()=>{$('#foodResult').innerHTML=`<div>今天就吃</div><div class="num" style="font-size:28px">${esc(arr[idx])}</div>`},3000);
+  const arr=getWheelFoodOptions();
+  if(!arr.length)return;
+
+  const idx=Math.floor(Math.random()*arr.length);
+  const step=360/arr.length;
+
+  // 讓實際停在上方指針的格子，與下方顯示結果完全一致。
+  const selectedCenter=idx*step+step/2;
+  const currentNormalized=((currentRotation%360)+360)%360;
+  const desiredNormalized=(360-selectedCenter)%360;
+  const extraTurns=5+Math.floor(Math.random()*3);
+  const delta=((desiredNormalized-currentNormalized+360)%360)+(extraTurns*360);
+
+  currentRotation+=delta;
+
+  const wheel=$('#foodWheel');
+  wheel.style.transform=`rotate(${currentRotation}deg)`;
+
+  setTimeout(()=>{
+    $('#foodResult').innerHTML=
+      `<div>今天就吃</div>`+
+      `<div class="num" style="font-size:28px">${esc(arr[idx])}</div>`;
+  },3250);
 }
 
 let nearbyRestaurants=[];
+let sessionGpsFoodOptions=[]; // 僅本次開啟有效，重新載入後自動清空
+
+function isGpsFoodSessionActive(){
+  return sessionGpsFoodOptions.length>0;
+}
+
+function getWheelFoodOptions(){
+  // 本次只要加入過 GPS 餐廳，轉盤就只顯示本次加入的 GPS 餐廳。
+  // 重新開啟 HTML 後 sessionGpsFoodOptions 會重新變成空陣列，
+  // 原本便當/麵食/火鍋/燒肉/日式/小吃等設定便會再次出現。
+  return isGpsFoodSessionActive() ? sessionGpsFoodOptions : getFoodOptions();
+}
+
+function refreshFoodWheelAfterGps(){
+  renderFoodTags();
+  renderFoodWheelLabels();
+}
+
 
 function distanceMeters(lat1,lon1,lat2,lon2){
   const R=6371000;
@@ -1667,6 +2098,11 @@ out center tags;`;
 
 function renderNearbyRestaurants(){
   const el=$('#nearbyRestaurantList');
+  if(!el)return;
+  if(!nearbyRestaurants.length){
+    el.innerHTML='';
+    return;
+  }
   el.innerHTML=nearbyRestaurants.map((r,i)=>{
     const dist=r.distance<1000?`${Math.round(r.distance)} 公尺`:`${(r.distance/1000).toFixed(1)} 公里`;
     const cuisine=r.cuisine?` · ${esc(r.cuisine)}`:'';
@@ -1694,13 +2130,48 @@ function mergeFoodOptions(names){
 function addNearbyToWheel(index){
   const r=nearbyRestaurants[index];
   if(!r)return;
-  const added=mergeFoodOptions([r.name]);
-  $('#nearbyStatus').textContent=added?`已將「${r.name}」加入轉盤。`:`「${r.name}」已經在轉盤內。`;
+
+  if(!sessionGpsFoodOptions.includes(r.name)){
+    sessionGpsFoodOptions.push(r.name);
+  }
+
+  // 加入後，從目前 GPS 搜尋清單移除該餐廳
+  nearbyRestaurants.splice(index,1);
+
+  // 本次開啟期間，轉盤只顯示 GPS 加入的餐廳；
+  // 原本設定不會被刪除，重新開啟後會自動恢復。
+  renderFoodTags();
+  renderFoodWheelLabels();
+  renderNearbyRestaurants();
+
+  $('#nearbyStatus').textContent=`已將「${r.name}」加入轉盤；本次轉盤暫時只顯示 GPS 餐廳。`;
+
+  const addAll=$('#nearbyAddAllBtn');
+  if(addAll) addAll.style.display=nearbyRestaurants.length?'block':'none';
 }
 
 function addAllNearbyToWheel(){
-  const added=mergeFoodOptions(nearbyRestaurants.map(x=>x.name));
-  $('#nearbyStatus').textContent=added?`已將 ${added} 間餐廳加入轉盤（最多保留 30 個選項）。`:'這些餐廳都已經在轉盤內。';
+  if(!nearbyRestaurants.length)return;
+
+  let added=0;
+  nearbyRestaurants.forEach(r=>{
+    if(!sessionGpsFoodOptions.includes(r.name)){
+      sessionGpsFoodOptions.push(r.name);
+      added++;
+    }
+  });
+
+  nearbyRestaurants=[];
+  renderFoodTags();
+  renderFoodWheelLabels();
+  renderNearbyRestaurants();
+
+  $('#nearbyStatus').textContent=added
+    ? `已將 ${added} 間餐廳加入轉盤；本次轉盤暫時只顯示 GPS 餐廳。`
+    : '這些餐廳都已經在本次轉盤內。';
+
+  const addAll=$('#nearbyAddAllBtn');
+  if(addAll) addAll.style.display='none';
 }
 
 // Parking
@@ -2172,6 +2643,7 @@ function generateLotteryNumbers(){
   const gameKey=$('#lotteryGame').value;
   const rule=LOTTERY_RULES[gameKey];
   let main=[],power=null,meta='';
+  let destinySyncData=null;
 
   if(lotteryMode==='random'){
     main=uniqueRandomNumbers(rule.count,rule.max);
@@ -2180,6 +2652,14 @@ function generateLotteryNumbers(){
   }else{
     const d=getLotteryDestinySeed(gameKey);
     if(!d)return;
+    destinySyncData={
+      name:d.name,
+      birthDate:d.birthDate,
+      birthTime:d.birthTime,
+      buyTime:d.buyTime,
+      lunar:d.lunar,
+      hourBranch:d.branch
+    };
     main=uniqueSeededNumbers(rule.count,rule.max,d.seed+'|main');
     if(rule.powerMax)power=uniqueSeededNumbers(1,rule.powerMax,d.seed+'|power')[0];
     meta=`紫微靈感模式 · 農曆參考：${d.lunar} · ${d.branch} · 購買時間 ${d.buyTime.replace('T',' ')}`;
@@ -2205,6 +2685,17 @@ function generateLotteryNumbers(){
   lastLotteryCopyText=power!==null
     ? `${rule.name}：第一區 ${main.map(pad).join('、')}｜第二區 ${pad(power)}`
     : `${rule.name}：${main.map(pad).join('、')}`;
+
+  sendRecordToGoogleSheet('lottery',{
+    game:rule.name,
+    mode:lotteryMode==='random'?'純隨機':'紫微靈感',
+    mainNumbers:main.map(pad).join('、'),
+    secondZone:power!==null?pad(power):'',
+    resultText:lastLotteryCopyText,
+    fortune,
+    destiny:destinySyncData,
+    createdAt:new Date().toISOString()
+  });
 }
 
 async function copyLotteryResult(){
@@ -2416,6 +2907,213 @@ function calcQuoteTax(){
     el.classList.remove('margin-positive','margin-negative');
     el.classList.add(v>=0?'margin-positive':'margin-negative');
   });
+}
+
+
+
+
+// ===== 每日幽默勵志座右銘 =====
+const DAILY_MOTTOS=[
+  '今天先處理最重要的一件事，剩下的先假裝沒看到 ☀️',
+  '事情很多沒關係，先做一件，焦慮就少一格 😌',
+  '今天不求完美，只求不要一直開新分頁 🖥️',
+  '把最難的先做掉，等等耍廢才比較心安 😎',
+  '今天的你只需要比昨天少拖延五分鐘 ⏳',
+  '先完成，再漂亮；先開始，再厲害 ✨',
+  '人生沒有一鍵完成，但可以先按「開始」 ▶️',
+  '別等靈感來，先動手，靈感通常很愛遲到 😂',
+  '今天做一點，明天就少欠自己一點 📌',
+  '如果事情很難，就先把它拆成「現在能做的一小步」 🧩',
+  '今天可以慢，但不要原地轉圈圈 🐢',
+  '完成 80 分，比想像中的 100 分有用多了 🎯',
+  '先把眼前這件做完，再去煩惱下一件 😏',
+  '今天的任務：少想一點，多完成一點 ✅',
+  '沒有人能一次搞定人生，但你可以先搞定上午 ☕',
+  '先做最不想做的，等等連空氣都會變甜 🍬',
+  '今天不用當超人，當一個有進度的人就好 🦸',
+  '拖延不會消失，只會換一個更大的包裝回來 📦',
+  '把待辦清掉一個，就像幫大腦關掉一個吵鬧通知 🔕',
+  '今天的好運，通常藏在「我先去做」後面 🍀',
+  '別把力氣花在想「要不要」，先做五分鐘再說 ⏱️',
+  '今天可以不厲害，但要比「完全沒開始」厲害一點 😆',
+  '先完成最重要的，再去完成最想做的 🎈',
+  '如果不知道從哪開始，就從最不想碰的那一件開始 😅',
+  '今天的你不需要滿血，只需要上線 🔋',
+  '做完一件事情的快樂，比列十張待辦清單實際多了 📝',
+  '少一點完美主義，多一點「先交出去再說」 🚀',
+  '今天別跟自己開太多會議，直接執行就對了 🤝',
+  '事情不會自己完成，但咖啡至少會先陪你 ☕',
+  '今天的目標不是忙，是有結果 🎯',
+  '先做，再修；先走，再調整方向 🧭',
+  '不要怕今天做得少，怕的是一直等明天開始 📅',
+  '把今天能做的做好，明天的你會偷偷感謝你 🙌',
+  '人生已經夠複雜了，今天先把一件事情做簡單一點 🧹',
+  '你不是沒時間，你只是剛剛又滑了十分鐘手機 📱',
+  '今天的第一個勝利：先把最煩的那件事情打勾 ✔️',
+  '有進度就值得鼓掌，不一定要放煙火 👏',
+  '別跟待辦事項互看了，它不會害羞自己消失 👀',
+  '今天請對自己狠一點：先做事，再獎勵自己耍廢 😌',
+  '把焦慮換成一個小動作，效果通常比想很多有用 💡'
+];
+
+function localDateKey(d=new Date()){
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+}
+
+function updateDailyMotto(){
+  const el=document.getElementById('dailyMotto');
+  if(!el)return;
+
+  const today=localDateKey();
+  const saved=store.get('dailyMottoState',null);
+
+  if(saved && saved.date===today && Number.isInteger(saved.index) && DAILY_MOTTOS[saved.index]){
+    el.textContent=DAILY_MOTTOS[saved.index];
+    return;
+  }
+
+  let previousIndex=(saved && Number.isInteger(saved.index)) ? saved.index : -1;
+  let nextIndex=0;
+
+  if(DAILY_MOTTOS.length>1){
+    do{
+      if(window.crypto && crypto.getRandomValues){
+        const a=new Uint32Array(1);
+        crypto.getRandomValues(a);
+        nextIndex=a[0]%DAILY_MOTTOS.length;
+      }else{
+        nextIndex=Math.floor(Math.random()*DAILY_MOTTOS.length);
+      }
+    }while(nextIndex===previousIndex);
+  }
+
+  store.set('dailyMottoState',{
+    date:today,
+    index:nextIndex
+  });
+
+  el.textContent=DAILY_MOTTOS[nextIndex];
+}
+
+// ===== Google Sheet 自動同步 =====
+const SHEET_SYNC_KEYS={
+  url:'sheetSyncUrl',
+  key:'sheetSyncKey',
+  enabled:'sheetSyncEnabled'
+};
+
+function getSheetSyncSettings(){
+  return {
+    url:String(store.get(SHEET_SYNC_KEYS.url,'')||'').trim(),
+    key:String(store.get(SHEET_SYNC_KEYS.key,'')||'').trim(),
+    enabled:store.get(SHEET_SYNC_KEYS.enabled,false)===true
+  };
+}
+
+function loadSheetSyncSettings(){
+  const s=getSheetSyncSettings();
+  if($('#sheetSyncUrl'))$('#sheetSyncUrl').value=s.url;
+  if($('#sheetSyncKey'))$('#sheetSyncKey').value=s.key;
+  if($('#sheetSyncEnabled'))$('#sheetSyncEnabled').checked=s.enabled;
+
+  if($('#sheetSyncStatus')){
+    $('#sheetSyncStatus').textContent=s.enabled
+      ? (s.url?'目前：自動同步已啟用。':'目前：已勾選自動同步，但尚未設定 Web App URL。')
+      : '目前：自動同步未啟用。';
+  }
+}
+
+function saveSheetSyncSettings(){
+  const url=($('#sheetSyncUrl')?.value||'').trim();
+  const key=($('#sheetSyncKey')?.value||'').trim();
+  const enabled=$('#sheetSyncEnabled')?.checked===true;
+
+  if(enabled && !/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec(?:\?.*)?$/.test(url)){
+    $('#sheetSyncStatus').className='note sync-error';
+    $('#sheetSyncStatus').textContent='請先輸入正確的 Google Apps Script Web App /exec 網址。';
+    return;
+  }
+
+  store.set(SHEET_SYNC_KEYS.url,url);
+  store.set(SHEET_SYNC_KEYS.key,key);
+  store.set(SHEET_SYNC_KEYS.enabled,enabled);
+
+  $('#sheetSyncStatus').className='note sync-ok';
+  $('#sheetSyncStatus').textContent=enabled
+    ? '設定已儲存，之後新增指定紀錄會自動送到 Google Sheet。'
+    : '設定已儲存，目前不會自動同步。';
+}
+
+
+function setSheetSyncMessage(text,type=''){
+  const el=$('#sheetSyncStatus');
+  if(!el)return;
+  el.className='note'+(type?' sync-'+type:'');
+  el.textContent=text;
+}
+
+async function sendRecordToGoogleSheet(recordType,data,options={}){
+  const s=getSheetSyncSettings();
+
+  if(!options.force && !s.enabled){
+    return {skipped:true,reason:'disabled'};
+  }
+
+  if(!s.url){
+    if(options.force)setSheetSyncMessage('尚未設定 Web App URL。','error');
+    return {skipped:true,reason:'no-url'};
+  }
+
+  const payload={
+    action:'append',
+    recordType,
+    syncKey:s.key,
+    deviceTime:new Date().toISOString(),
+    data
+  };
+
+  try{
+    await fetch(s.url,{
+      method:'POST',
+      mode:'no-cors',
+      headers:{
+        'Content-Type':'text/plain;charset=utf-8'
+      },
+      body:JSON.stringify(payload),
+      cache:'no-store'
+    });
+
+    if(options.force){
+      setSheetSyncMessage('測試同步請求已送出，請到 Google Sheet 查看是否新增「同步測試」資料。','ok');
+    }
+
+    return {sent:true};
+  }catch(err){
+    if(options.force){
+      setSheetSyncMessage('送出失敗：'+(err?.message||'網路或 Web App 設定錯誤'),'error');
+    }
+    return {sent:false,error:String(err)};
+  }
+}
+
+function sendSheetSyncTest(){
+  // 先儲存畫面上的最新設定
+  const url=($('#sheetSyncUrl')?.value||'').trim();
+  const key=($('#sheetSyncKey')?.value||'').trim();
+
+  if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec(?:\?.*)?$/.test(url)){
+    setSheetSyncMessage('請先貼上部署完成的 Apps Script /exec 網址。','error');
+    return;
+  }
+
+  store.set(SHEET_SYNC_KEYS.url,url);
+  store.set(SHEET_SYNC_KEYS.key,key);
+
+  setSheetSyncMessage('正在送出測試資料…','warn');
+  sendRecordToGoogleSheet('sync_test',{
+    message:'生活工具箱 Google Sheet 同步測試',
+    localTime:new Date().toLocaleString('zh-TW')
+  },{force:true});
 }
 
 
@@ -2742,6 +3440,16 @@ function saveCurrentPassword(){
 
   // 上限 50 筆，避免 localStorage 無限制增長
   store.set('passwordHistory',list.slice(0,50));
+
+  sendRecordToGoogleSheet('vault_password',{
+    id:now,
+    name,
+    account,
+    source:manual?'手動輸入':'密碼產生器',
+    password:password,
+    passwordIncluded:true,
+    createdAt:new Date(now).toISOString()
+  });
 
   $('#pwdRecordName').value='';
   $('#pwdRecordAccount').value='';
@@ -3618,6 +4326,7 @@ function initHomeReorder(){
 
 // 所有拖曳相關 const / let / function 都建立完成後才初始化。
 // 這是上一版無法移動的核心修正。
+updateDailyMotto();
 initHomeReorder();
 
 
