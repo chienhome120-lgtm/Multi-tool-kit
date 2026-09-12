@@ -627,6 +627,68 @@ input,select,textarea{
   }
 }
 
+
+/* ===== v16 金庫密碼登入保護 ===== */
+.vault-access-card{
+  text-align:center;
+  padding:24px 16px;
+}
+.vault-lock-icon{
+  font-size:48px;
+  line-height:1;
+  margin-bottom:10px;
+  filter:drop-shadow(0 4px 5px rgba(64,49,43,.14));
+}
+.vault-protection-choice{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:8px;
+}
+.vault-protection-choice button{
+  min-height:48px;
+  border-radius:15px;
+  border:1px solid rgba(255,255,255,.82);
+  background:linear-gradient(145deg,#fffdfa,#eee5de);
+  color:var(--ink);
+  font-weight:800;
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.95),
+    inset -1px -1px 0 rgba(128,105,93,.10),
+    0 4px 7px rgba(73,57,49,.11);
+}
+.vault-protection-choice button.active{
+  background:linear-gradient(145deg,#9b7378,#795259);
+  color:#fff;
+  border-color:rgba(255,255,255,.25);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.25),
+    inset 0 -2px 3px rgba(65,43,48,.20),
+    0 5px 8px rgba(82,56,61,.20);
+}
+.vault-protection-choice button:active{
+  transform:translateY(2px);
+}
+.vault-setup-title{
+  font-size:16px;
+  font-weight:900;
+  padding-top:3px;
+}
+#vaultLoginMessage,
+#vaultSetupMessage{
+  min-height:18px;
+}
+#vaultContent{
+  animation:vaultFadeIn .18s ease;
+}
+@keyframes vaultFadeIn{
+  from{opacity:.3;transform:translateY(4px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@media(max-width:380px){
+  .vault-protection-choice{grid-template-columns:1fr}
+}
+
 </style>
 </head>
 <body>
@@ -653,7 +715,7 @@ input,select,textarea{
       <button class="tool" onclick="openPage('lottery')"><span class="icon">🧧</span><b>讓您發大財</b><small>大樂透・威力彩・539 選號靈感</small></button>
       <button class="tool" onclick="openPage('packing')"><span class="icon">🧳</span><b>旅行打包助手</b><small>範本清單、勾選與進度</small></button>
       <button class="tool" onclick="openPage('quoteTax')"><span class="icon">🧾</span><b>報價／稅額計算器</b><small>稅額、毛利率與淨利率</small></button>
-      <button class="tool" onclick="openPage('password')"><span class="icon">🔐</span><b>密碼產生器</b><small>安全隨機、長度與字元組合</small></button>
+      <button class="tool" onclick="openPage('password')"><span class="icon">🔐</span><b>金庫密碼</b><small>密碼產生、紀錄與登入保護</small></button>
     </div>
     <footer>資料只儲存在這台裝置的瀏覽器中</footer>
   </section>
@@ -963,8 +1025,76 @@ input,select,textarea{
     </div>
   </section>
 
-  <section id="password" class="page">
-    <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>密碼產生器</h2></div>
+  <section id="password" class="page"><div class="topbar"><button class="back" onclick="leaveVault()">←</button><h2>🔐 金庫密碼</h2></div>
+
+    <div id="vaultLoginPanel" class="card vault-access-card" style="display:none">
+      <div class="vault-lock-icon">🔒</div>
+      <h3 style="margin:0 0 6px">金庫已上鎖</h3>
+      <div class="note">請輸入登入密碼才能查看金庫內容。</div>
+
+      <label style="margin-top:14px">登入密碼</label>
+      <input id="vaultLoginPassword" type="password" autocomplete="current-password"
+             placeholder="請輸入金庫登入密碼"
+             onkeydown="if(event.key==='Enter') verifyVaultPassword()">
+
+      <label class="check-line" style="margin-top:10px">
+        <input id="vaultShowLoginPassword" type="checkbox" onchange="toggleVaultLoginPassword()"> 顯示密碼
+      </label>
+
+      <button class="primary full" style="margin-top:12px" onclick="verifyVaultPassword()">🔓 解鎖金庫</button>
+      <div id="vaultLoginMessage" class="note" style="margin-top:9px"></div>
+    </div>
+
+    <div id="vaultContent">
+      <div class="card">
+        <strong style="font-size:18px">🛡️ 金庫登入保護</strong>
+        <div class="note" id="vaultProtectionStatus" style="margin-top:5px"></div>
+
+        <label style="margin-top:13px">進入金庫時需要密碼嗎？</label>
+        <div class="vault-protection-choice">
+          <button id="vaultNoPasswordBtn" type="button" onclick="chooseVaultLoginProtection(false)">
+            🔓 不需要
+          </button>
+          <button id="vaultNeedPasswordBtn" type="button" onclick="chooseVaultLoginProtection(true)">
+            🔒 需要密碼
+          </button>
+        </div>
+
+        <div id="vaultPasswordSetup" style="display:none;margin-top:14px">
+          <div class="vault-setup-title" id="vaultSetupTitle">設定金庫登入密碼</div>
+
+          <label style="margin-top:10px">第一次輸入</label>
+          <input id="vaultSetupPassword1" type="password" autocomplete="new-password"
+                 placeholder="請輸入登入密碼">
+
+          <label style="margin-top:10px">第二次輸入</label>
+          <input id="vaultSetupPassword2" type="password" autocomplete="new-password"
+                 placeholder="請再次輸入相同密碼">
+
+          <label class="check-line" style="margin-top:10px">
+            <input id="vaultShowSetupPassword" type="checkbox" onchange="toggleVaultSetupPassword()"> 顯示輸入內容
+          </label>
+
+          <div class="row" style="margin-top:10px">
+            <button class="primary col" onclick="saveVaultProtectionPassword()">確認</button>
+            <button class="secondary col" onclick="cancelVaultPasswordSetup()">取消</button>
+          </div>
+
+          <div id="vaultSetupMessage" class="note" style="margin-top:8px"></div>
+        </div>
+
+        <div id="vaultProtectedActions" class="row" style="display:none;margin-top:12px;flex-wrap:wrap">
+          <button class="secondary col" onclick="startChangeVaultPassword()">變更登入密碼</button>
+          <button class="danger col" onclick="disableVaultProtection()">關閉登入保護</button>
+        </div>
+
+        <div class="pwd-warning" style="margin-top:12px">
+          ⚠️ 登入保護主要用來避免別人直接看到金庫內容；目前保存的帳號密碼仍儲存在瀏覽器 localStorage，
+          並不是銀行等級的加密密碼保管庫。
+        </div>
+      </div>
+
+    
 
     <div class="card">
       <label>密碼長度：<b id="pwdLenText">16</b> 字元</label>
@@ -1028,7 +1158,9 @@ input,select,textarea{
       <div id="pwdHistoryList"></div>
       <button id="pwdClearAllBtn" class="danger full" style="margin-top:12px;display:none" onclick="clearAllPasswordHistory()">清除全部密碼紀錄</button>
     </div>
-  </section>
+  
+    </div>
+</section>
 
 <section id="calc" class="page">
     <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>萬用計算器</h2></div>
@@ -1103,6 +1235,7 @@ const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`
 function esc(s=''){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 
 function openPage(id){
+  if(id!=='password') vaultUnlockedThisVisit=false;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   $('#'+id).classList.add('active');
   window.scrollTo({top:0,behavior:'instant'});
@@ -1116,7 +1249,7 @@ function openPage(id){
   if(id==='lottery'){renderLotteryRule();ensureLotteryBuyTime();}
   if(id==='packing') renderPack();
   if(id==='quoteTax') calcQuoteTax();
-  if(id==='password'){ensurePassword();renderPasswordHistory();}
+  if(id==='password'){ensurePassword();openVaultGate();}
   if(id==='calc') initFx();
 }
 function goHome(){openPage('home')}
@@ -2099,6 +2232,214 @@ function calcQuoteTax(){
     el.classList.add(v>=0?'margin-positive':'margin-negative');
   });
 }
+
+
+// ===== 金庫密碼：可選登入保護 =====
+let vaultUnlockedThisVisit=false;
+let vaultPasswordSetupMode='enable';
+
+function vaultProtectionEnabled(){
+  return store.get('vaultProtectionEnabled',false)===true;
+}
+
+// 登入密碼只保存雜湊結果，不直接保存明文。
+// 注意：這仍只是本機介面防護，並非真正加密整個密碼資料庫。
+function vaultHash(text){
+  let h1=0x811c9dc5;
+  let h2=0x9e3779b9;
+  const salt=store.get('vaultHashSalt','life-box-vault');
+  const input=salt+'|'+text+'|vault';
+  for(let round=0;round<3000;round++){
+    for(let i=0;i<input.length;i++){
+      const c=input.charCodeAt(i)+(round&255);
+      h1^=c;
+      h1=Math.imul(h1,0x01000193);
+      h2^=(c+i*31);
+      h2=Math.imul(h2,0x85ebca6b);
+    }
+    h1^=h2>>>13;
+    h2^=h1>>>11;
+  }
+  return (h1>>>0).toString(16).padStart(8,'0')+(h2>>>0).toString(16).padStart(8,'0');
+}
+
+function ensureVaultSalt(){
+  if(store.get('vaultHashSalt',''))return;
+  let salt='';
+  if(window.crypto && crypto.getRandomValues){
+    const a=new Uint32Array(4);
+    crypto.getRandomValues(a);
+    salt=Array.from(a).map(x=>x.toString(16)).join('');
+  }else{
+    salt=String(Date.now())+'-'+String(Math.random()).slice(2);
+  }
+  store.set('vaultHashSalt',salt);
+}
+
+function refreshVaultProtectionUI(){
+  const enabled=vaultProtectionEnabled();
+  const status=$('#vaultProtectionStatus');
+  if(!status)return;
+
+  status.textContent=enabled
+    ? '目前設定：需要密碼。只要離開金庫，再次進入就必須重新驗證。'
+    : '目前設定：不需要密碼。進入金庫時會直接開啟。';
+
+  $('#vaultNeedPasswordBtn').classList.toggle('active',enabled);
+  $('#vaultNoPasswordBtn').classList.toggle('active',!enabled);
+  $('#vaultProtectedActions').style.display=enabled?'flex':'none';
+}
+
+function openVaultGate(){
+  const login=$('#vaultLoginPanel');
+  const content=$('#vaultContent');
+  if(!login || !content)return;
+
+  if(vaultProtectionEnabled() && !vaultUnlockedThisVisit){
+    content.style.display='none';
+    login.style.display='block';
+    $('#vaultLoginPassword').value='';
+    $('#vaultLoginMessage').textContent='';
+    $('#vaultShowLoginPassword').checked=false;
+    toggleVaultLoginPassword();
+    setTimeout(()=>$('#vaultLoginPassword').focus(),80);
+  }else{
+    login.style.display='none';
+    content.style.display='block';
+    refreshVaultProtectionUI();
+    renderPasswordHistory();
+  }
+}
+
+function chooseVaultLoginProtection(needPassword){
+  if(!needPassword){
+    if(vaultProtectionEnabled()){
+      disableVaultProtection();
+    }else{
+      store.set('vaultProtectionEnabled',false);
+      refreshVaultProtectionUI();
+    }
+    return;
+  }
+
+  if(vaultProtectionEnabled()){
+    refreshVaultProtectionUI();
+    return;
+  }
+
+  vaultPasswordSetupMode='enable';
+  $('#vaultSetupTitle').textContent='設定金庫登入密碼';
+  $('#vaultPasswordSetup').style.display='block';
+  $('#vaultSetupPassword1').value='';
+  $('#vaultSetupPassword2').value='';
+  $('#vaultSetupMessage').textContent='請連續輸入兩次相同密碼。';
+  setTimeout(()=>$('#vaultSetupPassword1').focus(),50);
+}
+
+function startChangeVaultPassword(){
+  vaultPasswordSetupMode='change';
+  $('#vaultSetupTitle').textContent='變更金庫登入密碼';
+  $('#vaultPasswordSetup').style.display='block';
+  $('#vaultSetupPassword1').value='';
+  $('#vaultSetupPassword2').value='';
+  $('#vaultSetupMessage').textContent='請輸入兩次相同的新密碼。';
+  setTimeout(()=>$('#vaultSetupPassword1').focus(),50);
+}
+
+function cancelVaultPasswordSetup(){
+  $('#vaultPasswordSetup').style.display='none';
+  $('#vaultSetupPassword1').value='';
+  $('#vaultSetupPassword2').value='';
+  $('#vaultSetupMessage').textContent='';
+  $('#vaultShowSetupPassword').checked=false;
+  toggleVaultSetupPassword();
+  refreshVaultProtectionUI();
+}
+
+function toggleVaultSetupPassword(){
+  const show=$('#vaultShowSetupPassword')?.checked===true;
+  if($('#vaultSetupPassword1'))$('#vaultSetupPassword1').type=show?'text':'password';
+  if($('#vaultSetupPassword2'))$('#vaultSetupPassword2').type=show?'text':'password';
+}
+
+function toggleVaultLoginPassword(){
+  const show=$('#vaultShowLoginPassword')?.checked===true;
+  if($('#vaultLoginPassword'))$('#vaultLoginPassword').type=show?'text':'password';
+}
+
+function saveVaultProtectionPassword(){
+  const p1=$('#vaultSetupPassword1').value;
+  const p2=$('#vaultSetupPassword2').value;
+  const msg=$('#vaultSetupMessage');
+
+  if(!p1 || !p2){
+    msg.textContent='第一次與第二次都必須輸入。';
+    return;
+  }
+  if(p1.length<4){
+    msg.textContent='登入密碼至少需要 4 個字元。';
+    return;
+  }
+  if(p1!==p2){
+    msg.textContent='兩次輸入不相同，請重新確認。';
+    return;
+  }
+
+  ensureVaultSalt();
+  store.set('vaultAccessHash',vaultHash(p1));
+  store.set('vaultProtectionEnabled',true);
+  vaultUnlockedThisVisit=true;
+
+  cancelVaultPasswordSetup();
+  refreshVaultProtectionUI();
+
+  const info=$('#pwdInfo');
+  if(info){
+    info.textContent=vaultPasswordSetupMode==='change'
+      ? '金庫登入密碼已變更。'
+      : '已啟用金庫登入保護；下次離開後再進入就必須驗證。';
+  }
+}
+
+function verifyVaultPassword(){
+  const input=$('#vaultLoginPassword').value;
+  const saved=store.get('vaultAccessHash','');
+  const msg=$('#vaultLoginMessage');
+
+  if(!input){
+    msg.textContent='請先輸入登入密碼。';
+    return;
+  }
+
+  if(!saved || vaultHash(input)!==saved){
+    msg.textContent='登入密碼不正確，請再試一次。';
+    $('#vaultLoginPassword').select();
+    return;
+  }
+
+  vaultUnlockedThisVisit=true;
+  $('#vaultLoginPassword').value='';
+  $('#vaultShowLoginPassword').checked=false;
+  toggleVaultLoginPassword();
+  openVaultGate();
+}
+
+function disableVaultProtection(){
+  store.set('vaultProtectionEnabled',false);
+  store.set('vaultAccessHash','');
+  vaultUnlockedThisVisit=true;
+  cancelVaultPasswordSetup();
+  refreshVaultProtectionUI();
+
+  const info=$('#pwdInfo');
+  if(info)info.textContent='已關閉金庫登入保護；之後進入不需要驗證密碼。';
+}
+
+function leaveVault(){
+  vaultUnlockedThisVisit=false;
+  goHome();
+}
+
 
 // Password generator + local password history
 const pwdVisibleIds=new Set();
