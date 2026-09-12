@@ -1,8 +1,13 @@
 <!DOCTYPE html>
-<html lang="zh-Hant"><head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#8d6e63">
+<html lang="zh-Hant">
+<head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="life-box-build" content="v39">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#8d6e63" />
 <title>我的生活工具箱</title>
 <style>
 :root{
@@ -1128,7 +1133,7 @@ body.home-card-dragging{
   -webkit-user-select:none !important;
   user-select:none !important;
   -webkit-touch-callout:none !important;
-  touch-action:pan-y;
+  touch-action:none !important;
 }
 
 .admin-login-modal{
@@ -1195,35 +1200,260 @@ body.admin-modal-open{
   overflow:hidden;
 }
 
+
+/* ===== v38 手機後台長按最終相容修正 ===== */
+#adminSecretTrigger,
+#adminSecretTrigger *{
+  -webkit-user-select:none !important;
+  user-select:none !important;
+  -webkit-touch-callout:none !important;
+}
+
+#adminSecretTrigger{
+  touch-action:none !important;
+  cursor:default;
+}
+
+
+/* ===== v39 後台獨立觸控層 ===== */
+#adminSecretTrigger{
+  position:relative !important;
+}
+
+#adminSecretPressLayer{
+  position:absolute !important;
+  inset:0 !important;
+  z-index:25 !important;
+  display:block !important;
+  background:transparent !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  touch-action:none !important;
+  -webkit-user-select:none !important;
+  user-select:none !important;
+  -webkit-touch-callout:none !important;
+}
+
+
+/* ===== v40 行李密碼轉盤式年月日選擇器 ===== */
+.date-wheel-trigger{
+  width:100%;
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 14px;
+  border-radius:14px;
+  border:1px solid rgba(84,72,63,.18);
+  background:linear-gradient(145deg,#fffdfa,#eee7df);
+  color:var(--ink);
+  font-size:16px;
+  font-weight:700;
+  text-align:left;
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.95),
+    0 3px 8px rgba(65,50,43,.08);
+}
+
+.date-wheel-trigger.has-value .date-wheel-trigger-text{
+  color:var(--ink);
+}
+
+.date-wheel-trigger:not(.has-value) .date-wheel-trigger-text{
+  color:var(--muted);
+  font-weight:600;
+}
+
+.date-wheel-trigger-icon{
+  flex:0 0 auto;
+  font-size:18px;
+  opacity:.65;
+}
+
+.date-wheel-modal{
+  position:fixed;
+  inset:0;
+  z-index:2147483000;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  padding:0;
+}
+
+.date-wheel-modal.show{
+  display:flex;
+}
+
+.date-wheel-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(41,34,30,.48);
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+}
+
+.date-wheel-panel{
+  position:relative;
+  z-index:1;
+  width:min(100%,520px);
+  border-radius:24px 24px 0 0;
+  padding:16px 16px calc(18px + env(safe-area-inset-bottom));
+  background:linear-gradient(180deg,#faf7f2,#ece5de);
+  border:1px solid rgba(255,255,255,.9);
+  box-shadow:0 -14px 32px rgba(53,42,36,.24);
+}
+
+.date-wheel-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:6px;
+}
+
+.date-wheel-head strong{
+  font-size:19px;
+}
+
+.date-wheel-close{
+  width:36px;
+  height:36px;
+  border:0;
+  border-radius:50%;
+  font-size:24px;
+  line-height:1;
+  background:rgba(255,255,255,.6);
+  color:var(--ink);
+}
+
+.date-wheel-labels{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  text-align:center;
+  font-size:13px;
+  font-weight:800;
+  color:var(--muted);
+  margin:4px 0 6px;
+}
+
+.date-wheel-shell{
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  height:220px;
+  overflow:hidden;
+  border-radius:18px;
+  background:
+    linear-gradient(180deg,rgba(224,217,209,.75),rgba(255,255,255,.72) 35%,rgba(255,255,255,.72) 65%,rgba(224,217,209,.75));
+  border:1px solid rgba(91,76,67,.12);
+}
+
+.date-wheel-highlight{
+  position:absolute;
+  left:8px;
+  right:8px;
+  top:50%;
+  transform:translateY(-50%);
+  height:48px;
+  border-top:1px solid rgba(111,88,75,.22);
+  border-bottom:1px solid rgba(111,88,75,.22);
+  background:rgba(255,255,255,.48);
+  border-radius:12px;
+  pointer-events:none;
+  z-index:2;
+}
+
+.date-wheel-column{
+  position:relative;
+  z-index:3;
+  height:220px;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scroll-snap-type:y mandatory;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  padding:86px 0;
+  touch-action:pan-y;
+}
+
+.date-wheel-column::-webkit-scrollbar{
+  display:none;
+}
+
+.date-wheel-item{
+  height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  scroll-snap-align:center;
+  font-size:20px;
+  font-weight:800;
+  color:#766960;
+  transition:transform .12s ease,opacity .12s ease;
+  opacity:.55;
+}
+
+.date-wheel-item.active{
+  color:var(--ink);
+  font-size:22px;
+  opacity:1;
+  transform:scale(1.06);
+}
+
+.date-wheel-preview{
+  margin-top:10px;
+  text-align:center;
+  font-size:17px;
+  font-weight:800;
+  color:var(--ink);
+}
+
+body.date-wheel-open{
+  overflow:hidden;
+}
+
+@media(min-width:700px){
+  .date-wheel-modal{
+    align-items:center;
+    padding:18px;
+  }
+  .date-wheel-panel{
+    border-radius:24px;
+  }
+}
+
 </style>
 </head>
-<body class="">
+<body>
 <div class="app">
   <section id="home" class="page active">
     <div class="hero">
       <h1>我的生活工具箱</h1>
-      <p>動點頭腦把每天的小事，變得更簡單。     CHIEN HUNG</p>
+      <p>動動腦生活變得更簡單.........Chien hung</p>
     </div>
     <div class="today-card" id="adminSecretTrigger" aria-label="今日資訊">
-      <div class="date" id="todayText">2026年9月12日星期六</div>
-      <div class="quote"><span id="dailyMotto">今天的第一個勝利：先把最煩的那件事情打勾 ✔️</span></div>
+      <div class="date" id="todayText"></div>
+      <div class="quote"><span id="dailyMotto">今天先處理最重要的一件事 ☀️</span></div>
+      <div id="adminSecretPressLayer" aria-hidden="true"></div>
     </div>
     <div class="grid">
+      <button class="tool" onclick="openPage('todo')"><span class="icon">✅</span><b>待辦事項</b><small>今天、明天、重要任務</small></button>
+      <button class="tool" onclick="openPage('countdown')"><span class="icon">📅</span><b>行程倒數</b><small>旅行、生日、重要日期</small></button>
+      <button class="tool" onclick="openPage('money')"><span class="icon">💰</span><b>收支記帳</b><small>快速記錄收入與支出</small></button>
+      <button class="tool" onclick="openPage('split')"><span class="icon">👥</span><b>AA 分帳</b><small>聚餐平均分攤</small></button>
+      <button class="tool" onclick="openPage('food')"><span class="icon">🍜</span><b>今天吃什麼</b><small>轉盤幫你決定</small></button>
+      <button class="tool" onclick="openPage('parking')"><span class="icon">🅿️</span><b>停車位置</b><small>時間、位置與備註</small></button>
+      <button class="tool" onclick="openPage('shopping')"><span class="icon">🛒</span><b>購物清單</b><small>買完直接勾掉</small></button>
+      <button class="tool" onclick="openPage('calc')"><span class="icon">🧮</span><b>萬用計算器</b><small>折扣、百分比、坪數、匯率</small></button>
+      <button class="tool" onclick="openPage('decision')"><span class="icon">🎭</span><b>困難選擇器</b><small>要不要？買不買？宇宙幫你決定</small></button>
+      <button class="tool" onclick="openPage('lottery')"><span class="icon">🧧</span><b>讓您發大財</b><small>大樂透・威力彩・539 選號靈感</small></button>
+      <button class="tool" onclick="openPage('packing')"><span class="icon">🧳</span><b>旅行打包助手</b><small>範本清單、勾選與進度</small></button>
+      <button class="tool" onclick="openPage('quoteTax')"><span class="icon">🧾</span><b>報價／稅額計算器</b><small>稅額、毛利率與淨利率</small></button>
+      <button class="tool" onclick="openPage('password')"><span class="icon">🔐</span><b>金庫密碼</b><small>密碼產生、紀錄與登入保護</small></button>
       
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-    <button class="tool" onclick="openPage('todo')"><span class="icon">✅</span><b>待辦事項</b><small>今天、明天、重要任務</small></button><button class="tool" onclick="openPage('countdown')"><span class="icon">📅</span><b>行程倒數</b><small>旅行、生日、重要日期</small></button><button class="tool" onclick="openPage('money')"><span class="icon">💰</span><b>收支記帳</b><small>快速記錄收入與支出</small></button><button class="tool" onclick="openPage('split')"><span class="icon">👥</span><b>AA 分帳</b><small>聚餐平均分攤</small></button><button class="tool" onclick="openPage('food')"><span class="icon">🍜</span><b>今天吃什麼</b><small>轉盤幫你決定</small></button><button class="tool" onclick="openPage('parking')"><span class="icon">🅿️</span><b>停車位置</b><small>時間、位置與備註</small></button><button class="tool" onclick="openPage('shopping')"><span class="icon">🛒</span><b>購物清單</b><small>買完直接勾掉</small></button><button class="tool" onclick="openPage('calc')"><span class="icon">🧮</span><b>萬用計算器</b><small>折扣、百分比、坪數、匯率</small></button><button class="tool" onclick="openPage('decision')"><span class="icon">🎭</span><b>困難選擇器</b><small>要不要？買不買？宇宙幫你決定</small></button><button class="tool" onclick="openPage('lottery')"><span class="icon">🧧</span><b>祝您發大財</b><small>大樂透・威力彩・539 選號靈感</small></button><button class="tool" onclick="openPage('packing')"><span class="icon">🧳</span><b>旅行打包助手</b><small>範本清單、勾選與進度</small></button><button class="tool" onclick="openPage('quoteTax')"><span class="icon">🧾</span><b>報價／稅額計算器</b><small>稅額、毛利率與淨利率</small></button><button class="tool" onclick="openPage('password')"><span class="icon">🔐</span><b>金庫密碼</b><small>密碼產生、紀錄與登入保護</small></button></div>
+    </div>
     <footer>資料只儲存在這台裝置的瀏覽器中</footer>
   </section>
 
@@ -1232,7 +1462,11 @@ body.admin-modal-open{
     <div class="card">
       <div class="row">
         <div class="col"><label>待辦內容</label><input id="todoText" placeholder="例如：繳電費"></div>
-        <div style="width:130px"><label>日期</label><input id="todoDate" type="date"></div>
+        <div style="width:130px"><label>日期</label><input id="todoDate" type="hidden">
+            <button type="button" class="date-wheel-trigger" data-date-target="todoDate" onclick="openDateWheel('todoDate')">
+              <span class="date-wheel-trigger-text" id="todoDateDisplay">選擇待辦日期</span>
+              <span class="date-wheel-trigger-icon">▾</span>
+            </button></div>
       </div>
       <div class="row" style="margin-top:10px">
         <label style="display:flex;align-items:center;gap:8px;margin:0;flex:1"><input id="todoImportant" type="checkbox" style="width:18px"> 標記重要</label>
@@ -1252,7 +1486,11 @@ body.admin-modal-open{
     <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>行程倒數</h2></div>
     <div class="card">
       <label>事件名稱</label><input id="cdTitle" placeholder="例如：日本旅行">
-      <label style="margin-top:10px">日期</label><input id="cdDate" type="date">
+      <label style="margin-top:10px">日期</label><input id="cdDate" type="hidden">
+            <button type="button" class="date-wheel-trigger" data-date-target="cdDate" onclick="openDateWheel('cdDate')">
+              <span class="date-wheel-trigger-text" id="cdDateDisplay">選擇行程日期</span>
+              <span class="date-wheel-trigger-icon">▾</span>
+            </button>
       
       <label style="margin-top:10px">備註</label>
       <textarea id="countNote" rows="2" placeholder="例如：訂房編號、集合地點、航班、要帶的東西（可不填）"></textarea>
@@ -1274,7 +1512,11 @@ body.admin-modal-open{
       </div>
       <div class="row" style="margin-top:10px">
         <div class="col"><label>分類</label><select id="moneyCat" onchange="toggleMoneyCustomCat()"><option>餐飲</option><option>交通</option><option>購物</option><option>帳單</option><option>娛樂</option><option>薪資</option><option>其他</option></select></div>
-        <div class="col"><label>日期</label><input id="moneyDate" type="date"></div>
+        <div class="col"><label>日期</label><input id="moneyDate" type="hidden">
+            <button type="button" class="date-wheel-trigger" data-date-target="moneyDate" onclick="openDateWheel('moneyDate')">
+              <span class="date-wheel-trigger-text" id="moneyDateDisplay">選擇記帳日期</span>
+              <span class="date-wheel-trigger-icon">▾</span>
+            </button></div>
       </div>
       <div id="moneyCustomCatWrap" style="display:none;margin-top:10px">
         <label>自訂分類名稱</label>
@@ -1321,7 +1563,7 @@ body.admin-modal-open{
           <label>搜尋半徑</label>
           <select id="nearbyRadius">
             <option value="500">500 公尺</option>
-            <option value="1000" selected="">1 公里</option>
+            <option value="1000" selected>1 公里</option>
             <option value="2000">2 公里</option>
             <option value="3000">3 公里</option>
           </select>
@@ -1405,7 +1647,7 @@ body.admin-modal-open{
 
     <div class="card">
       <div class="row"><strong class="col">最近的命運紀錄</strong><button id="decisionClearAllBtn" type="button" class="iconbtn" title="清除全部紀錄">🗑️</button></div>
-      <div id="decisionHistory" class="decision-history" style="margin-top:10px"><div class="empty" style="padding:10px 4px">還沒有紀錄。你的糾結目前仍然很純潔。</div></div>
+      <div id="decisionHistory" class="decision-history" style="margin-top:10px"></div>
     </div>
   </section>
 
@@ -1436,7 +1678,11 @@ body.admin-modal-open{
           </div>
           <div>
             <label>出生年月日</label>
-            <input id="lotteryBirthDate" type="date">
+            <input id="lotteryBirthDate" type="hidden">
+            <button type="button" class="date-wheel-trigger" data-date-target="lotteryBirthDate" onclick="openDateWheel('lotteryBirthDate')">
+              <span class="date-wheel-trigger-text" id="lotteryBirthDateDisplay">選擇出生年月日</span>
+              <span class="date-wheel-trigger-icon">▾</span>
+            </button>
           </div>
           <div>
             <label>出生時間</label>
@@ -1528,13 +1774,13 @@ body.admin-modal-open{
     <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>報價／稅額計算器</h2></div>
     <div class="card">
       <div class="quote-grid">
-        <div><label>單價基準</label><select id="quoteMode" data-live-bound="1"><option value="before">未稅單價</option><option value="after">含稅單價</option></select></div>
-        <div><label>單價</label><input id="quoteUnit" type="number" inputmode="decimal" min="0" placeholder="例如：1000" data-live-bound="1"></div>
-        <div><label>數量</label><input id="quoteQty" type="number" inputmode="decimal" min="0" value="1" data-live-bound="1"></div>
-        <div><label>折扣 %</label><input id="quoteDiscount" type="number" inputmode="decimal" min="0" max="100" value="0" data-live-bound="1"></div>
-        <div><label>稅率 %</label><input id="quoteTaxRate" type="number" inputmode="decimal" min="0" value="5" data-live-bound="1"></div>
-        <div><label>單位成本</label><input id="quoteCost" type="number" inputmode="decimal" min="0" placeholder="例如：600" data-live-bound="1"></div>
-        <div><label>其他費用</label><input id="quoteOtherExpense" type="number" inputmode="decimal" min="0" value="0" placeholder="運費、平台費等" data-live-bound="1"></div>
+        <div><label>單價基準</label><select id="quoteMode"><option value="before">未稅單價</option><option value="after">含稅單價</option></select></div>
+        <div><label>單價</label><input id="quoteUnit" type="number" inputmode="decimal" min="0" placeholder="例如：1000"></div>
+        <div><label>數量</label><input id="quoteQty" type="number" inputmode="decimal" min="0" value="1"></div>
+        <div><label>折扣 %</label><input id="quoteDiscount" type="number" inputmode="decimal" min="0" max="100" value="0"></div>
+        <div><label>稅率 %</label><input id="quoteTaxRate" type="number" inputmode="decimal" min="0" value="5"></div>
+        <div><label>單位成本</label><input id="quoteCost" type="number" inputmode="decimal" min="0" placeholder="例如：600"></div>
+        <div><label>其他費用</label><input id="quoteOtherExpense" type="number" inputmode="decimal" min="0" value="0" placeholder="運費、平台費等"></div>
       </div>
       <div class="note" style="margin-top:10px">輸入數字後會自動計算。毛利率＝（未稅銷售額－商品成本）÷未稅銷售額；淨利率＝（毛利－其他費用）÷未稅銷售額。此處的 5% 為營業稅試算，不等同所得稅。</div>
 
@@ -1556,14 +1802,16 @@ body.admin-modal-open{
 
   
   
-  <div id="adminLoginModal" class="admin-login-modal" aria-hidden="true">
+  <div id="adminLoginModal" class="admin-login-modal" aria-hidden="true" style="display:none">
     <div class="admin-login-backdrop" onclick="closeAdminLoginModal()"></div>
     <div class="admin-login-dialog" role="dialog" aria-modal="true" aria-labelledby="adminLoginTitle">
       <div class="admin-login-icon">⚙️</div>
       <h3 id="adminLoginTitle">後台管理登入</h3>
-      <div class="note">請輸入後台密碼</div>
+      <div class="note">請輸入後台密碼</div><div class="note" style="font-size:10px;opacity:.55;margin-top:3px">後台入口 v39</div>
 
-      <input id="adminLoginPassword" type="password" inputmode="numeric" autocomplete="off" placeholder="輸入密碼" onkeydown="if(event.key==='Enter') submitAdminLogin()">
+      <input id="adminLoginPassword" type="password" inputmode="numeric"
+             autocomplete="off" placeholder="輸入密碼"
+             onkeydown="if(event.key==='Enter') submitAdminLogin()">
 
       <label class="check-line" style="margin-top:10px">
         <input id="adminShowPassword" type="checkbox" onchange="toggleAdminLoginPassword()"> 顯示密碼
@@ -1591,10 +1839,12 @@ body.admin-modal-open{
       </div>
 
       <label style="margin-top:12px">Web App /exec 網址</label>
-      <input id="sheetSyncUrl" type="url" inputmode="url" placeholder="https://script.google.com/macros/s/......../exec">
+      <input id="sheetSyncUrl" type="url" inputmode="url"
+             placeholder="https://script.google.com/macros/s/......../exec">
 
       <label style="margin-top:10px">同步密鑰（選填）</label>
-      <input id="sheetSyncKey" type="password" autocomplete="off" placeholder="若 Apps Script 的 SYNC_KEY 留白，這裡也留白" value="">
+      <input id="sheetSyncKey" type="password" autocomplete="off"
+             placeholder="若 Apps Script 的 SYNC_KEY 留白，這裡也留白">
 
       <label class="check-line" style="margin-top:10px">
         <input id="sheetSyncEnabled" type="checkbox"> 啟用待辦／收支／彩券自動同步
@@ -1604,7 +1854,7 @@ body.admin-modal-open{
         <button class="primary col" onclick="saveSheetSyncSettings()">儲存連線</button>
         <button class="secondary col" onclick="sendSheetSyncTest()">測試送出</button>
       </div>
-      <div id="sheetSyncStatus" class="note sync-ok" style="margin-top:9px">Sheet 連線已設定。金庫保存密碼時會立即上傳。</div>
+      <div id="sheetSyncStatus" class="note" style="margin-top:9px"></div>
     </div>
 
     <div class="card">
@@ -1621,7 +1871,7 @@ body.admin-modal-open{
     <div class="card">
       <strong style="font-size:18px">🧩 既有功能字卡編輯</strong>
       <label style="margin-top:12px">選擇字卡</label>
-      <select id="adminBuiltinCardSelect" onchange="loadAdminBuiltinCardEditor()"><option value="todo">待辦事項</option><option value="countdown">行程倒數</option><option value="money">收支記帳</option><option value="split">AA 分帳</option><option value="food">今天吃什麼</option><option value="parking">停車位置</option><option value="shopping">購物清單</option><option value="calc">萬用計算器</option><option value="decision">困難選擇器</option><option value="lottery">祝您發大財</option><option value="packing">旅行打包助手</option><option value="quoteTax">報價／稅額計算器</option><option value="password">金庫密碼</option></select>
+      <select id="adminBuiltinCardSelect" onchange="loadAdminBuiltinCardEditor()"></select>
 
       <div class="admin-card-editor-grid" style="margin-top:10px">
         <div>
@@ -1669,14 +1919,15 @@ body.admin-modal-open{
       <input id="adminCustomSubtitle" maxlength="60" placeholder="例如：快速開啟公司網站">
 
       <label style="margin-top:10px">連結網址</label>
-      <input id="adminCustomUrl" type="url" inputmode="url" placeholder="https://example.com">
+      <input id="adminCustomUrl" type="url" inputmode="url"
+             placeholder="https://example.com">
 
       <div class="row" style="margin-top:11px">
         <button id="adminCustomSaveBtn" class="primary col" onclick="saveAdminCustomCard()">新增字卡</button>
         <button class="secondary col" onclick="clearAdminCustomEditor()">清空</button>
       </div>
 
-      <div id="adminCustomCardList" class="admin-custom-list" style="margin-top:13px"><div class="empty" style="padding:8px 0">尚未新增外部連結字卡</div></div>
+      <div id="adminCustomCardList" class="admin-custom-list" style="margin-top:13px"></div>
     </div>
 
     <div class="card">
@@ -1702,7 +1953,9 @@ body.admin-modal-open{
       <div class="note">請輸入登入密碼才能查看金庫內容。</div>
 
       <label style="margin-top:14px">登入密碼</label>
-      <input id="vaultLoginPassword" type="password" autocomplete="current-password" placeholder="請輸入金庫登入密碼" onkeydown="if(event.key==='Enter') verifyVaultPassword()">
+      <input id="vaultLoginPassword" type="password" autocomplete="current-password"
+             placeholder="請輸入金庫登入密碼"
+             onkeydown="if(event.key==='Enter') verifyVaultPassword()">
 
       <label class="check-line" style="margin-top:10px">
         <input id="vaultShowLoginPassword" type="checkbox" onchange="toggleVaultLoginPassword()"> 顯示密碼
@@ -1734,10 +1987,12 @@ body.admin-modal-open{
           <div class="vault-setup-title" id="vaultSetupTitle">設定金庫登入密碼</div>
 
           <label style="margin-top:10px">第一次輸入</label>
-          <input id="vaultSetupPassword1" type="password" autocomplete="new-password" placeholder="請輸入登入密碼">
+          <input id="vaultSetupPassword1" type="password" autocomplete="new-password"
+                 placeholder="請輸入登入密碼">
 
           <label style="margin-top:10px">第二次輸入</label>
-          <input id="vaultSetupPassword2" type="password" autocomplete="new-password" placeholder="請再次輸入相同密碼">
+          <input id="vaultSetupPassword2" type="password" autocomplete="new-password"
+                 placeholder="請再次輸入相同密碼">
 
           <label class="check-line" style="margin-top:10px">
             <input id="vaultShowSetupPassword" type="checkbox" onchange="toggleVaultSetupPassword()"> 顯示輸入內容
@@ -1766,24 +2021,24 @@ body.admin-modal-open{
 
     <div class="card">
       <label>密碼長度：<b id="pwdLenText">16</b> 字元</label>
-      <input id="pwdLength" type="range" min="8" max="64" value="16" data-live-bound="1">
+      <input id="pwdLength" type="range" min="8" max="64" value="16">
 
       <div class="check-grid">
-        <label class="check-line"><input id="pwdLower" type="checkbox" checked="" data-live-bound="1"> 小寫 a-z</label>
-        <label class="check-line"><input id="pwdUpper" type="checkbox" checked="" data-live-bound="1"> 大寫 A-Z</label>
-        <label class="check-line"><input id="pwdNumber" type="checkbox" checked="" data-live-bound="1"> 數字 0-9</label>
-        <label class="check-line"><input id="pwdSymbol" type="checkbox" checked="" data-live-bound="1"> 特殊符號</label>
+        <label class="check-line"><input id="pwdLower" type="checkbox" checked> 小寫 a-z</label>
+        <label class="check-line"><input id="pwdUpper" type="checkbox" checked> 大寫 A-Z</label>
+        <label class="check-line"><input id="pwdNumber" type="checkbox" checked> 數字 0-9</label>
+        <label class="check-line"><input id="pwdSymbol" type="checkbox" checked> 特殊符號</label>
       </div>
-      <label class="check-line" style="margin-top:10px"><input id="pwdAvoid" type="checkbox" checked="" data-live-bound="1"> 排除容易混淆的 0/O、1/l/I</label>
+      <label class="check-line" style="margin-top:10px"><input id="pwdAvoid" type="checkbox" checked> 排除容易混淆的 0/O、1/l/I</label>
 
       <label style="margin-top:14px">產生結果</label>
-      <textarea id="pwdOutput" class="password-output" rows="3" readonly=""></textarea>
+      <textarea id="pwdOutput" class="password-output" rows="3" readonly></textarea>
 
       <div class="row" style="margin-top:10px">
         <button class="primary col" onclick="generatePassword()">產生新密碼</button>
         <button class="secondary col" onclick="copyPassword()">複製密碼</button>
       </div>
-      <div class="note" id="pwdInfo" style="margin-top:10px">長度 16 字元，使用 4 種字元類型；尚未保存。</div>
+      <div class="note" id="pwdInfo" style="margin-top:10px">按下「保存這組密碼」後會立即保存本機，並在已設定 Google Sheet URL 時同步上傳。</div>
     </div>
 
     <div class="card">
@@ -1803,9 +2058,11 @@ body.admin-modal-open{
         <label>密碼</label>
         <div class="row">
           <div class="col">
-            <input id="pwdManualInput" type="password" autocomplete="new-password" placeholder="可手動輸入舊密碼；留白則使用上方產生的密碼">
+            <input id="pwdManualInput" type="password" autocomplete="new-password"
+                   placeholder="可手動輸入舊密碼；留白則使用上方產生的密碼">
           </div>
-          <button id="pwdManualToggleBtn" type="button" class="secondary" onclick="toggleManualPasswordVisibility()">👁️ 顯示</button>
+          <button id="pwdManualToggleBtn" type="button" class="secondary"
+                  onclick="toggleManualPasswordVisibility()">👁️ 顯示</button>
         </div>
         <div class="note" style="margin-top:7px">
           若要新增舊密碼，直接在這裡輸入；若留白，則會保存上方「產生結果」中的密碼。
@@ -1819,37 +2076,10 @@ body.admin-modal-open{
     <div class="card">
       <div class="pwd-history-head">
         <strong style="font-size:18px">🔐 密碼紀錄</strong>
-        <span class="pwd-history-count" id="pwdHistoryCount">3 筆</span>
+        <span class="pwd-history-count" id="pwdHistoryCount">0 筆</span>
       </div>
-      <div id="pwdHistoryList"><div class="pwd-history-item">
-      <div class="pwd-history-title">8888</div>
-      <div class="pwd-history-meta">25541 · 2026/9/12 下午05:58</div>
-      <div class="pwd-history-secret">••••••••</div>
-      <div class="pwd-history-actions">
-        <button class="pwd-reveal" onclick="toggleSavedPassword(1789207119851)">👁️ 顯示</button>
-        <button class="pwd-copy" onclick="copySavedPassword(1789207119851)">📋 複製</button>
-        <button class="pwd-delete" onclick="deleteSavedPassword(1789207119851)">🗑️ 刪除</button>
-      </div>
-    </div><div class="pwd-history-item">
-      <div class="pwd-history-title">123</div>
-      <div class="pwd-history-meta">123 · 2026/9/12 下午05:40</div>
-      <div class="pwd-history-secret">••••••••</div>
-      <div class="pwd-history-actions">
-        <button class="pwd-reveal" onclick="toggleSavedPassword(1789206037555)">👁️ 顯示</button>
-        <button class="pwd-copy" onclick="copySavedPassword(1789206037555)">📋 複製</button>
-        <button class="pwd-delete" onclick="deleteSavedPassword(1789206037555)">🗑️ 刪除</button>
-      </div>
-    </div><div class="pwd-history-item">
-      <div class="pwd-history-title">google</div>
-      <div class="pwd-history-meta">123654 · 2026/9/12 下午03:23</div>
-      <div class="pwd-history-secret">••••••••</div>
-      <div class="pwd-history-actions">
-        <button class="pwd-reveal" onclick="toggleSavedPassword(1789197796696)">👁️ 顯示</button>
-        <button class="pwd-copy" onclick="copySavedPassword(1789197796696)">📋 複製</button>
-        <button class="pwd-delete" onclick="deleteSavedPassword(1789197796696)">🗑️ 刪除</button>
-      </div>
-    </div></div>
-      <button id="pwdClearAllBtn" class="danger full" style="margin-top: 12px; display: block;" onclick="clearAllPasswordHistory()">清除全部密碼紀錄</button>
+      <div id="pwdHistoryList"></div>
+      <button id="pwdClearAllBtn" class="danger full" style="margin-top:12px;display:none" onclick="clearAllPasswordHistory()">清除全部密碼紀錄</button>
     </div>
   
     </div>
@@ -1865,26 +2095,26 @@ body.admin-modal-open{
         <button onclick="showCalc('fx',this)">匯率</button>
       </div>
       <div id="calc-discount" class="calc-panel active">
-        <label>原價</label><input id="discPrice" type="number" placeholder="1000" data-live-bound="1">
-        <label style="margin-top:10px">折數（例如：7 = 7折、8.5 = 85折）</label><input id="discRate" type="number" value="7" step="0.1" min="0" max="10" data-live-bound="1">
+        <label>原價</label><input id="discPrice" type="number" placeholder="1000">
+        <label style="margin-top:10px">折數（例如：7 = 7折、8.5 = 85折）</label><input id="discRate" type="number" value="7" step="0.1" min="0" max="10">
         <div class="note" style="margin-top:10px">輸入數字後會自動計算</div>
-        <div class="big-result" id="discResult"><div class="num">—</div><small>請輸入原價與折數</small></div>
+        <div class="big-result" id="discResult"><div class="num">$0</div></div>
       </div>
       <div id="calc-percent" class="calc-panel">
-        <label>數值</label><input id="pctBase" type="number" placeholder="1000" data-live-bound="1">
-        <label style="margin-top:10px">百分比 %</label><input id="pctRate" type="number" placeholder="15" data-live-bound="1">
+        <label>數值</label><input id="pctBase" type="number" placeholder="1000">
+        <label style="margin-top:10px">百分比 %</label><input id="pctRate" type="number" placeholder="15">
         <div class="note" style="margin-top:10px">輸入數字後會自動計算</div>
-        <div class="big-result" id="pctResult"><div class="num">—</div><small>請輸入數值與百分比</small></div>
+        <div class="big-result" id="pctResult"><div class="num">0</div></div>
       </div>
       <div id="calc-area" class="calc-panel">
-        <label>平方公尺</label><input id="sqm" type="number" placeholder="33" data-live-bound="1">
+        <label>平方公尺</label><input id="sqm" type="number" placeholder="33">
         <div class="note" style="margin-top:10px">輸入數字後會自動換算</div>
-        <div class="big-result" id="areaResult"><div class="num">—</div><small>請輸入平方公尺</small></div>
+        <div class="big-result" id="areaResult"><div class="num">0 坪</div></div>
       </div>
 
       <div id="calc-fx" class="calc-panel">
         <label>金額</label>
-        <input id="fxAmount" type="number" inputmode="decimal" value="1000" min="0" step="any" data-live-bound="1">
+        <input id="fxAmount" type="number" inputmode="decimal" value="1000" min="0" step="any">
 
         <div class="fx-select-row" style="margin-top:12px">
           <div>
@@ -1922,7 +2152,8 @@ const store = {
   get(k, d){ try{return JSON.parse(localStorage.getItem("lifeBox_"+k)) ?? d}catch{return d} },
   set(k, v){ localStorage.setItem("lifeBox_"+k, JSON.stringify(v)) }
 };
-const ADMIN_DEFAULTS = {"homeTitle":"我的生活工具箱","homeSubtitle":"動點頭腦把每天的小事，變得更簡單。     CHIEN HUNG","cardOverrides":{"lottery":{"icon":"🧧","title":"祝您發大財","subtitle":"大樂透・威力彩・539 選號靈感"}},"customCards":[],"homeOrder":["todo","countdown","money","split","food","parking","shopping","calc","decision","lottery","packing","quoteTax","password"],"deletedBuiltinCards":[]};
+const ADMIN_DEFAULTS = {"homeTitle":"我的生活工具箱","homeSubtitle":"把每天的小事，變得更簡單。","cardOverrides":{},"customCards":[],"homeOrder":[],"deletedBuiltinCards":[]};
+const ADMIN_EXPORT_REVISION = 'base-v37';
 const fmt = n => new Intl.NumberFormat('zh-TW',{maximumFractionDigits:2}).format(Number(n)||0);
 const pad = n => String(n).padStart(2,'0');
 const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
@@ -3290,6 +3521,39 @@ function calcQuoteTax(){
 
 
 // ===== 隱藏後台管理與首頁編輯 =====
+
+function syncAdminDefaultsFromExport(){
+  const seen=String(store.get('adminExportRevision','')||'');
+  if(seen===ADMIN_EXPORT_REVISION)return;
+
+  // 新匯出的 HTML 視為新的「介面基準」。
+  // 只更新後台版面設定與首頁排序，不清除待辦、收支、密碼等資料。
+  const next=JSON.parse(JSON.stringify(ADMIN_DEFAULTS));
+  store.set('adminConfig',next);
+
+  if(Array.isArray(next.homeOrder) && next.homeOrder.length){
+    store.set('homeToolOrderV1',next.homeOrder);
+  }else{
+    localStorage.removeItem('lifeBox_homeToolOrderV1');
+  }
+
+  store.set('adminExportRevision',ADMIN_EXPORT_REVISION);
+}
+
+function handleAdminRefreshQuery(){
+  try{
+    const u=new URL(location.href);
+    if(u.searchParams.get('refresh')!=='1')return;
+
+    localStorage.removeItem('lifeBox_adminConfig');
+    localStorage.removeItem('lifeBox_homeToolOrderV1');
+    localStorage.removeItem('lifeBox_adminExportRevision');
+
+    u.searchParams.delete('refresh');
+    history.replaceState(null,'',u.pathname+(u.search||'')+u.hash);
+  }catch(e){}
+}
+
 let adminUnlocked=false;
 let adminOriginalBuiltinCards=null;
 
@@ -3420,7 +3684,15 @@ function applyAdminConfig(){
 
 function openAdminLoginModal(){
   const modal=document.getElementById('adminLoginModal');
-  if(!modal)return;
+  if(!modal){
+    alert('後台登入元件未載入，請重新整理頁面。');
+    return;
+  }
+
+  // 直接移到 body 最上層，避免 .app 或其他 stacking context / overflow 影響。
+  if(modal.parentElement!==document.body){
+    document.body.appendChild(modal);
+  }
 
   const input=document.getElementById('adminLoginPassword');
   const msg=document.getElementById('adminLoginMessage');
@@ -3435,9 +3707,20 @@ function openAdminLoginModal(){
 
   modal.classList.add('show');
   modal.setAttribute('aria-hidden','false');
+
+  // 不只靠 CSS class，直接強制最高層顯示，排除手機瀏覽器樣式/層級干擾。
+  modal.style.setProperty('display','flex','important');
+  modal.style.setProperty('position','fixed','important');
+  modal.style.setProperty('inset','0','important');
+  modal.style.setProperty('z-index','2147483647','important');
+  modal.style.setProperty('align-items','center','important');
+  modal.style.setProperty('justify-content','center','important');
+
   document.body.classList.add('admin-modal-open');
 
-  setTimeout(()=>input?.focus(),80);
+  setTimeout(()=>{
+    try{input?.focus({preventScroll:true})}catch(e){try{input?.focus()}catch(_){}}
+  },120);
 }
 
 function closeAdminLoginModal(){
@@ -3446,6 +3729,7 @@ function closeAdminLoginModal(){
 
   modal.classList.remove('show');
   modal.setAttribute('aria-hidden','true');
+  modal.style.setProperty('display','none','important');
   document.body.classList.remove('admin-modal-open');
 
   const input=document.getElementById('adminLoginPassword');
@@ -3482,102 +3766,135 @@ function submitAdminLogin(){
 }
 
 function initHiddenAdminTrigger(){
-  const el=document.getElementById('adminSecretTrigger');
-  if(!el || el.__adminTriggerBound===true)return;
-
-  el.__adminTriggerBound=true;
-  el.removeAttribute('data-admin-trigger-bound');
+  const layer=document.getElementById('adminSecretPressLayer');
+  if(!layer || layer.__adminPressBound===true)return;
+  layer.__adminPressBound=true;
 
   let timer=null;
+  let startedAt=0;
   let startX=0;
   let startY=0;
-  let touchActive=false;
-  let mouseActive=false;
+  let active=false;
+  let fired=false;
 
-  const clearTimer=()=>{
+  const clear=()=>{
     if(timer){
       clearTimeout(timer);
       timer=null;
     }
+    active=false;
   };
 
-  const armLongPress=(x,y)=>{
-    clearTimer();
+  const fire=()=>{
+    if(fired)return;
+    fired=true;
+    clear();
+
+    // 這個震動只會在我們自己的程式真正觸發時發生。
+    try{
+      if(navigator.vibrate)navigator.vibrate([80,40,80]);
+    }catch(e){}
+
+    openAdminLoginModal();
+    setTimeout(()=>{fired=false},700);
+  };
+
+  const begin=(x,y)=>{
+    clear();
+    startedAt=Date.now();
     startX=x;
     startY=y;
+    active=true;
 
     timer=setTimeout(()=>{
-      timer=null;
-      touchActive=false;
-      mouseActive=false;
-
-      try{
-        if(navigator.vibrate)navigator.vibrate([45,30,45]);
-      }catch(e){}
-
-      // 不再使用 prompt()。
-      // GitHub Pages / 手機瀏覽器對 setTimeout 後的 JS 對話框可能會阻擋，
-      // 改用頁面內建 Modal 可穩定運作。
-      openAdminLoginModal();
+      if(active)fire();
     },2000);
   };
 
-  // 手機：直接使用 touch 事件，避免 pointercancel / 瀏覽器手勢造成長按失效
-  el.addEventListener('touchstart',e=>{
-    if(e.touches.length!==1)return;
-
-    const t=e.touches[0];
-    touchActive=true;
-    armLongPress(t.clientX,t.clientY);
-  },{passive:true});
-
-  el.addEventListener('touchmove',e=>{
-    if(!touchActive || !timer || e.touches.length!==1)return;
-
-    const t=e.touches[0];
-    if(Math.hypot(t.clientX-startX,t.clientY-startY)>18){
-      touchActive=false;
-      clearTimer();
+  const move=(x,y)=>{
+    if(!active)return;
+    if(Math.hypot(x-startX,y-startY)>55){
+      clear();
     }
-  },{passive:true});
+  };
 
-  el.addEventListener('touchend',()=>{
-    touchActive=false;
-    clearTimer();
-  },{passive:true});
+  const finish=()=>{
+    if(!active)return;
+    const held=Date.now()-startedAt;
+    if(held>=1850)fire();
+    else clear();
+  };
 
-  el.addEventListener('touchcancel',()=>{
-    touchActive=false;
-    clearTimer();
-  },{passive:true});
+  // Android / iPhone 主路徑
+  layer.addEventListener('touchstart',e=>{
+    if(e.touches.length!==1)return;
+    e.preventDefault();
+    e.stopPropagation();
+    const t=e.touches[0];
+    begin(t.clientX,t.clientY);
+  },{passive:false});
+
+  layer.addEventListener('touchmove',e=>{
+    if(!active || e.touches.length!==1)return;
+    e.preventDefault();
+    e.stopPropagation();
+    const t=e.touches[0];
+    move(t.clientX,t.clientY);
+  },{passive:false});
+
+  layer.addEventListener('touchend',e=>{
+    e.preventDefault();
+    e.stopPropagation();
+    finish();
+  },{passive:false});
+
+  layer.addEventListener('touchcancel',()=>clear(),{passive:true});
 
   // 電腦滑鼠
-  el.addEventListener('mousedown',e=>{
+  layer.addEventListener('mousedown',e=>{
     if(e.button!==0)return;
-    mouseActive=true;
-    armLongPress(e.clientX,e.clientY);
+    e.preventDefault();
+    e.stopPropagation();
+    begin(e.clientX,e.clientY);
   });
 
   window.addEventListener('mousemove',e=>{
-    if(!mouseActive || !timer)return;
-    if(Math.hypot(e.clientX-startX,e.clientY-startY)>18){
-      mouseActive=false;
-      clearTimer();
+    if(active)move(e.clientX,e.clientY);
+  });
+
+  window.addEventListener('mouseup',()=>finish());
+
+  layer.addEventListener('contextmenu',e=>{
+    e.preventDefault();
+    e.stopPropagation();
+  });
+
+  // 備援：3 秒內快速點 5 次
+  let taps=0;
+  let tapTimer=null;
+  layer.addEventListener('click',e=>{
+    e.preventDefault();
+    e.stopPropagation();
+    taps++;
+    clearTimeout(tapTimer);
+    tapTimer=setTimeout(()=>{taps=0},3000);
+    if(taps>=5){
+      taps=0;
+      clearTimeout(tapTimer);
+      openAdminLoginModal();
     }
   });
-
-  window.addEventListener('mouseup',()=>{
-    if(!mouseActive)return;
-    mouseActive=false;
-    clearTimer();
-  });
-
-  // 避免手機長按跳出文字選取、圖片選單等原生 UI
-  el.addEventListener('contextmenu',e=>{
-    e.preventDefault();
-    clearTimer();
-  });
 }
+
+// 後台入口採獨立初始化。
+// 即使後續其他功能初始化出錯，日期卡的後台手勢仍已先完成綁定。
+try{
+  document.documentElement.dataset.lifeBoxBuild='v39';
+  initHiddenAdminTrigger();
+}catch(e){
+  console.error('Admin trigger init failed:',e);
+}
+
 
 function leaveAdmin(){
   adminUnlocked=false;
@@ -3890,8 +4207,16 @@ function exportModifiedHtml(){
     if(exportAdminModal){
       exportAdminModal.classList.remove('show');
       exportAdminModal.setAttribute('aria-hidden','true');
+      exportAdminModal.setAttribute('style','display:none');
     }
     clone.querySelector('body')?.classList.remove('admin-modal-open');
+
+    const exportDateWheel=clone.querySelector('#dateWheelModal');
+    if(exportDateWheel){
+      exportDateWheel.classList.remove('show');
+      exportDateWheel.setAttribute('aria-hidden','true');
+    }
+    clone.querySelector('body')?.classList.remove('date-wheel-open');
 
     // 關鍵修正：
     // 事件監聽器不會被 cloneNode / outerHTML 匯出，
@@ -3931,6 +4256,14 @@ function exportModifiedHtml(){
       'const ADMIN_DEFAULTS = '+safeDefaults+';'
     );
 
+    // 每次匯出產生新的版面版本碼。
+    // 手機 GitHub 端讀到新版 HTML 後，就會自動套用這次匯出的設定。
+    const exportRevision='exp-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);
+    out=out.replace(
+      /const ADMIN_EXPORT_REVISION\s*=\s*['"][^'"]*['"];/,
+      `const ADMIN_EXPORT_REVISION = '${exportRevision}';`
+    );
+
     // 將目前 Google Sheet 連線一起寫入新匯出的 HTML。
     // 這樣新檔案即使是不同 file:// 路徑、沒有原 localStorage，仍可直接上傳。
     const currentSheet=getSheetSyncSettings();
@@ -3953,7 +4286,7 @@ function exportModifiedHtml(){
     const a=document.createElement('a');
     const d=new Date();
     a.href=url;
-    a.download=`我的生活工具箱_自訂版_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}.html`;
+    a.download=`我的生活工具箱_自訂版_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.html`;
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -3973,12 +4306,20 @@ function exportModifiedHtml(){
 
 function initAdminCustomization(){
   adminOriginalBuiltinCards=getBuiltinHomeCardSnapshot();
+
+  handleAdminRefreshQuery();
+  syncAdminDefaultsFromExport();
+
   applyAdminConfig();
   initHiddenAdminTrigger();
 
   if(!document.__adminModalEscBound){
     document.__adminModalEscBound=true;
     document.addEventListener('keydown',e=>{
+      if(e.key==='Escape' && document.getElementById('dateWheelModal')?.classList.contains('show')){
+        closeDateWheel();
+        return;
+      }
       if(e.key==='Escape' && document.getElementById('adminLoginModal')?.classList.contains('show')){
         closeAdminLoginModal();
       }
@@ -3986,6 +4327,441 @@ function initAdminCustomization(){
   }
 }
 
+
+
+// ===== 行李密碼轉盤式年月日選擇器 =====
+let activeDateWheelTarget='';
+let dateWheelState={year:0,month:0,day:0};
+const DATE_WHEEL_ITEM_HEIGHT=48;
+let dateWheelScrollTimers={};
+let dateWheelLastFeedback={year:null,month:null,day:null};
+let dateWheelAudioCtx=null;
+let dateWheelLastHapticAt=0;
+
+function ensureDateWheelAudio(){
+  try{
+    if(!dateWheelAudioCtx){
+      const AC=window.AudioContext||window.webkitAudioContext;
+      if(AC)dateWheelAudioCtx=new AC();
+    }
+    if(dateWheelAudioCtx && dateWheelAudioCtx.state==='suspended'){
+      dateWheelAudioCtx.resume().catch(()=>{});
+    }
+  }catch(e){}
+}
+
+function playDateWheelTick(){
+  try{
+    ensureDateWheelAudio();
+    if(!dateWheelAudioCtx)return;
+
+    const ctx=dateWheelAudioCtx;
+    const now=ctx.currentTime;
+
+    const osc=ctx.createOscillator();
+    const gain=ctx.createGain();
+
+    osc.type='sine';
+    osc.frequency.setValueAtTime(920,now);
+    osc.frequency.exponentialRampToValueAtTime(620,now+0.025);
+
+    gain.gain.setValueAtTime(0.0001,now);
+    gain.gain.exponentialRampToValueAtTime(0.035,now+0.004);
+    gain.gain.exponentialRampToValueAtTime(0.0001,now+0.035);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now+0.04);
+  }catch(e){}
+}
+
+function vibrateDateWheelTick(){
+  try{
+    const now=Date.now();
+    if(now-dateWheelLastHapticAt<35)return;
+    dateWheelLastHapticAt=now;
+
+    if(navigator.vibrate){
+      navigator.vibrate(10);
+    }
+  }catch(e){}
+}
+
+function dateWheelFeedback(type,value){
+  if(dateWheelLastFeedback[type]===value)return;
+  dateWheelLastFeedback[type]=value;
+
+  playDateWheelTick();
+  vibrateDateWheelTick();
+}
+
+function pad2DateWheel(n){
+  return String(n).padStart(2,'0');
+}
+
+function parseDateWheelValue(v){
+  const m=String(v||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(!m)return null;
+  return {
+    year:Number(m[1]),
+    month:Number(m[2]),
+    day:Number(m[3])
+  };
+}
+
+function daysInMonthWheel(year,month){
+  return new Date(year,month,0).getDate();
+}
+
+function formatDateWheelValue(year,month,day){
+  return `${year}-${pad2DateWheel(month)}-${pad2DateWheel(day)}`;
+}
+
+function formatDateWheelDisplay(year,month,day){
+  return `${year} 年 ${month} 月 ${day} 日`;
+}
+
+function getDateWheelRange(targetId){
+  const now=new Date();
+  const currentYear=now.getFullYear();
+
+  // 出生年月日往前給較長範圍；其他一般日期保留前後實用範圍。
+  if(targetId==='lotteryBirthDate'){
+    return {
+      minYear:currentYear-100,
+      maxYear:currentYear
+    };
+  }
+
+  return {
+    minYear:currentYear-5,
+    maxYear:currentYear+30
+  };
+}
+
+function buildDateWheelColumn(el,values,formatter,currentValue,type){
+  if(!el)return;
+  el.innerHTML=values.map(v=>
+    `<div class="date-wheel-item${v===currentValue?' active':''}" data-wheel-type="${type}" data-wheel-value="${v}">${formatter(v)}</div>`
+  ).join('');
+}
+
+function rebuildDateWheelDays(){
+  const max=daysInMonthWheel(dateWheelState.year,dateWheelState.month);
+  if(dateWheelState.day>max)dateWheelState.day=max;
+
+  const days=Array.from({length:max},(_,i)=>i+1);
+  buildDateWheelColumn(
+    $('#dateWheelDay'),
+    days,
+    v=>String(v).padStart(2,'0'),
+    dateWheelState.day,
+    'day'
+  );
+}
+
+function scrollWheelToValue(type,value,instant=false){
+  const map={
+    year:'#dateWheelYear',
+    month:'#dateWheelMonth',
+    day:'#dateWheelDay'
+  };
+  const el=$(map[type]);
+  if(!el)return;
+
+  const item=el.querySelector(`[data-wheel-value="${value}"]`);
+  if(!item)return;
+
+  const top=item.offsetTop-(el.clientHeight-item.clientHeight)/2;
+
+  if(instant){
+    el.scrollTop=top;
+  }else{
+    el.scrollTo({top,behavior:'smooth'});
+  }
+}
+
+function updateDateWheelActiveClasses(){
+  ['year','month','day'].forEach(type=>{
+    const el=$(`#dateWheel${type[0].toUpperCase()+type.slice(1)}`);
+    if(!el)return;
+
+    el.querySelectorAll('.date-wheel-item').forEach(item=>{
+      const val=Number(item.dataset.wheelValue);
+      item.classList.toggle('active',val===dateWheelState[type]);
+    });
+  });
+
+  const preview=$('#dateWheelPreview');
+  if(preview){
+    preview.textContent=formatDateWheelDisplay(
+      dateWheelState.year,
+      dateWheelState.month,
+      dateWheelState.day
+    );
+  }
+}
+
+function resolveWheelValueFromScroll(el){
+  const center=el.scrollTop+el.clientHeight/2;
+  const items=[...el.querySelectorAll('.date-wheel-item')];
+  if(!items.length)return null;
+
+  let best=null;
+  let bestDist=Infinity;
+
+  items.forEach(item=>{
+    const itemCenter=item.offsetTop+item.clientHeight/2;
+    const dist=Math.abs(itemCenter-center);
+    if(dist<bestDist){
+      bestDist=dist;
+      best=item;
+    }
+  });
+
+  return best?Number(best.dataset.wheelValue):null;
+}
+
+function handleDateWheelScroll(type){
+  const el=$(`#dateWheel${type[0].toUpperCase()+type.slice(1)}`);
+  if(!el)return;
+
+  // 捲動過程中即時判斷目前最接近中央的數字，
+  // 每跨過一格就產生一次「喀」聲與輕微震動。
+  const liveValue=resolveWheelValueFromScroll(el);
+  if(liveValue!=null){
+    dateWheelFeedback(type,liveValue);
+  }
+
+  clearTimeout(dateWheelScrollTimers[type]);
+
+  dateWheelScrollTimers[type]=setTimeout(()=>{
+    const value=resolveWheelValueFromScroll(el);
+    if(value==null)return;
+
+    const oldYear=dateWheelState.year;
+    const oldMonth=dateWheelState.month;
+
+    dateWheelState[type]=value;
+    dateWheelFeedback(type,value);
+
+    if(type==='year' || type==='month'){
+      if(oldYear!==dateWheelState.year || oldMonth!==dateWheelState.month){
+        rebuildDateWheelDays();
+        scrollWheelToValue('day',dateWheelState.day,true);
+
+        // 月份/年份變更若迫使日期縮小，更新 day 的回饋基準
+        dateWheelLastFeedback.day=dateWheelState.day;
+      }
+    }
+
+    updateDateWheelActiveClasses();
+    scrollWheelToValue(type,dateWheelState[type],false);
+  },80);
+}
+
+function bindDateWheelColumn(type){
+  const el=$(`#dateWheel${type[0].toUpperCase()+type.slice(1)}`);
+  if(!el || el.__wheelBound)return;
+  el.__wheelBound=true;
+
+  el.addEventListener('scroll',()=>handleDateWheelScroll(type),{passive:true});
+
+  el.addEventListener('click',e=>{
+    const item=e.target.closest('.date-wheel-item');
+    if(!item)return;
+
+    const value=Number(item.dataset.wheelValue);
+    dateWheelState[type]=value;
+    dateWheelFeedback(type,value);
+
+    if(type==='year' || type==='month'){
+      rebuildDateWheelDays();
+    }
+
+    updateDateWheelActiveClasses();
+    scrollWheelToValue(type,value,false);
+  });
+}
+
+function openDateWheel(targetId){
+  const input=document.getElementById(targetId);
+  const modal=$('#dateWheelModal');
+  if(!input || !modal)return;
+
+  activeDateWheelTarget=targetId;
+  ensureDateWheelAudio();
+
+  const existing=parseDateWheelValue(input.value);
+  const now=new Date();
+
+  dateWheelState=existing || {
+    year:now.getFullYear(),
+    month:now.getMonth()+1,
+    day:now.getDate()
+  };
+
+  dateWheelLastFeedback={
+    year:dateWheelState.year,
+    month:dateWheelState.month,
+    day:dateWheelState.day
+  };
+
+  const range=getDateWheelRange(targetId);
+  dateWheelState.year=Math.min(range.maxYear,Math.max(range.minYear,dateWheelState.year));
+
+  const years=[];
+  for(let y=range.minYear;y<=range.maxYear;y++)years.push(y);
+
+  const months=Array.from({length:12},(_,i)=>i+1);
+
+  buildDateWheelColumn(
+    $('#dateWheelYear'),
+    years,
+    v=>String(v),
+    dateWheelState.year,
+    'year'
+  );
+
+  buildDateWheelColumn(
+    $('#dateWheelMonth'),
+    months,
+    v=>String(v).padStart(2,'0'),
+    dateWheelState.month,
+    'month'
+  );
+
+  rebuildDateWheelDays();
+  updateDateWheelActiveClasses();
+
+  bindDateWheelColumn('year');
+  bindDateWheelColumn('month');
+  bindDateWheelColumn('day');
+
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden','false');
+  document.body.classList.add('date-wheel-open');
+
+  requestAnimationFrame(()=>{
+    scrollWheelToValue('year',dateWheelState.year,true);
+    scrollWheelToValue('month',dateWheelState.month,true);
+    scrollWheelToValue('day',dateWheelState.day,true);
+
+    setTimeout(()=>{
+      updateDateWheelActiveClasses();
+    },50);
+  });
+}
+
+function closeDateWheel(){
+  const modal=$('#dateWheelModal');
+  if(!modal)return;
+
+  modal.classList.remove('show');
+  modal.setAttribute('aria-hidden','true');
+  document.body.classList.remove('date-wheel-open');
+  activeDateWheelTarget='';
+}
+
+function confirmDateWheel(){
+  if(!activeDateWheelTarget)return;
+
+  const input=document.getElementById(activeDateWheelTarget);
+  if(!input)return;
+
+  const value=formatDateWheelValue(
+    dateWheelState.year,
+    dateWheelState.month,
+    dateWheelState.day
+  );
+
+  input.value=value;
+
+  const display=document.getElementById(activeDateWheelTarget+'Display');
+  const trigger=document.querySelector(`[data-date-target="${activeDateWheelTarget}"]`);
+
+  if(display){
+    display.textContent=formatDateWheelDisplay(
+      dateWheelState.year,
+      dateWheelState.month,
+      dateWheelState.day
+    );
+  }
+
+  trigger?.classList.add('has-value');
+
+  // 模擬原生日期欄位 change/input，保持舊功能相容
+  input.dispatchEvent(new Event('input',{bubbles:true}));
+  input.dispatchEvent(new Event('change',{bubbles:true}));
+
+  try{
+    if(navigator.vibrate)navigator.vibrate([18,22,28]);
+  }catch(e){}
+
+  closeDateWheel();
+}
+
+function dateWheelToday(){
+  const now=new Date();
+  dateWheelState={
+    year:now.getFullYear(),
+    month:now.getMonth()+1,
+    day:now.getDate()
+  };
+
+  playDateWheelTick();
+  vibrateDateWheelTick();
+
+  const range=getDateWheelRange(activeDateWheelTarget);
+  dateWheelState.year=Math.min(range.maxYear,Math.max(range.minYear,dateWheelState.year));
+
+  rebuildDateWheelDays();
+  updateDateWheelActiveClasses();
+
+  requestAnimationFrame(()=>{
+    scrollWheelToValue('year',dateWheelState.year,false);
+    scrollWheelToValue('month',dateWheelState.month,false);
+    scrollWheelToValue('day',dateWheelState.day,false);
+  });
+}
+
+function syncDateWheelDisplay(inputId){
+  const input=document.getElementById(inputId);
+  const display=document.getElementById(inputId+'Display');
+  const trigger=document.querySelector(`[data-date-target="${inputId}"]`);
+  if(!input || !display || !trigger)return;
+
+  const parsed=parseDateWheelValue(input.value);
+
+  if(parsed){
+    display.textContent=formatDateWheelDisplay(parsed.year,parsed.month,parsed.day);
+    trigger.classList.add('has-value');
+  }else{
+    const labels={
+      todoDate:'選擇待辦日期',
+      cdDate:'選擇行程日期',
+      moneyDate:'選擇記帳日期',
+      lotteryBirthDate:'選擇出生年月日'
+    };
+    display.textContent=labels[inputId]||'選擇日期';
+    trigger.classList.remove('has-value');
+  }
+}
+
+function initAllDateWheelDisplays(){
+  ['todoDate','cdDate','moneyDate','lotteryBirthDate'].forEach(id=>{
+    syncDateWheelDisplay(id);
+
+    const input=document.getElementById(id);
+    if(input && !input.__wheelSyncBound){
+      input.__wheelSyncBound=true;
+      input.addEventListener('change',()=>syncDateWheelDisplay(id));
+      input.addEventListener('input',()=>syncDateWheelDisplay(id));
+    }
+  });
+}
 
 // ===== 每日幽默勵志座右銘 =====
 const DAILY_MOTTOS=[
@@ -4076,7 +4852,7 @@ const SHEET_SYNC_KEYS={
   key:'sheetSyncKey',
   enabled:'sheetSyncEnabled'
 };
-const SHEET_SYNC_DEFAULTS = {"url":"https://script.google.com/macros/s/AKfycbz4KbT7mj3ZH2NEa38TgmWrx7l05JuOO_4eaAx_464anGVE400rr_yyfrrWjWIKyCUS/exec","key":"","enabled":true};
+const SHEET_SYNC_DEFAULTS = {url:'',key:'',enabled:false};
 
 function getSheetSyncSettings(){
   const localUrl=store.get(SHEET_SYNC_KEYS.url,null);
@@ -5576,6 +6352,7 @@ function initHomeReorder(){
 // 所有拖曳相關 const / let / function 都建立完成後才初始化。
 // 這是上一版無法移動的核心修正。
 initAdminCustomization();
+initAllDateWheelDisplays();
 updateDailyMotto();
 initHomeReorder();
 
@@ -5674,4 +6451,34 @@ document.addEventListener('touchstart', function unlockAudio(){
 
 </script>
 
-</body></html>
+<div id="dateWheelModal" class="date-wheel-modal" aria-hidden="true">
+  <div class="date-wheel-backdrop" onclick="closeDateWheel()"></div>
+  <div class="date-wheel-panel" role="dialog" aria-modal="true" aria-labelledby="dateWheelTitle">
+    <div class="date-wheel-head">
+      <strong id="dateWheelTitle">選擇日期</strong>
+      <button type="button" class="date-wheel-close" onclick="closeDateWheel()">×</button>
+    </div>
+
+    <div class="date-wheel-labels">
+      <span>年</span><span>月</span><span>日</span>
+    </div>
+
+    <div class="date-wheel-shell">
+      <div class="date-wheel-highlight"></div>
+
+      <div class="date-wheel-column" id="dateWheelYear"></div>
+      <div class="date-wheel-column" id="dateWheelMonth"></div>
+      <div class="date-wheel-column" id="dateWheelDay"></div>
+    </div>
+
+    <div class="date-wheel-preview" id="dateWheelPreview">—</div>
+
+    <div class="row" style="margin-top:14px">
+      <button type="button" class="secondary col" onclick="dateWheelToday()">今天</button>
+      <button type="button" class="primary col" onclick="confirmDateWheel()">確定</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
