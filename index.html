@@ -226,6 +226,69 @@ footer{text-align:center;color:#a0928a;font-size:12px;padding:24px 0 8px}
 }
 
 
+
+/* ===== 彩券選號器 ===== */
+.lottery-mode{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px
+}
+.lottery-mode button{
+  border:1px solid var(--line);background:#fff;color:var(--ink);
+  border-radius:14px;padding:11px 8px;font-weight:800
+}
+.lottery-mode button.active{
+  background:var(--wine);color:#fff;border-color:var(--wine)
+}
+.lottery-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px
+}
+.lottery-personal{
+  margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)
+}
+.lottery-result-box{
+  text-align:center;padding:18px 12px;border-radius:22px;
+  background:linear-gradient(145deg,#f8eee6,#edf2ea);
+  border:1px solid var(--line)
+}
+.lottery-title{
+  font-size:13px;color:var(--muted);margin-bottom:10px
+}
+.lottery-balls{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:8px
+}
+.lottery-ball{
+  width:45px;height:45px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:#fff;border:2px solid #c9b9ae;
+  font-size:18px;font-weight:900;color:var(--ink)
+}
+.lottery-ball.power{
+  background:#8c5b62;color:#fff;border-color:#8c5b62
+}
+.lottery-zone{
+  margin-top:13px;padding-top:11px;border-top:1px dashed var(--line)
+}
+.lottery-zone-label{
+  font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:700
+}
+.lottery-fortune{
+  margin-top:13px;font-size:14px;line-height:1.6;color:#665b56
+}
+.lottery-meta{
+  margin-top:10px;font-size:12px;line-height:1.55;color:var(--muted)
+}
+.lottery-disclaimer{
+  margin-top:10px;padding:11px 12px;border-radius:14px;
+  background:#fff2e8;color:#76594a;font-size:12px;line-height:1.55
+}
+.lottery-now-row{
+  display:flex;gap:8px;align-items:end
+}
+.lottery-now-row>div{flex:1;min-width:0}
+@media(max-width:430px){
+  .lottery-grid{grid-template-columns:1fr}
+  .lottery-ball{width:41px;height:41px;font-size:17px}
+}
+
 /* ===== v13 首頁功能字卡：圖示左、文字右、縮小版 ===== */
 #home .grid{
   gap:8px;
@@ -317,6 +380,7 @@ footer{text-align:center;color:#a0928a;font-size:12px;padding:24px 0 8px}
       <button class="tool" onclick="openPage('shopping')"><span class="icon">🛒</span><b>購物清單</b><small>買完直接勾掉</small></button>
       <button class="tool" onclick="openPage('calc')"><span class="icon">🧮</span><b>萬用計算器</b><small>折扣、百分比、坪數、匯率</small></button>
       <button class="tool" onclick="openPage('decision')"><span class="icon">🎭</span><b>困難選擇器</b><small>要不要？買不買？宇宙幫你決定</small></button>
+      <button class="tool" onclick="openPage('lottery')"><span class="icon">🧧</span><b>讓您發大財</b><small>大樂透・威力彩・539 選號靈感</small></button>
       <button class="tool" onclick="openPage('packing')"><span class="icon">🧳</span><b>旅行打包助手</b><small>範本清單、勾選與進度</small></button>
       <button class="tool" onclick="openPage('quoteTax')"><span class="icon">🧾</span><b>報價／稅額計算器</b><small>稅額、毛利率與淨利率</small></button>
       <button class="tool" onclick="openPage('password')"><span class="icon">🔐</span><b>密碼產生器</b><small>安全隨機、長度與字元組合</small></button>
@@ -498,6 +562,70 @@ footer{text-align:center;color:#a0928a;font-size:12px;padding:24px 0 8px}
     <div class="card">
       <div class="row"><strong class="col">最近的命運紀錄</strong><button id="decisionClearAllBtn" type="button" class="iconbtn" title="清除全部紀錄">🗑️</button></div>
       <div id="decisionHistory" class="decision-history" style="margin-top:10px"></div>
+    </div>
+  </section>
+
+
+  <section id="lottery" class="page">
+    <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>🧧 讓您發大財</h2></div>
+
+    <div class="card">
+      <label>彩券種類</label>
+      <select id="lotteryGame" onchange="renderLotteryRule()">
+        <option value="lotto649">大樂透</option>
+        <option value="super638">威力彩</option>
+        <option value="daily539">今彩539</option>
+      </select>
+      <div class="note" id="lotteryRule" style="margin-top:8px"></div>
+
+      <label style="margin-top:14px">選號方式</label>
+      <div class="lottery-mode">
+        <button id="lotteryRandomModeBtn" type="button" class="active" onclick="setLotteryMode('random')">🎲 純隨機</button>
+        <button id="lotteryDestinyModeBtn" type="button" onclick="setLotteryMode('destiny')">🔮 紫微靈感</button>
+      </div>
+
+      <div id="lotteryPersonalFields" class="lottery-personal" style="display:none">
+        <div class="lottery-grid">
+          <div>
+            <label>姓名</label>
+            <input id="lotteryName" autocomplete="off" placeholder="輸入姓名">
+          </div>
+          <div>
+            <label>出生年月日</label>
+            <input id="lotteryBirthDate" type="date">
+          </div>
+          <div>
+            <label>出生時間</label>
+            <input id="lotteryBirthTime" type="time">
+          </div>
+          <div class="lottery-now-row">
+            <div>
+              <label>預計買彩券時間</label>
+              <input id="lotteryBuyTime" type="datetime-local">
+            </div>
+            <button type="button" class="secondary" onclick="setLotteryBuyNow()">現在</button>
+          </div>
+        </div>
+        <div class="note" style="margin-top:10px">
+          紫微靈感模式會使用姓名、出生日期、出生時辰、農曆日期字串與購買時間形成個人化種子。
+          這不是正式紫微斗數命盤，也不宣稱能預測開獎。
+        </div>
+      </div>
+    </div>
+
+    <button class="primary full" style="font-size:18px;padding:15px" onclick="generateLotteryNumbers()">✨ 幫我選一組發財號碼</button>
+
+    <div class="card">
+      <div id="lotteryResult" class="lottery-result-box" aria-live="polite">
+        <div class="lottery-title">財神爺目前還沒出手</div>
+        <div style="font-size:38px">🧧</div>
+        <div class="lottery-fortune">選好彩種與模式後，按下「幫我選一組發財號碼」。</div>
+      </div>
+      <button id="lotteryCopyBtn" class="secondary full" style="margin-top:10px;display:none" onclick="copyLotteryResult()">📋 複製這組號碼</button>
+      <div class="lottery-disclaimer">
+        🎯 娛樂提醒：彩券是隨機遊戲，每一組合法號碼的中獎機率相同。
+        姓名、生日、紫微斗數或購買時間都無法提高中獎機率；「紫微靈感」僅作個人化選號趣味用途。
+      </div>
     </div>
   </section>
 
@@ -715,6 +843,7 @@ function openPage(id){
   if(id==='parking') renderParking();
   if(id==='shopping') renderShop();
   if(id==='decision') renderDecisionHistory();
+  if(id==='lottery'){renderLotteryRule();ensureLotteryBuyTime();}
   if(id==='packing') renderPack();
   if(id==='quoteTax') calcQuoteTax();
   if(id==='password'){ensurePassword();renderPasswordHistory();}
@@ -726,6 +855,7 @@ const now = new Date();
 $('#todayText').textContent = new Intl.DateTimeFormat('zh-TW',{year:'numeric',month:'long',day:'numeric',weekday:'long'}).format(now);
 $('#todoDate').value = ymd(now);
 $('#moneyDate').value = ymd(now);
+if($('#lotteryBuyTime')) $('#lotteryBuyTime').value = toLocalDateTimeInput(now);
 
 // Todo
 let todoFilter='all';
@@ -1298,6 +1428,222 @@ document.addEventListener('click',function(e){
     if(msg)msg.textContent='命運黑歷史已全部清空，宇宙表示查無此事。';
   }
 },false);
+
+// Lottery number picker
+let lotteryMode='random';
+let lastLotteryCopyText='';
+
+const LOTTERY_RULES={
+  lotto649:{name:'大樂透',count:6,max:49,rule:'從 01～49 中選 6 個不重複號碼'},
+  super638:{name:'威力彩',count:6,max:38,powerMax:8,rule:'第一區從 01～38 選 6 個；第二區從 01～08 選 1 個'},
+  daily539:{name:'今彩539',count:5,max:39,rule:'從 01～39 中選 5 個不重複號碼'}
+};
+
+const LOTTERY_FORTUNES=[
+  '財神爺已簽收，但沒有承諾今天到貨。',
+  '這組號碼很有氣勢；中獎機率依然公平得令人尊敬。',
+  '號碼已選好，接下來請把「發財」和「量力而為」一起帶出門。',
+  '宇宙提供靈感，開獎機器負責保持神祕。',
+  '這組看起來很旺，但真正穩定的財運通常還是來自少花一點、多存一點。',
+  '財神今天有回訊息：號碼可以給，保證書沒有。',
+  '命理可以增加儀式感，機率數學仍然不吃這一套。',
+  '祝你手氣好；沒中就當作買了一小張期待感。'
+];
+
+function renderLotteryRule(){
+  const game=$('#lotteryGame');
+  if(!game)return;
+  const r=LOTTERY_RULES[game.value];
+  $('#lotteryRule').textContent=r.rule;
+}
+
+function setLotteryMode(mode){
+  lotteryMode=mode==='destiny'?'destiny':'random';
+  $('#lotteryRandomModeBtn').classList.toggle('active',lotteryMode==='random');
+  $('#lotteryDestinyModeBtn').classList.toggle('active',lotteryMode==='destiny');
+  $('#lotteryPersonalFields').style.display=lotteryMode==='destiny'?'block':'none';
+  if(lotteryMode==='destiny')ensureLotteryBuyTime();
+}
+
+function toLocalDateTimeInput(d){
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function ensureLotteryBuyTime(){
+  const el=$('#lotteryBuyTime');
+  if(el && !el.value)el.value=toLocalDateTimeInput(new Date());
+}
+
+function setLotteryBuyNow(){
+  $('#lotteryBuyTime').value=toLocalDateTimeInput(new Date());
+}
+
+function lotterySecureInt(max){
+  if(max<=1)return 0;
+  if(window.crypto && crypto.getRandomValues){
+    const limit=Math.floor(4294967296/max)*max;
+    const a=new Uint32Array(1);
+    do{crypto.getRandomValues(a)}while(a[0]>=limit);
+    return a[0]%max;
+  }
+  return Math.floor(Math.random()*max);
+}
+
+function uniqueRandomNumbers(count,max){
+  const pool=Array.from({length:max},(_,i)=>i+1);
+  for(let i=pool.length-1;i>0;i--){
+    const j=lotterySecureInt(i+1);
+    [pool[i],pool[j]]=[pool[j],pool[i]];
+  }
+  return pool.slice(0,count).sort((a,b)=>a-b);
+}
+
+function fnv1a32(text){
+  let h=0x811c9dc5;
+  for(let i=0;i<text.length;i++){
+    h^=text.charCodeAt(i);
+    h=Math.imul(h,0x01000193);
+  }
+  return h>>>0;
+}
+
+function mulberry32(seed){
+  let a=seed>>>0;
+  return function(){
+    a=(a+0x6D2B79F5)>>>0;
+    let t=a;
+    t=Math.imul(t^(t>>>15),t|1);
+    t^=t+Math.imul(t^(t>>>7),t|61);
+    return ((t^(t>>>14))>>>0)/4294967296;
+  };
+}
+
+function uniqueSeededNumbers(count,max,seedText){
+  const rand=mulberry32(fnv1a32(seedText));
+  const pool=Array.from({length:max},(_,i)=>i+1);
+  for(let i=pool.length-1;i>0;i--){
+    const j=Math.floor(rand()*(i+1));
+    [pool[i],pool[j]]=[pool[j],pool[i]];
+  }
+  return pool.slice(0,count).sort((a,b)=>a-b);
+}
+
+function birthHourBranch(time){
+  if(!time)return '';
+  const h=Number(time.split(':')[0]);
+  if(!Number.isFinite(h))return '';
+  const branches=['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+  return branches[Math.floor(((h+1)%24)/2)]+'時';
+}
+
+function chineseCalendarText(dateStr){
+  if(!dateStr)return '';
+  try{
+    const [y,m,d]=dateStr.split('-').map(Number);
+    const dt=new Date(y,m-1,d,12,0,0);
+    return new Intl.DateTimeFormat('zh-TW-u-ca-chinese',{
+      year:'numeric',month:'long',day:'numeric'
+    }).format(dt);
+  }catch(e){
+    return dateStr;
+  }
+}
+
+function getLotteryDestinySeed(gameKey){
+  const name=$('#lotteryName').value.trim();
+  const birthDate=$('#lotteryBirthDate').value;
+  const birthTime=$('#lotteryBirthTime').value;
+  const buyTime=$('#lotteryBuyTime').value;
+
+  if(!name || !birthDate || !birthTime || !buyTime){
+    alert('紫微靈感模式請完整輸入姓名、出生年月日、出生時間與買彩券時間。');
+    return null;
+  }
+
+  const lunar=chineseCalendarText(birthDate);
+  const branch=birthHourBranch(birthTime);
+  const seed=[
+    'fortune-lottery-v1',
+    gameKey,
+    name,
+    birthDate,
+    birthTime,
+    lunar,
+    branch,
+    buyTime
+  ].join('|');
+
+  return {seed,name,birthDate,birthTime,buyTime,lunar,branch};
+}
+
+function ballHtml(n,cls=''){
+  return `<span class="lottery-ball ${cls}">${pad(n)}</span>`;
+}
+
+function generateLotteryNumbers(){
+  const gameKey=$('#lotteryGame').value;
+  const rule=LOTTERY_RULES[gameKey];
+  let main=[],power=null,meta='';
+
+  if(lotteryMode==='random'){
+    main=uniqueRandomNumbers(rule.count,rule.max);
+    if(rule.powerMax)power=uniqueRandomNumbers(1,rule.powerMax)[0];
+    meta='純隨機模式 · 使用瀏覽器隨機來源產生';
+  }else{
+    const d=getLotteryDestinySeed(gameKey);
+    if(!d)return;
+    main=uniqueSeededNumbers(rule.count,rule.max,d.seed+'|main');
+    if(rule.powerMax)power=uniqueSeededNumbers(1,rule.powerMax,d.seed+'|power')[0];
+    meta=`紫微靈感模式 · 農曆參考：${d.lunar} · ${d.branch} · 購買時間 ${d.buyTime.replace('T',' ')}`;
+  }
+
+  const fortune=LOTTERY_FORTUNES[lotterySecureInt(LOTTERY_FORTUNES.length)];
+  let resultHtml=`<div class="lottery-title">${esc(rule.name)} · ${lotteryMode==='random'?'純隨機':'紫微靈感'}</div>
+    <div class="lottery-balls">${main.map(n=>ballHtml(n)).join('')}</div>`;
+
+  if(power!==null){
+    resultHtml+=`<div class="lottery-zone">
+      <div class="lottery-zone-label">第二區</div>
+      <div class="lottery-balls">${ballHtml(power,'power')}</div>
+    </div>`;
+  }
+
+  resultHtml+=`<div class="lottery-fortune">「${esc(fortune)}」</div>
+    <div class="lottery-meta">${esc(meta)}</div>`;
+
+  $('#lotteryResult').innerHTML=resultHtml;
+  $('#lotteryCopyBtn').style.display='block';
+
+  lastLotteryCopyText=power!==null
+    ? `${rule.name}：第一區 ${main.map(pad).join('、')}｜第二區 ${pad(power)}`
+    : `${rule.name}：${main.map(pad).join('、')}`;
+}
+
+async function copyLotteryResult(){
+  if(!lastLotteryCopyText)return;
+  let ok=false;
+  try{
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(lastLotteryCopyText);
+      ok=true;
+    }
+  }catch(e){}
+  if(!ok){
+    const ta=document.createElement('textarea');
+    ta.value=lastLotteryCopyText;
+    ta.style.position='fixed';
+    ta.style.opacity='0';
+    document.body.appendChild(ta);
+    ta.focus();ta.select();
+    try{ok=document.execCommand('copy')}catch(e){}
+    ta.remove();
+  }
+  if(ok){
+    const old=$('#lotteryCopyBtn').textContent;
+    $('#lotteryCopyBtn').textContent='✅ 已複製';
+    setTimeout(()=>{$('#lotteryCopyBtn').textContent=old},1200);
+  }
+}
 
 // Packing assistant
 const PACK_PRESETS={
