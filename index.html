@@ -1468,8 +1468,9 @@ body.startup-ad-open{overflow:hidden!important}
 }
 #startupAd.startup-ad-hide{
   opacity:0;
-  visibility:hidden;
-  pointer-events:none;
+  /* 保留透明觸控層到同一次手勢完全結束，避免點擊穿透到底下首頁字卡 */
+  visibility:visible;
+  pointer-events:auto;
 }
 .startup-ad-panel{
   position:relative;
@@ -3979,7 +3980,7 @@ function openAdminCustomCard(id){
     alert('這張字卡的連結網址無效，請到後台修改。');
     return;
   }
-  window.open(url,'_blank','noopener');
+  window.location.href=url;
 }
 
 function renderAdminCustomCards(){
@@ -6862,24 +6863,43 @@ document.addEventListener('touchstart', function unlockAudio(){
 (function(){
   var ad = document.getElementById('startupAd');
   if(!ad) return;
+
   document.body.classList.add('startup-ad-open');
   var closed = false;
+
+  function swallowStartupEvent(ev){
+    if(!ev) return;
+    if(ev.cancelable) ev.preventDefault();
+    ev.stopPropagation();
+    if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+  }
+
   function closeStartupAd(ev){
+    swallowStartupEvent(ev);
     if(closed) return;
     closed = true;
-    if(ev && ev.cancelable) ev.preventDefault();
-    if(ev) ev.stopPropagation();
+
+    /* 第一個觸碰只做一件事：回首頁並關閉廣告，不執行任何首頁字卡。 */
+    if(typeof goHome === 'function') goHome();
+
+    ad.setAttribute('aria-hidden','true');
     ad.classList.add('startup-ad-hide');
     document.body.classList.remove('startup-ad-open');
+
+    /* 暫時保留透明遮罩，吃掉同一次觸控可能補送的 click，避免事件穿透。 */
     window.setTimeout(function(){
       if(ad && ad.parentNode) ad.parentNode.removeChild(ad);
-    },180);
+    },260);
   }
+
   if(window.PointerEvent){
-    ad.addEventListener('pointerdown', closeStartupAd, {once:true});
+    ad.addEventListener('pointerdown', swallowStartupEvent, true);
+    ad.addEventListener('pointerup', closeStartupAd, {once:true, capture:true});
+    ad.addEventListener('click', swallowStartupEvent, true);
   }else{
-    ad.addEventListener('touchstart', closeStartupAd, {once:true, passive:false});
-    ad.addEventListener('click', closeStartupAd, {once:true});
+    ad.addEventListener('touchstart', swallowStartupEvent, {passive:false, capture:true});
+    ad.addEventListener('touchend', closeStartupAd, {once:true, passive:false, capture:true});
+    ad.addEventListener('click', swallowStartupEvent, true);
   }
 })();
 </script>
