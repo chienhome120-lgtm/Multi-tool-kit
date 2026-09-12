@@ -689,6 +689,191 @@ input,select,textarea{
   .vault-protection-choice{grid-template-columns:1fr}
 }
 
+
+/* ===== v17 首頁長按拖曳排序 ===== */
+#home .grid{
+  position:relative;
+}
+
+#home .tool{
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+  cursor:pointer;
+}
+
+#home .tool.home-drag-ready{
+  animation:homeLongPressReady .18s ease;
+}
+
+#home .tool.home-dragging{
+  position:relative;
+  z-index:50;
+  transform:scale(1.045) translateY(-4px) !important;
+  opacity:.93;
+  cursor:grabbing;
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.98),
+    inset -1px -1px 0 rgba(143,121,108,.12),
+    0 16px 24px rgba(74,58,50,.24),
+    0 5px 8px rgba(74,58,50,.18) !important;
+  outline:2px solid rgba(143,96,102,.30);
+}
+
+#home .tool.home-drag-over{
+  outline:2px dashed rgba(137,91,98,.55);
+  outline-offset:2px;
+}
+
+#home.home-reorder-mode::after{
+  content:"放開即可儲存位置";
+  position:fixed;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  z-index:999;
+  background:rgba(69,55,49,.90);
+  color:#fff;
+  padding:9px 14px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:800;
+  box-shadow:0 5px 12px rgba(55,43,38,.22);
+  pointer-events:none;
+  white-space:nowrap;
+}
+
+@keyframes homeLongPressReady{
+  0%{transform:scale(1)}
+  55%{transform:scale(.97)}
+  100%{transform:scale(1.045) translateY(-4px)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  #home .tool.home-drag-ready{animation:none}
+}
+
+
+/* ===== v18 首頁真正拖曳＋周圍字卡自動避讓 ===== */
+#home .grid{
+  position:relative;
+}
+
+#home .tool{
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-touch-callout:none;
+}
+
+/* 真正被拖起來的字卡 */
+#home .tool.home-floating-drag{
+  position:fixed !important;
+  z-index:9999 !important;
+  margin:0 !important;
+  pointer-events:none !important;
+  transform:scale(1.055) rotate(.4deg) !important;
+  opacity:.96;
+  cursor:grabbing;
+  transition:none !important;
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.98),
+    inset -1px -1px 0 rgba(143,121,108,.10),
+    0 18px 30px rgba(65,49,42,.28),
+    0 6px 10px rgba(65,49,42,.18) !important;
+  outline:2px solid rgba(142,91,98,.30);
+}
+
+/* 原位置／目標位置會顯示的佔位框 */
+#home .home-drop-placeholder{
+  min-height:80px;
+  border-radius:18px;
+  border:2px dashed rgba(139,92,99,.48);
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.32),rgba(222,208,199,.23));
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.45);
+  animation:homePlaceholderPulse .8s ease-in-out infinite alternate;
+}
+
+@keyframes homePlaceholderPulse{
+  from{opacity:.58}
+  to{opacity:.95}
+}
+
+#home.home-reorder-mode::after{
+  content:"拖到想要的位置，放開即可儲存";
+}
+
+/* 周圍字卡讓位時的輕微動態 */
+#home .tool.home-shift-animating{
+  z-index:1;
+}
+
+/* 長按成功的視覺回饋 */
+#home .tool.home-longpress-confirm{
+  filter:brightness(1.025);
+}
+
+/* 拖曳時避免頁面文字選取 */
+body.home-card-dragging{
+  -webkit-user-select:none !important;
+  user-select:none !important;
+}
+
+@media(max-width:380px){
+  #home .home-drop-placeholder{
+    min-height:78px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  #home .home-drop-placeholder{animation:none}
+}
+
+
+/* ===== v19 拖曳初始化修正與明確回饋 ===== */
+#home .grid[data-home-reorder-ready="1"] .tool{
+  cursor:grab;
+}
+
+#home .tool.home-floating-drag{
+  will-change:left,top,transform;
+}
+
+#home.home-reorder-mode .home-drop-placeholder{
+  visibility:visible;
+}
+
+#home.home-reorder-mode::before{
+  content:"↕ 移動模式";
+  position:fixed;
+  top:12px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:10000;
+  padding:7px 12px;
+  border-radius:999px;
+  background:rgba(132,83,91,.94);
+  color:#fff;
+  font-size:12px;
+  font-weight:900;
+  box-shadow:0 5px 12px rgba(55,43,38,.22);
+  pointer-events:none;
+  white-space:nowrap;
+}
+
+
+/* ===== v20 拖曳防抖 ===== */
+#home .tool.home-shift-animating{
+  transition:none !important;
+  will-change:transform;
+}
+
+#home.home-reorder-mode .tool:not(.home-floating-drag){
+  /* 避免原本卡片按壓 transition 與避讓動畫互相疊加 */
+  transition:box-shadow .10s ease, filter .10s ease !important;
+}
+
 </style>
 </head>
 <body>
@@ -2854,8 +3039,595 @@ function initLiveCalculator(){
 
 toggleMoneyCustomCat();
 renderDecisionHistory();
+
 initLiveCalculator();
 
+
+
+// ===== v18 首頁功能字卡：真正長按拖曳＋自動避讓 =====
+const HOME_ORDER_KEY='homeToolOrderV1';
+
+let homeDragState={
+  item:null,
+  placeholder:null,
+  timer:null,
+  active:false,
+  inputType:'',
+  startX:0,
+  startY:0,
+  lastX:0,
+  lastY:0,
+  offsetX:0,
+  offsetY:0,
+  width:0,
+  height:0,
+  suppressClickUntil:0,
+  lastTargetKey:'',
+  lastSwapX:null,
+  lastSwapY:null,
+  lastSwapAt:0,
+  scrollTimer:null
+};
+
+function getHomeToolGrid(){
+  return document.querySelector('#home .grid');
+}
+
+function getHomeToolKey(tool){
+  if(!tool)return '';
+  const onclick=tool.getAttribute('onclick')||'';
+  const match=onclick.match(/openPage\(['"]([^'"]+)['"]\)/);
+  if(match)return match[1];
+  return (tool.textContent||'').trim();
+}
+
+function saveHomeToolOrder(){
+  const grid=getHomeToolGrid();
+  if(!grid)return;
+  const order=[...grid.children].filter(el=>el.classList&&el.classList.contains('tool'))
+    .map(getHomeToolKey)
+    .filter(Boolean);
+  store.set(HOME_ORDER_KEY,order);
+}
+
+function restoreHomeToolOrder(){
+  const grid=getHomeToolGrid();
+  if(!grid)return;
+
+  const saved=store.get(HOME_ORDER_KEY,[]);
+  if(!Array.isArray(saved)||!saved.length)return;
+
+  const tools=[...grid.children].filter(el=>el.classList&&el.classList.contains('tool'));
+  const byKey=new Map(tools.map(tool=>[getHomeToolKey(tool),tool]));
+
+  saved.forEach(key=>{
+    const tool=byKey.get(key);
+    if(tool){
+      grid.appendChild(tool);
+      byKey.delete(key);
+    }
+  });
+
+  // 新增但尚未存在於舊排序中的功能，排到最後
+  tools.forEach(tool=>{
+    const key=getHomeToolKey(tool);
+    if(byKey.has(key)){
+      grid.appendChild(tool);
+      byKey.delete(key);
+    }
+  });
+}
+
+function clearHomeDragTimer(){
+  if(homeDragState.timer){
+    clearTimeout(homeDragState.timer);
+    homeDragState.timer=null;
+  }
+}
+
+function homeDistance(x1,y1,x2,y2){
+  return Math.hypot(x2-x1,y2-y1);
+}
+
+function createHomePlaceholder(item){
+  const p=document.createElement('div');
+  p.className='home-drop-placeholder';
+  p.setAttribute('aria-hidden','true');
+
+  const cs=getComputedStyle(item);
+  p.style.height=item.offsetHeight+'px';
+  p.style.minHeight=item.offsetHeight+'px';
+
+  // 讓 placeholder 在 grid 中占用與字卡相同的位置
+  if(cs.gridColumnStart && cs.gridColumnStart!=='auto'){
+    p.style.gridColumnStart=cs.gridColumnStart;
+  }
+  return p;
+}
+
+function getHomeLayoutRect(el){
+  const grid=getHomeToolGrid();
+  if(!grid || !el)return null;
+
+  const gr=grid.getBoundingClientRect();
+  return {
+    left:gr.left + el.offsetLeft,
+    top:gr.top + el.offsetTop,
+    width:el.offsetWidth,
+    height:el.offsetHeight,
+    right:gr.left + el.offsetLeft + el.offsetWidth,
+    bottom:gr.top + el.offsetTop + el.offsetHeight
+  };
+}
+
+function stopHomeReflowAnimations(){
+  const grid=getHomeToolGrid();
+  if(!grid)return;
+
+  [...grid.children]
+    .filter(el=>el.classList&&el.classList.contains('tool'))
+    .forEach(el=>{
+      try{
+        el.getAnimations().forEach(anim=>anim.cancel());
+      }catch(e){}
+      el.classList.remove('home-shift-animating');
+    });
+}
+
+function captureHomeRects(){
+  const grid=getHomeToolGrid();
+  if(!grid)return new Map();
+  const map=new Map();
+  [...grid.children].filter(el=>el.classList&&el.classList.contains('tool')).forEach(el=>{
+    if(el!==homeDragState.item){
+      map.set(el,el.getBoundingClientRect());
+    }
+  });
+  return map;
+}
+
+function animateHomeReflow(beforeRects){
+  const reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce)return;
+
+  requestAnimationFrame(()=>{
+    beforeRects.forEach((oldRect,el)=>{
+      if(!el.isConnected)return;
+
+      // 先取消同一張字卡尚未完成的舊動畫，避免多個動畫疊在一起造成抖動
+      try{el.getAnimations().forEach(anim=>anim.cancel())}catch(e){}
+
+      const newRect=el.getBoundingClientRect();
+      const dx=oldRect.left-newRect.left;
+      const dy=oldRect.top-newRect.top;
+
+      if(Math.abs(dx)<1 && Math.abs(dy)<1)return;
+
+      try{
+        el.classList.add('home-shift-animating');
+        const anim=el.animate(
+          [
+            {transform:`translate(${dx}px, ${dy}px)`},
+            {transform:'translate(0px, 0px)'}
+          ],
+          {
+            duration:135,
+            easing:'cubic-bezier(.22,.72,.28,1)'
+          }
+        );
+        anim.onfinish=()=>el.classList.remove('home-shift-animating');
+        anim.oncancel=()=>el.classList.remove('home-shift-animating');
+      }catch(e){}
+    });
+  });
+}
+
+function updateFloatingHomeCard(x,y){
+  const item=homeDragState.item;
+  if(!item || !homeDragState.active)return;
+
+  const left=x-homeDragState.offsetX;
+  const top=y-homeDragState.offsetY;
+
+  item.style.left=Math.round(left)+'px';
+  item.style.top=Math.round(top)+'px';
+}
+
+function startRealHomeDrag(item,x,y,inputType){
+  if(!item || homeDragState.active)return;
+
+  clearHomeDragTimer();
+
+  const rect=item.getBoundingClientRect();
+  const placeholder=createHomePlaceholder(item);
+
+  homeDragState.item=item;
+  homeDragState.placeholder=placeholder;
+  homeDragState.active=true;
+  homeDragState.inputType=inputType||'touch';
+  homeDragState.lastX=x;
+  homeDragState.lastY=y;
+  homeDragState.offsetX=Math.max(0,Math.min(rect.width,x-rect.left));
+  homeDragState.offsetY=Math.max(0,Math.min(rect.height,y-rect.top));
+  homeDragState.width=rect.width;
+  homeDragState.height=rect.height;
+  homeDragState.suppressClickUntil=Date.now()+1200;
+  homeDragState.lastTargetKey='';
+  homeDragState.lastSwapX=null;
+  homeDragState.lastSwapY=null;
+  homeDragState.lastSwapAt=0;
+
+  // 先在原位置插入 placeholder，再把實體字卡浮起來
+  item.parentNode.insertBefore(placeholder,item);
+
+  item.style.width=Math.round(rect.width)+'px';
+  item.style.height=Math.round(rect.height)+'px';
+  item.style.left=Math.round(rect.left)+'px';
+  item.style.top=Math.round(rect.top)+'px';
+  item.classList.add('home-floating-drag','home-longpress-confirm');
+
+  document.querySelector('#home')?.classList.add('home-reorder-mode');
+  document.body.classList.add('home-card-dragging');
+
+  updateFloatingHomeCard(x,y);
+
+  try{
+    if(navigator.vibrate)navigator.vibrate([24,18,20]);
+  }catch(e){}
+
+  setTimeout(()=>item.classList.remove('home-longpress-confirm'),180);
+}
+
+function getHomeDropTarget(x,y){
+  const grid=getHomeToolGrid();
+  if(!grid)return null;
+
+  const tools=[...grid.children]
+    .filter(el=>el.classList&&el.classList.contains('tool'))
+    .filter(el=>el!==homeDragState.item);
+
+  let inside=null;
+  let nearest=null;
+  let nearestDist=Infinity;
+
+  for(const el of tools){
+    const r=getHomeLayoutRect(el);
+    if(!r)continue;
+
+    // 優先使用實際 grid 格位，而不是動畫 transform 後的位置
+    if(x>=r.left && x<=r.right && y>=r.top && y<=r.bottom){
+      inside=el;
+      break;
+    }
+
+    const cx=r.left+r.width/2;
+    const cy=r.top+r.height/2;
+    const d=Math.hypot(x-cx,y-cy);
+    if(d<nearestDist){
+      nearestDist=d;
+      nearest=el;
+    }
+  }
+
+  return inside||nearest;
+}
+
+function decideInsertBefore(target,x,y){
+  const r=getHomeLayoutRect(target);
+  if(!r)return null;
+
+  const cx=r.left+r.width/2;
+  const cy=r.top+r.height/2;
+  const verticalDelta=Math.abs(y-cy);
+
+  // 中央死區：手指在分界線附近時先不換位，
+  // 避免左右／前後在同一個位置反覆切換。
+  if(verticalDelta>r.height*.31){
+    if(Math.abs(y-cy)<13)return null;
+    return y<cy;
+  }
+
+  if(Math.abs(x-cx)<16)return null;
+  return x<cx;
+}
+
+function moveHomePlaceholder(x,y){
+  const grid=getHomeToolGrid();
+  const placeholder=homeDragState.placeholder;
+  if(!grid || !placeholder || !homeDragState.active)return;
+
+  // 每次換位後，手指至少再移動 22px 才允許下一次換位。
+  // 這可避免 DOM 重排後，相同手指位置立刻被判斷成另一格而來回震盪。
+  if(homeDragState.lastSwapX!==null && homeDragState.lastSwapY!==null){
+    const moved=Math.hypot(
+      x-homeDragState.lastSwapX,
+      y-homeDragState.lastSwapY
+    );
+    if(moved<22)return;
+  }
+
+  // 再加非常短的冷卻時間，讓 grid 完成一次版面重排
+  if(Date.now()-homeDragState.lastSwapAt<85)return;
+
+  const target=getHomeDropTarget(x,y);
+  if(!target)return;
+
+  const before=decideInsertBefore(target,x,y);
+  if(before===null)return;
+
+  const targetKey=getHomeToolKey(target)+'|'+(before?'before':'after');
+
+  // 同一個目標位置不重複處理
+  if(targetKey===homeDragState.lastTargetKey)return;
+
+  // 先判斷 DOM 是否真的需要移動 placeholder
+  let needsMove=false;
+  if(before){
+    needsMove=placeholder.nextSibling!==target;
+  }else{
+    needsMove=target.nextSibling!==placeholder;
+  }
+
+  if(!needsMove){
+    homeDragState.lastTargetKey=targetKey;
+    return;
+  }
+
+  // 避免前一段 FLIP 動畫尚未結束又疊加新動畫
+  stopHomeReflowAnimations();
+  const beforeRects=captureHomeRects();
+
+  if(before){
+    grid.insertBefore(placeholder,target);
+  }else{
+    grid.insertBefore(placeholder,target.nextSibling);
+  }
+
+  homeDragState.lastTargetKey=targetKey;
+  homeDragState.lastSwapX=x;
+  homeDragState.lastSwapY=y;
+  homeDragState.lastSwapAt=Date.now();
+
+  animateHomeReflow(beforeRects);
+}
+
+function autoScrollHomeWhileDragging(y){
+  if(!homeDragState.active)return;
+
+  const edge=85;
+  const speed=9;
+  const h=window.innerHeight;
+
+  if(y<edge){
+    window.scrollBy(0,-speed);
+  }else if(y>h-edge){
+    window.scrollBy(0,speed);
+  }
+}
+
+function finishRealHomeDrag(){
+  clearHomeDragTimer();
+
+  const item=homeDragState.item;
+  const placeholder=homeDragState.placeholder;
+  const wasActive=homeDragState.active;
+
+  if(wasActive && item && placeholder && placeholder.parentNode){
+    const beforeRects=captureHomeRects();
+
+    // 將原字卡插回 placeholder 所在位置
+    placeholder.parentNode.insertBefore(item,placeholder);
+    placeholder.remove();
+
+    item.classList.remove('home-floating-drag','home-longpress-confirm');
+    item.removeAttribute('style');
+
+    animateHomeReflow(beforeRects);
+
+    saveHomeToolOrder();
+    homeDragState.suppressClickUntil=Date.now()+850;
+
+    try{
+      if(navigator.vibrate)navigator.vibrate(18);
+    }catch(e){}
+  }else if(placeholder){
+    placeholder.remove();
+  }
+
+  document.querySelector('#home')?.classList.remove('home-reorder-mode');
+  document.body.classList.remove('home-card-dragging');
+
+  homeDragState.item=null;
+  homeDragState.placeholder=null;
+  homeDragState.active=false;
+  homeDragState.inputType='';
+  homeDragState.lastTargetKey='';
+  homeDragState.lastSwapX=null;
+  homeDragState.lastSwapY=null;
+  homeDragState.lastSwapAt=0;
+}
+
+function cancelPendingHomeDrag(){
+  clearHomeDragTimer();
+  if(!homeDragState.active){
+    homeDragState.item=null;
+  }
+}
+
+/* ---------- 手機觸控 ---------- */
+function initHomeTouchReorder(){
+  const grid=getHomeToolGrid();
+  if(!grid || grid.dataset.touchReorderV18==='1')return;
+  grid.dataset.touchReorderV18='1';
+
+  grid.addEventListener('touchstart',e=>{
+    const tool=e.target.closest('.tool');
+    if(!tool || !grid.contains(tool) || e.touches.length!==1)return;
+
+    const t=e.touches[0];
+
+    homeDragState.item=tool;
+    homeDragState.startX=t.clientX;
+    homeDragState.startY=t.clientY;
+    homeDragState.lastX=t.clientX;
+    homeDragState.lastY=t.clientY;
+    homeDragState.active=false;
+    homeDragState.inputType='touch';
+
+    clearHomeDragTimer();
+    homeDragState.timer=setTimeout(()=>{
+      startRealHomeDrag(
+        tool,
+        homeDragState.lastX,
+        homeDragState.lastY,
+        'touch'
+      );
+    },380);
+  },{passive:true});
+
+  grid.addEventListener('touchmove',e=>{
+    if(!homeDragState.item || e.touches.length!==1)return;
+
+    const t=e.touches[0];
+    homeDragState.lastX=t.clientX;
+    homeDragState.lastY=t.clientY;
+
+    if(!homeDragState.active){
+      // 長按成立前，若已明顯移動，視為一般頁面滑動
+      if(homeDistance(
+        homeDragState.startX,
+        homeDragState.startY,
+        t.clientX,
+        t.clientY
+      )>11){
+        cancelPendingHomeDrag();
+      }
+      return;
+    }
+
+    // 真正進入拖曳後鎖住頁面原生捲動
+    e.preventDefault();
+
+    updateFloatingHomeCard(t.clientX,t.clientY);
+    moveHomePlaceholder(t.clientX,t.clientY);
+    autoScrollHomeWhileDragging(t.clientY);
+  },{passive:false});
+
+  grid.addEventListener('touchend',()=>{
+    if(homeDragState.active){
+      finishRealHomeDrag();
+    }else{
+      cancelPendingHomeDrag();
+    }
+  },{passive:true});
+
+  grid.addEventListener('touchcancel',()=>{
+    if(homeDragState.active){
+      finishRealHomeDrag();
+    }else{
+      cancelPendingHomeDrag();
+    }
+  },{passive:true});
+}
+
+/* ---------- 電腦滑鼠 ---------- */
+function initHomeMouseReorder(){
+  const grid=getHomeToolGrid();
+  if(!grid || grid.dataset.mouseReorderV18==='1')return;
+  grid.dataset.mouseReorderV18='1';
+
+  grid.addEventListener('mousedown',e=>{
+    if(e.button!==0)return;
+
+    const tool=e.target.closest('.tool');
+    if(!tool || !grid.contains(tool))return;
+
+    homeDragState.item=tool;
+    homeDragState.startX=e.clientX;
+    homeDragState.startY=e.clientY;
+    homeDragState.lastX=e.clientX;
+    homeDragState.lastY=e.clientY;
+    homeDragState.active=false;
+    homeDragState.inputType='mouse';
+
+    clearHomeDragTimer();
+    homeDragState.timer=setTimeout(()=>{
+      startRealHomeDrag(
+        tool,
+        homeDragState.lastX,
+        homeDragState.lastY,
+        'mouse'
+      );
+    },380);
+  });
+
+  window.addEventListener('mousemove',e=>{
+    if(!homeDragState.item)return;
+
+    homeDragState.lastX=e.clientX;
+    homeDragState.lastY=e.clientY;
+
+    if(!homeDragState.active){
+      if(homeDistance(
+        homeDragState.startX,
+        homeDragState.startY,
+        e.clientX,
+        e.clientY
+      )>9){
+        cancelPendingHomeDrag();
+      }
+      return;
+    }
+
+    e.preventDefault();
+
+    updateFloatingHomeCard(e.clientX,e.clientY);
+    moveHomePlaceholder(e.clientX,e.clientY);
+    autoScrollHomeWhileDragging(e.clientY);
+  });
+
+  window.addEventListener('mouseup',()=>{
+    if(homeDragState.active){
+      finishRealHomeDrag();
+    }else if(homeDragState.item){
+      cancelPendingHomeDrag();
+    }
+  });
+}
+
+/* 拖曳放開後，阻止同一次 click 誤觸進入功能 */
+document.addEventListener('click',e=>{
+  const tool=e.target.closest('#home .tool');
+  if(!tool)return;
+
+  if(Date.now()<homeDragState.suppressClickUntil){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+  }
+},true);
+
+function initHomeReorder(){
+  restoreHomeToolOrder();
+  initHomeTouchReorder();
+  initHomeMouseReorder();
+
+  // 顯示拖曳功能已正常完成初始化，避免靜默失敗
+  const grid=getHomeToolGrid();
+  if(grid)grid.dataset.homeReorderReady='1';
+}
+
+// 所有拖曳相關 const / let / function 都建立完成後才初始化。
+// 這是上一版無法移動的核心修正。
+initHomeReorder();
+
+
+
+// 首頁功能卡長按時不開啟瀏覽器原生內容選單
+document.addEventListener('contextmenu',e=>{
+  if(e.target.closest('#home .tool')){
+    e.preventDefault();
+  }
+});
 
 // ===== 全域按鍵點擊音效 =====
 let uiAudioCtx = null;
