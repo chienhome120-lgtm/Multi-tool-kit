@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#8d6e63" />
+<title>我的生活工具箱</title>
+<style>
+:root{
+  --bg:#f6f1ec;
+  --card:#fffaf6;
+  --ink:#3f3632;
+  --muted:#887a73;
+  --line:#e7ddd6;
+  --wine:#8c5b61;
+  --wine2:#74464d;
+  --green:#738b79;
+  --green2:#5f7765;
+  --sand:#c9ae8f;
+  --blue:#778a96;
+  --shadow:0 10px 28px rgba(79,60,53,.10);
+  --radius:22px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC",sans-serif}
+body{min-height:100vh}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{max-width:760px;margin:0 auto;min-height:100vh;padding:calc(16px + env(safe-area-inset-top)) 16px calc(30px + env(safe-area-inset-bottom))}
+.hero{padding:18px 4px 14px}
+.hero h1{margin:0;font-size:30px;letter-spacing:.02em}
+.hero p{margin:8px 0 0;color:var(--muted);font-size:15px}
+.today-card{
+  background:linear-gradient(135deg,#9b7774,#6f8174);
+  color:white;padding:18px;border-radius:24px;box-shadow:var(--shadow);margin:10px 0 18px
+}
+.today-card .date{opacity:.9;font-size:14px}
+.today-card .quote{font-size:18px;font-weight:700;margin-top:6px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tool{
+  border:0;background:var(--card);border-radius:22px;padding:18px 14px;text-align:left;
+  min-height:118px;box-shadow:var(--shadow);color:var(--ink);transition:.15s transform,.15s box-shadow
+}
+.tool:active{transform:scale(.98);box-shadow:0 4px 14px rgba(79,60,53,.10)}
+.tool .icon{font-size:31px;display:block;margin-bottom:10px}
+.tool b{font-size:17px}
+.tool small{display:block;color:var(--muted);margin-top:5px;line-height:1.35}
+.page{display:none}
+.page.active{display:block}
+.topbar{display:flex;align-items:center;gap:10px;margin:4px 0 16px}
+.back{border:0;background:#e9dfd8;color:var(--ink);width:42px;height:42px;border-radius:14px;font-size:20px}
+.topbar h2{margin:0;font-size:23px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;margin:12px 0;box-shadow:0 5px 18px rgba(79,60,53,.06)}
+.row{display:flex;gap:10px;align-items:center}
+.row>*{min-width:0}
+.col{flex:1}
+label{display:block;color:var(--muted);font-size:13px;margin:0 0 6px}
+input,select,textarea{
+  width:100%;border:1px solid #ded3cb;background:#fff;border-radius:14px;padding:12px 13px;color:var(--ink);outline:none
+}
+input:focus,select:focus,textarea:focus{border-color:#a58a7e;box-shadow:0 0 0 3px rgba(165,138,126,.13)}
+.primary,.secondary,.danger{
+  border:0;border-radius:14px;padding:12px 15px;font-weight:700
+}
+.primary{background:var(--wine);color:white}
+.primary:active{background:var(--wine2)}
+.secondary{background:#dfe8e0;color:#405147}
+.secondary:active{background:#cedcce}
+.danger{background:#f2dfdf;color:#8a4b4b}
+.full{width:100%}
+.pills{display:flex;gap:8px;overflow:auto;padding-bottom:4px}
+.pill{white-space:nowrap;border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;color:var(--muted)}
+.pill.active{background:var(--green);color:white;border-color:var(--green)}
+.item{
+  display:flex;gap:10px;align-items:center;padding:12px 0;border-bottom:1px dashed var(--line)
+}
+.item:last-child{border-bottom:0}
+.item .grow{flex:1}
+.item .title{font-weight:700}
+.item .meta{font-size:12px;color:var(--muted);margin-top:3px}
+.item.done .title{text-decoration:line-through;opacity:.55}
+.item input[type=checkbox]{width:20px;height:20px}
+.iconbtn{border:0;background:transparent;font-size:18px;padding:8px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{border-radius:18px;padding:14px;background:#f2ebe5}
+.stat strong{display:block;font-size:22px;margin-top:3px}
+.income{background:#e7efe8}
+.expense{background:#f2e6e6}
+.big-result{
+  text-align:center;border-radius:22px;background:#efe6df;padding:22px 14px;margin-top:12px
+}
+.big-result .num{font-size:34px;font-weight:800;margin:4px 0}
+.empty{text-align:center;color:var(--muted);padding:24px 8px}
+.wheel-wrap{display:flex;flex-direction:column;align-items:center}
+.wheel{
+  width:min(72vw,330px);aspect-ratio:1;border-radius:50%;position:relative;margin:16px auto;
+  background:conic-gradient(#af817e 0 60deg,#7f9584 60deg 120deg,#c3a985 120deg 180deg,#7f9099 180deg 240deg,#b99aa0 240deg 300deg,#9e8a77 300deg 360deg);
+  border:10px solid #fff;box-shadow:var(--shadow);transition:transform 3.2s cubic-bezier(.12,.6,.1,1)
+}
+.wheel:before{
+  content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:72px;height:72px;background:#fff;border-radius:50%;box-shadow:0 3px 12px rgba(0,0,0,.14)
+}
+.pointer{
+  width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:24px solid var(--wine2);
+  margin-bottom:-12px;z-index:2
+}
+.option-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tag{background:#eee5df;border-radius:999px;padding:7px 10px;font-size:13px}
+.note{font-size:12px;color:var(--muted);line-height:1.5}
+.calc-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.calc-tabs button{border:0;border-radius:12px;padding:9px;background:#ece3dd;color:var(--ink)}
+.calc-tabs button.active{background:var(--blue);color:white}
+.calc-panel{display:none}.calc-panel.active{display:block}
+.fx-select-row{display:grid;grid-template-columns:1fr 46px 1fr;gap:8px;align-items:end}
+.fx-swap{border:0;background:#e7ddd6;color:var(--ink);height:46px;border-radius:14px;font-size:20px;font-weight:800}
+.fx-rate-line{margin-top:8px;font-size:14px;color:var(--muted);line-height:1.5}
+.fx-source{margin-top:9px;font-size:11px;color:#9b8d85;line-height:1.5}
+.fx-loading{opacity:.65;pointer-events:none}
+footer{text-align:center;color:#a0928a;font-size:12px;padding:24px 0 8px}
+@media(min-width:650px){
+  .grid{grid-template-columns:repeat(4,1fr)}
+  .tool{min-height:140px}
+}
+
+.progress-track{height:12px;background:#e9dfd8;border-radius:999px;overflow:hidden;margin-top:10px}
+.progress-fill{height:100%;width:0;background:var(--green);transition:width .2s ease}
+.pack-toolbar{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end}
+.quote-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quote-result{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.quote-result .stat{background:#f2ebe5}
+.password-output{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:17px;letter-spacing:.03em;word-break:break-all}
+.pwd-save-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.pwd-history-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.pwd-history-count{margin-left:auto;color:var(--muted);font-size:12px}
+.pwd-history-item{padding:13px 0;border-bottom:1px dashed var(--line)}
+.pwd-history-item:last-child{border-bottom:0}
+.pwd-history-title{font-weight:800;font-size:16px;word-break:break-word}
+.pwd-history-meta{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.45;word-break:break-word}
+.pwd-history-secret{
+  margin-top:8px;padding:10px 11px;border-radius:12px;background:#f3ece7;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  word-break:break-all;letter-spacing:.03em;font-size:15px
+}
+.pwd-history-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.pwd-history-actions button{border:0;border-radius:11px;padding:9px 11px;font-weight:700}
+.pwd-reveal{background:#e5ece6;color:#405147}
+.pwd-copy{background:#e7e3ef;color:#504962}
+.pwd-delete{background:#f2dfdf;color:#8a4b4b}
+.pwd-warning{
+  margin-top:10px;padding:11px 12px;border-radius:13px;background:#fff2e8;
+  color:#775949;font-size:12px;line-height:1.55
+}
+@media(max-width:460px){.pwd-save-grid{grid-template-columns:1fr}}
+
+.nearby-controls{display:grid;grid-template-columns:130px 1fr;gap:10px;align-items:end}
+.nearby-status{font-size:13px;color:var(--muted);line-height:1.5;margin-top:10px}
+.nearby-card{padding:12px 0;border-bottom:1px dashed var(--line)}
+.nearby-card:last-child{border-bottom:0}
+.nearby-name{font-weight:800;font-size:16px}
+.nearby-meta{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.45}
+.nearby-actions{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap}
+.mini-btn{border:0;border-radius:11px;padding:9px 11px;font-weight:700;background:#e5ece6;color:#405147}
+.mini-btn.alt{background:#eee5df;color:var(--ink)}
+.margin-positive{color:#496b55}
+.margin-negative{color:#9a5555}
+.decision-stage{
+  position:relative;overflow:hidden;text-align:center;padding:24px 16px;
+  border-radius:24px;background:linear-gradient(145deg,#f2e8e2,#e4ece6);
+}
+.decision-face{font-size:52px;line-height:1;margin-bottom:10px;transition:transform .22s ease}
+.decision-stage.thinking .decision-face{animation:decisionWobble .22s linear infinite}
+@keyframes decisionWobble{
+  0%{transform:rotate(-8deg) scale(.98)}50%{transform:rotate(8deg) scale(1.05)}100%{transform:rotate(-8deg) scale(.98)}
+}
+.decision-question{font-size:14px;color:var(--muted);margin-bottom:5px}
+.decision-answer{font-size:31px;font-weight:900;line-height:1.2;word-break:break-word}
+.decision-comment{margin-top:10px;color:#6f625c;line-height:1.55;min-height:24px}
+.decision-versus{display:grid;grid-template-columns:1fr 42px 1fr;gap:9px;align-items:end}
+.decision-vs{
+  display:flex;align-items:center;justify-content:center;height:46px;
+  font-weight:900;color:var(--wine);font-size:14px
+}
+.decision-presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.decision-presets button{
+  border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 11px;color:var(--ink)
+}
+.decision-history{display:flex;flex-direction:column;gap:7px}
+.decision-rounds{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px
+}
+.decision-round{
+  background:#fff;border:1px solid var(--line);border-radius:15px;padding:10px 8px;text-align:center;
+  min-height:74px;display:flex;flex-direction:column;justify-content:center
+}
+.decision-round .r-title{font-size:12px;color:var(--muted)}
+.decision-round .r-value{font-size:18px;font-weight:900;margin-top:4px;word-break:break-word}
+.decision-round.pending{opacity:.55}
+.decision-final-report{
+  margin-top:12px;background:#fff8f4;border-radius:16px;padding:12px 13px;
+  line-height:1.6;text-align:left;border:1px solid #eadbd2
+}
+
+.decision-history-item{
+  background:#f4ede8;border-radius:13px;padding:9px 11px;font-size:13px;line-height:1.45
+}
+.decision-history-item{display:flex;gap:8px;align-items:flex-start}
+.decision-history-main{flex:1;min-width:0}
+.decision-history-delete{
+  border:0;background:#f2dfdf;color:#8a4b4b;border-radius:10px;
+  width:36px;height:36px;flex:0 0 36px;font-size:16px;padding:0
+}
+.decision-history-delete{cursor:pointer;position:relative;z-index:2;touch-action:manipulation}
+.decision-history-delete:active{transform:scale(.94)}
+
+
+@media (prefers-reduced-motion:reduce){.decision-stage.thinking .decision-face{animation:none}}
+
+@media(max-width:420px){.nearby-controls{grid-template-columns:1fr}.nearby-controls button{width:100%}}
+.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.check-line{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.check-line input{width:18px;height:18px}
+@media(max-width:430px){
+  .quote-grid,.quote-result,.check-grid{grid-template-columns:1fr}
+  .pack-toolbar{grid-template-columns:1fr}
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <section id="home" class="page active">
+    <div class="hero">
+      <h1>我的生活工具箱</h1>
+      <p>把每天的小事，變得更簡單。</p>
+    </div>
+    <div class="today-card">
+      <div class="date" id="todayText"></div>
+      <div class="quote">今天先處理最重要的一件事 ☀️</div>
+    </div>
+    <div class="grid">
+      <button class="tool" onclick="openPage('todo')"><span class="icon">✅</span><b>待辦事項</b><small>今天、明天、重要任務</small></button>
+      <button class="tool" onclick="openPage('countdown')"><span class="icon">📅</span><b>行程倒數</b><small>旅行、生日、重要日期</small></button>
+      <button class="tool" onclick="openPage('money')"><span class="icon">💰</span><b>收支記帳</b><small>快速記錄收入與支出</small></button>
+      <button class="tool" onclick="openPage('split')"><span class="icon">👥</span><b>AA 分帳</b><small>聚餐平均分攤</small></button>
+      <button class="tool" onclick="openPage('food')"><span class="icon">🍜</span><b>今天吃什麼</b><small>轉盤幫你決定</small></button>
+      <button class="tool" onclick="openPage('parking')"><span class="icon">🅿️</span><b>停車位置</b><small>時間、位置與備註</small></button>
+      <button class="tool" onclick="openPage('shopping')"><span class="icon">🛒</span><b>購物清單</b><small>買完直接勾掉</small></button>
+      <button class="tool" onclick="openPage('calc')"><span class="icon">🧮</span><b>萬用計算器</b><small>折扣、百分比、坪數、匯率</small></button>
+      <button class="tool" onclick="openPage('decision')"><span class="icon">🎭</span><b>困難選擇器</b><small>要不要？買不買？宇宙幫你決定</small></button>
+      <button class="tool" onclick="openPage('packing')"><span class="icon">🧳</span><b>旅行打包助手</b><small>範本清單、勾選與進度</small></button>
+      <button class="tool" onclick="openPage('quoteTax')"><span class="icon">🧾</span><b>報價／稅額計算器</b><small>稅額、毛利率與淨利率</small></button>
+      <button class="tool" onclick="openPage('password')"><span class="icon">🔐</span><b>密碼產生器</b><small>安全隨機、長度與字元組合</small></button>
+    </div>
+    <footer>資料只儲存在這台裝置的瀏覽器中</footer>
+  </section>
+
+  <section id="todo" class="page">
+    <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>待辦事項</h2></div>
+    <div class="card">
+      <div class="row">
+        <div class="col"><label>待辦內容</label><input id="todoText" placeholder="例如：繳電費"></div>
+        <div style="width:130px"><label>日期</label><input id="todoDate" type="date"></div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <label style="display:flex;align-items:center;gap:8px;margin:0;flex:1"><input id="todoImportant" type="checkbox" style="width:18px"> 標記重要</label>
+        <button class="primary" onclick="addTodo()">新增</button>
+      </div>
+    </div>
+    <div class="pills">
+      <button class="pill active" data-filter="all" onclick="setTodoFilter('all',this)">全部</button>
+      <button class="pill" data-filter="today" onclick="setTodoFilter('today',this)">今天</button>
+      <button class="pill" data-filter="tomorrow" onclick="setTodoFilter('tomorrow',this)">明天</button>
+      <button class="pill" data-filter="important" onclick="setTodoFilter('important',this)">重要</button>
+    </div>
+    <div class="card" id="todoList"></div>
+  </section>
+
+  <section id="countdown" class="page">
+    <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>行程倒數</h2></div>
+    <div class="card">
+      <label>事件名稱</label><input id="cdTitle" placeholder="例如：日本旅行">
+      <label style="margin-top:10px">日期</label><input id="cdDate" type="date">
+      <button class="primary full" style="margin-top:12px" onclick="addCountdown()">新增倒數</button>
+    </div>
+    <div class="card" id="countdownList"></div>
+  </section>
+
+  <section id="money" class="page">
+    <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>收支記帳</h2></div>
+    <div class="stats">
+      <div class="stat income"><small>本月收入</small><strong id="monthIncome">$0</strong></div>
+      <div class="stat expense"><small>本月支出</small><strong id="monthExpense">$0</strong></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="col"><label>類型</label><select id="moneyType"><option value="expense">支出</option><option value="income">收入</option></select></div>
+        <div class="col"><label>金額</label><input id="moneyAmount" type="number" inputmode="decimal" placeholder="0"></div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <div class="col"><label>分類</label><select id="moneyCat" onchange="toggleMoneyCustomCat()"><option>餐飲</option><option>交通</option><option>購物</option><option>帳單</option><option>娛樂</option><option>薪資</option><option>其他</option></select></div>
+        <div class="col"><label>日期</label><input id="moneyDate" type="date"></div>
+      </div>
+      <div id="moneyCustomCatWrap" style="display:none;margin-top:10px">
+        <label>自訂分類名稱</label>
+        <input id="moneyCustomCat" placeholder="例如：寵物、醫療、進修、房租">
+      </div>
+      <label style="margin-top:10px">備註</label><input id="moneyNote" placeholder="可不填">
+      <button class="primary full" style="margin-top:12px" onclick="addMoney()">記一筆</button>
+    </div>
+    <div class="card" id="moneyList"></div>
+  </section>
+
+  <section id="split" class="page">
+    <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>AA 分帳</h2></div>
+    <div class="card">
+      <label>總金額</label><input id="splitTotal" type="number" inputmode="decimal" placeholder="例如：1280">
+      <label style="margin-top:10px">人數</label><input id="splitPeople" type="number" min="1" value="2">
+      <label style="margin-top:10px">服務費／其他費用（可不填）</label><input id="splitExtra" type="number" inputmode="decimal" value="0">
+      <button class="primary full" style="margin-top:12px" onclick="calcSplit()">計算</button>
+      <div class="big-result" id="splitResult"><div>每人平均</div><div class="num">$0</div><small>輸入金額後計算</small></div>
+    </div>
+  </section>
+
+  <section id="food" class="page">
+    <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>今天吃什麼</h2></div>
+    <div class="card wheel-wrap">
+      <div class="pointer"></div>
+      <div class="wheel" id="foodWheel"></div>
+      <button class="primary" onclick="spinFood()">開始轉盤</button>
+      <div class="big-result" style="width:100%" id="foodResult"><div>今天就吃</div><div class="num" style="font-size:28px">？</div></div>
+    </div>
+    <div class="card">
+      <label>自訂餐廳／餐點（用逗號分隔）</label>
+      <textarea id="foodOptions" rows="3">便當,麵食,火鍋,燒肉,日式,小吃</textarea>
+      <button class="secondary full" style="margin-top:10px" onclick="saveFoodOptions()">儲存選項</button>
+      <div class="option-tags" id="foodTags"></div>
+    </div>
+
+    <div class="card">
+      <strong style="font-size:18px">📍 GPS 搜尋附近餐廳</strong>
+      <div class="nearby-controls" style="margin-top:12px">
+        <div>
+          <label>搜尋半徑</label>
+          <select id="nearbyRadius">
+            <option value="500">500 公尺</option>
+            <option value="1000" selected>1 公里</option>
+            <option value="2000">2 公里</option>
+            <option value="3000">3 公里</option>
+          </select>
+        </div>
+        <button id="nearbySearchBtn" class="primary" onclick="searchNearbyRestaurants()">使用目前 GPS 搜尋</button>
+      </div>
+      <div class="nearby-status" id="nearbyStatus">點選搜尋後，手機會詢問是否允許取得目前位置。</div>
+      <div id="nearbyRestaurantList"></div>
+      <button id="nearbyAddAllBtn" class="secondary full" style="margin-top:12px;display:none" onclick="addAllNearbyToWheel()">把搜尋結果全部加入轉盤</button>
+      <div class="note" style="margin-top:10px">附近餐廳資料取自 OpenStreetMap。GPS 座標只用於本次搜尋，不會儲存在工具箱。</div>
+    </div>
+  </section>
+
+  <section id="parking" class="page">
+    <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>停車位置</h2></div>
+    <div class="card">
+      <label>位置／樓層／車格</label><input id="parkNote" placeholder="例如：B2 A35">
+      <div class="row" style="margin-top:10px">
+        <button class="secondary col" onclick="getLocation()">📍 取得目前位置</button>
+        <button class="primary col" onclick="saveParking()">儲存停車</button>
+      </div>
+      <p class="note">定位功能需瀏覽器允許位置權限；若直接開本機 HTML，部分手機可能不提供定位，放到 HTTPS 網站後較穩定。</p>
+    </div>
+    <div class="card" id="parkingInfo"></div>
+  </section>
+
+  <section id="shopping" class="page">
+    <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>購物清單</h2></div>
+    <div class="card">
+      <div class="row">
+        <div class="col"><label>品項</label><input id="shopText" placeholder="例如：牛奶"></div>
+        <div style="width:90px"><label>數量</label><input id="shopQty" type="number" min="1" value="1"></div>
+        <button class="primary" style="margin-top:19px" onclick="addShop()">新增</button>
+      </div>
+    </div>
+    <div class="card" id="shopList"></div>
+  </section>
+
+  <section id="decision" class="page">
+    <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>困難選擇器</h2></div>
+
+    <div class="card">
+      <label>你到底在糾結什麼？</label>
+      <input id="decisionTopic" placeholder="例如：今晚要不要吃宵夜？">
+
+      <div class="decision-versus" style="margin-top:12px">
+        <div>
+          <label>選項 A</label>
+          <input id="decisionA" value="要" maxlength="30">
+        </div>
+        <div class="decision-vs">VS</div>
+        <div>
+          <label>選項 B</label>
+          <input id="decisionB" value="不要" maxlength="30">
+        </div>
+      </div>
+
+      <div class="decision-presets">
+        <button type="button" onclick="setDecisionPreset('要','不要','到底要不要？')">要／不要</button>
+        <button type="button" onclick="setDecisionPreset('買','不買','這東西到底該不該買？')">買／不買</button>
+        <button type="button" onclick="setDecisionPreset('去','不去','這局到底去不去？')">去／不去</button>
+        <button type="button" onclick="setDecisionPreset('吃','忍住','嘴饞跟理智誰會贏？')">吃／忍住</button>
+      </div>
+    </div>
+
+    <div class="decision-stage" id="decisionStage" aria-live="polite">
+      <div class="decision-face" id="decisionFace">🤔</div>
+      <div class="decision-question" id="decisionQuestion">宇宙目前保持中立</div>
+      <div class="decision-answer" id="decisionAnswer">還沒決定</div>
+      <div class="decision-comment" id="decisionComment">別怕，按下去之後就可以把責任推給這個按鈕。</div>
+      <div id="decisionRounds" class="decision-rounds" style="display:none">
+        <div class="decision-round pending" id="decisionRound1"><div class="r-title">第 1 戰</div><div class="r-value">等待</div></div>
+        <div class="decision-round pending" id="decisionRound2"><div class="r-title">第 2 戰</div><div class="r-value">等待</div></div>
+        <div class="decision-round pending" id="decisionRound3"><div class="r-title">第 3 戰</div><div class="r-value">等待</div></div>
+      </div>
+      <div id="decisionFinalReport" class="decision-final-report" style="display:none"></div>
+    </div>
+
+    <button id="decisionBtn" class="primary full" style="margin-top:14px;font-size:18px;padding:15px" onclick="makeDecision()">🎲 幫我決定！</button>
+    <button class="secondary full" style="margin-top:9px" onclick="bestOfThreeDecision()">⚔️ 太不甘心？三戰兩勝</button>
+
+    <div class="card">
+      <div class="row"><strong class="col">最近的命運紀錄</strong><button id="decisionClearAllBtn" type="button" class="iconbtn" title="清除全部紀錄">🗑️</button></div>
+      <div id="decisionHistory" class="decision-history" style="margin-top:10px"></div>
+    </div>
+  </section>
+
+  <section id="packing" class="page">
+    <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>旅行打包助手</h2></div>
+
+    <div class="card">
+      <div class="pack-toolbar">
+        <div>
+          <label>快速範本</label>
+          <select id="packPreset">
+            <option value="domestic">國內旅遊</option>
+            <option value="overseas">海外旅行</option>
+            <option value="business">商務出差</option>
+            <option value="camping">露營／戶外</option>
+          </select>
+        </div>
+        <button class="secondary" onclick="applyPackPreset()">套用範本</button>
+      </div>
+      <div style="margin-top:14px">
+        <div class="row"><strong class="col">打包進度</strong><span id="packProgressText">0 / 0</span></div>
+        <div class="progress-track"><div class="progress-fill" id="packProgressFill"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div class="col"><label>新增物品</label><input id="packText" placeholder="例如：行動電源"></div>
+        <div style="width:120px"><label>分類</label><select id="packCat"><option>證件</option><option>衣物</option><option>盥洗</option><option>3C</option><option>藥品</option><option>其他</option></select></div>
+        <button class="primary" style="margin-top:19px" onclick="addPackItem()">新增</button>
+      </div>
+    </div>
+
+    <div class="card" id="packList"></div>
+    <div class="row">
+      <button class="secondary col" onclick="uncheckAllPack()">全部取消勾選</button>
+      <button class="danger col" onclick="clearPackedItems()">刪除已完成</button>
+    </div>
+  </section>
+
+  <section id="quoteTax" class="page">
+    <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>報價／稅額計算器</h2></div>
+    <div class="card">
+      <div class="quote-grid">
+        <div><label>單價基準</label><select id="quoteMode"><option value="before">未稅單價</option><option value="after">含稅單價</option></select></div>
+        <div><label>單價</label><input id="quoteUnit" type="number" inputmode="decimal" min="0" placeholder="例如：1000"></div>
+        <div><label>數量</label><input id="quoteQty" type="number" inputmode="decimal" min="0" value="1"></div>
+        <div><label>折扣 %</label><input id="quoteDiscount" type="number" inputmode="decimal" min="0" max="100" value="0"></div>
+        <div><label>稅率 %</label><input id="quoteTaxRate" type="number" inputmode="decimal" min="0" value="5"></div>
+        <div><label>單位成本</label><input id="quoteCost" type="number" inputmode="decimal" min="0" placeholder="例如：600"></div>
+        <div><label>其他費用</label><input id="quoteOtherExpense" type="number" inputmode="decimal" min="0" value="0" placeholder="運費、平台費等"></div>
+      </div>
+      <div class="note" style="margin-top:10px">輸入數字後會自動計算。毛利率＝（未稅銷售額－商品成本）÷未稅銷售額；淨利率＝（毛利－其他費用）÷未稅銷售額。此處的 5% 為營業稅試算，不等同所得稅。</div>
+
+      <div class="quote-result">
+        <div class="stat"><small>未稅金額</small><strong id="quoteBefore">$0</strong></div>
+        <div class="stat"><small>折扣金額</small><strong id="quoteDiscountAmt">$0</strong></div>
+        <div class="stat"><small>稅額</small><strong id="quoteTaxAmt">$0</strong></div>
+        <div class="stat income"><small>含稅總額</small><strong id="quoteTotal">$0</strong></div>
+        <div class="stat"><small>毛利</small><strong id="quoteGrossProfit">—</strong></div>
+        <div class="stat"><small>毛利率</small><strong id="quoteGrossMargin">—</strong></div>
+        <div class="stat"><small>淨利</small><strong id="quoteNetProfit">—</strong></div>
+        <div class="stat"><small>淨利率</small><strong id="quoteNetMargin">—</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="password" class="page">
+    <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>密碼產生器</h2></div>
+
+    <div class="card">
+      <label>密碼長度：<b id="pwdLenText">16</b> 字元</label>
+      <input id="pwdLength" type="range" min="8" max="64" value="16">
+
+      <div class="check-grid">
+        <label class="check-line"><input id="pwdLower" type="checkbox" checked> 小寫 a-z</label>
+        <label class="check-line"><input id="pwdUpper" type="checkbox" checked> 大寫 A-Z</label>
+        <label class="check-line"><input id="pwdNumber" type="checkbox" checked> 數字 0-9</label>
+        <label class="check-line"><input id="pwdSymbol" type="checkbox" checked> 特殊符號</label>
+      </div>
+      <label class="check-line" style="margin-top:10px"><input id="pwdAvoid" type="checkbox" checked> 排除容易混淆的 0/O、1/l/I</label>
+
+      <label style="margin-top:14px">產生結果</label>
+      <textarea id="pwdOutput" class="password-output" rows="3" readonly></textarea>
+
+      <div class="row" style="margin-top:10px">
+        <button class="primary col" onclick="generatePassword()">產生新密碼</button>
+        <button class="secondary col" onclick="copyPassword()">複製密碼</button>
+      </div>
+      <div class="note" id="pwdInfo" style="margin-top:10px">密碼只在裝置上產生；只有按下「保存這組密碼」才會寫入本機紀錄。</div>
+    </div>
+
+    <div class="card">
+      <strong style="font-size:18px">💾 保存目前密碼</strong>
+      <div class="pwd-save-grid">
+        <div>
+          <label>名稱／網站</label>
+          <input id="pwdRecordName" placeholder="例如：Google、公司系統">
+        </div>
+        <div>
+          <label>帳號／用途</label>
+          <input id="pwdRecordAccount" placeholder="例如：david@email.com">
+        </div>
+      </div>
+
+      <div style="margin-top:12px">
+        <label>密碼</label>
+        <div class="row">
+          <div class="col">
+            <input id="pwdManualInput" type="password" autocomplete="new-password"
+                   placeholder="可手動輸入舊密碼；留白則使用上方產生的密碼">
+          </div>
+          <button id="pwdManualToggleBtn" type="button" class="secondary"
+                  onclick="toggleManualPasswordVisibility()">👁️ 顯示</button>
+        </div>
+        <div class="note" style="margin-top:7px">
+          若要新增舊密碼，直接在這裡輸入；若留白，則會保存上方「產生結果」中的密碼。
+        </div>
+      </div>
+
+      <button class="primary full" style="margin-top:12px" onclick="saveCurrentPassword()">保存這組密碼</button>
+      <div class="pwd-warning">⚠️ 此功能將密碼保存在目前瀏覽器的 localStorage，方便但不是加密密碼保管庫。請勿用來保存網銀、公司 VPN、主信箱等高敏感帳號。</div>
+    </div>
+
+    <div class="card">
+      <div class="pwd-history-head">
+        <strong style="font-size:18px">🔐 密碼紀錄</strong>
+        <span class="pwd-history-count" id="pwdHistoryCount">0 筆</span>
+      </div>
+      <div id="pwdHistoryList"></div>
+      <button id="pwdClearAllBtn" class="danger full" style="margin-top:12px;display:none" onclick="clearAllPasswordHistory()">清除全部密碼紀錄</button>
+    </div>
+  </section>
+
+<section id="calc" class="page">
+    <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>萬用計算器</h2></div>
+    <div class="card">
+      <div class="calc-tabs">
+        <button class="active" onclick="showCalc('discount',this)">折扣</button>
+        <button onclick="showCalc('percent',this)">百分比</button>
+        <button onclick="showCalc('area',this)">坪數</button>
+        <button onclick="showCalc('fx',this)">匯率</button>
+      </div>
+      <div id="calc-discount" class="calc-panel active">
+        <label>原價</label><input id="discPrice" type="number" placeholder="1000">
+        <label style="margin-top:10px">折數（例如：7 = 7折、8.5 = 85折）</label><input id="discRate" type="number" value="7" step="0.1" min="0" max="10">
+        <div class="note" style="margin-top:10px">輸入數字後會自動計算</div>
+        <div class="big-result" id="discResult"><div class="num">$0</div></div>
+      </div>
+      <div id="calc-percent" class="calc-panel">
+        <label>數值</label><input id="pctBase" type="number" placeholder="1000">
+        <label style="margin-top:10px">百分比 %</label><input id="pctRate" type="number" placeholder="15">
+        <div class="note" style="margin-top:10px">輸入數字後會自動計算</div>
+        <div class="big-result" id="pctResult"><div class="num">0</div></div>
+      </div>
+      <div id="calc-area" class="calc-panel">
+        <label>平方公尺</label><input id="sqm" type="number" placeholder="33">
+        <div class="note" style="margin-top:10px">輸入數字後會自動換算</div>
+        <div class="big-result" id="areaResult"><div class="num">0 坪</div></div>
+      </div>
+
+      <div id="calc-fx" class="calc-panel">
+        <label>金額</label>
+        <input id="fxAmount" type="number" inputmode="decimal" value="1000" min="0" step="any">
+
+        <div class="fx-select-row" style="margin-top:12px">
+          <div>
+            <label>從</label>
+            <select id="fxFrom" onchange="saveFxPrefs();scheduleFxConvert()"></select>
+          </div>
+          <button class="fx-swap" type="button" onclick="swapFx()" aria-label="交換幣別">⇄</button>
+          <div>
+            <label>轉換成</label>
+            <select id="fxTo" onchange="saveFxPrefs();scheduleFxConvert()"></select>
+          </div>
+        </div>
+
+        <button id="fxConvertBtn" class="secondary full" style="margin-top:12px" onclick="convertFx(true)">重新取得最新匯率</button>
+
+        <div class="big-result" id="fxResult">
+          <div>換算結果</div>
+          <div class="num" style="font-size:30px">—</div>
+          <small>輸入金額或切換幣別後會自動換算</small>
+        </div>
+
+        <div class="fx-rate-line" id="fxRateInfo"></div>
+        <div class="fx-source">
+          匯率為每日更新的市場參考值，非銀行現鈔／即期買入賣出牌告價；實際換匯金額請以銀行或換匯平台為準。
+          <br>資料來源：fawazahmed0 Exchange API（jsDelivr CDN，失敗時自動切換 Cloudflare 備援）。
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const store = {
+  get(k, d){ try{return JSON.parse(localStorage.getItem("lifeBox_"+k)) ?? d}catch{return d} },
+  set(k, v){ localStorage.setItem("lifeBox_"+k, JSON.stringify(v)) }
+};
+const fmt = n => new Intl.NumberFormat('zh-TW',{maximumFractionDigits:2}).format(Number(n)||0);
+const pad = n => String(n).padStart(2,'0');
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+function esc(s=''){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+
+function openPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  $('#'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'instant'});
+  if(id==='todo') renderTodos();
+  if(id==='countdown') renderCountdowns();
+  if(id==='money') renderMoney();
+  if(id==='food') loadFood();
+  if(id==='parking') renderParking();
+  if(id==='shopping') renderShop();
+  if(id==='decision') renderDecisionHistory();
+  if(id==='packing') renderPack();
+  if(id==='quoteTax') calcQuoteTax();
+  if(id==='password'){ensurePassword();renderPasswordHistory();}
+  if(id==='calc') initFx();
+}
+function goHome(){openPage('home')}
+
+const now = new Date();
+$('#todayText').textContent = new Intl.DateTimeFormat('zh-TW',{year:'numeric',month:'long',day:'numeric',weekday:'long'}).format(now);
+$('#todoDate').value = ymd(now);
+$('#moneyDate').value = ymd(now);
+
+// Todo
+let todoFilter='all';
+function addTodo(){
+  const text=$('#todoText').value.trim(); if(!text)return;
+  const list=store.get('todos',[]);
+  list.unshift({id:Date.now(),text,date:$('#todoDate').value,important:$('#todoImportant').checked,done:false});
+  store.set('todos',list); $('#todoText').value=''; $('#todoImportant').checked=false; renderTodos();
+}
+function setTodoFilter(f,el){
+  todoFilter=f; document.querySelectorAll('#todo .pill').forEach(x=>x.classList.remove('active')); el.classList.add('active'); renderTodos();
+}
+function toggleTodo(id){const l=store.get('todos',[]);const x=l.find(x=>x.id===id);if(x)x.done=!x.done;store.set('todos',l);renderTodos()}
+function delTodo(id){store.set('todos',store.get('todos',[]).filter(x=>x.id!==id));renderTodos()}
+function renderTodos(){
+  const today=ymd(new Date()), t=new Date();t.setDate(t.getDate()+1);const tomorrow=ymd(t);
+  let l=store.get('todos',[]);
+  l=l.filter(x=>todoFilter==='all'||(todoFilter==='today'&&x.date===today)||(todoFilter==='tomorrow'&&x.date===tomorrow)||(todoFilter==='important'&&x.important));
+  $('#todoList').innerHTML=l.length?l.map(x=>`<div class="item ${x.done?'done':''}">
+    <input type="checkbox" ${x.done?'checked':''} onchange="toggleTodo(${x.id})">
+    <div class="grow"><div class="title">${x.important?'⭐ ':''}${esc(x.text)}</div><div class="meta">${esc(x.date||'未指定日期')}</div></div>
+    <button class="iconbtn" onclick="delTodo(${x.id})">🗑️</button></div>`).join(''):`<div class="empty">目前沒有待辦事項</div>`;
+}
+
+// Countdown
+function addCountdown(){
+  const title=$('#cdTitle').value.trim(),date=$('#cdDate').value;if(!title||!date)return;
+  const l=store.get('countdowns',[]);l.push({id:Date.now(),title,date});store.set('countdowns',l);
+  $('#cdTitle').value='';$('#cdDate').value='';renderCountdowns();
+}
+function delCountdown(id){store.set('countdowns',store.get('countdowns',[]).filter(x=>x.id!==id));renderCountdowns()}
+function dayDiff(date){
+  const a=new Date();a.setHours(0,0,0,0);const b=new Date(date+'T00:00:00');return Math.ceil((b-a)/86400000);
+}
+function renderCountdowns(){
+  const l=store.get('countdowns',[]).sort((a,b)=>a.date.localeCompare(b.date));
+  $('#countdownList').innerHTML=l.length?l.map(x=>{const d=dayDiff(x.date);const txt=d>0?`還有 ${d} 天`:d===0?'就是今天！':`已過 ${Math.abs(d)} 天`;
+    return `<div class="item"><div class="grow"><div class="title">${esc(x.title)}</div><div class="meta">${esc(x.date)} · ${txt}</div></div><button class="iconbtn" onclick="delCountdown(${x.id})">🗑️</button></div>`}).join(''):`<div class="empty">新增一個值得期待的日子吧</div>`;
+}
+
+// Money
+function toggleMoneyCustomCat(){
+  const isOther=$('#moneyCat').value==='其他';
+  $('#moneyCustomCatWrap').style.display=isOther?'block':'none';
+  if(isOther) setTimeout(()=>$('#moneyCustomCat').focus(),0);
+}
+function getMoneyCategory(){
+  if($('#moneyCat').value!=='其他')return $('#moneyCat').value;
+  return $('#moneyCustomCat').value.trim() || '其他';
+}
+function addMoney(){
+  const amount=Number($('#moneyAmount').value);if(!(amount>0))return;
+  const l=store.get('money',[]);
+  l.unshift({id:Date.now(),type:$('#moneyType').value,amount,cat:getMoneyCategory(),date:$('#moneyDate').value,note:$('#moneyNote').value.trim()});
+  store.set('money',l);
+  $('#moneyAmount').value='';
+  $('#moneyNote').value='';
+  $('#moneyCustomCat').value='';
+  renderMoney();
+}
+function delMoney(id){store.set('money',store.get('money',[]).filter(x=>x.id!==id));renderMoney()}
+function renderMoney(){
+  const l=store.get('money',[]), m=ymd(new Date()).slice(0,7);
+  let inc=0,exp=0;l.forEach(x=>{if((x.date||'').startsWith(m)){x.type==='income'?inc+=Number(x.amount):exp+=Number(x.amount)}});
+  $('#monthIncome').textContent='$'+fmt(inc);$('#monthExpense').textContent='$'+fmt(exp);
+  $('#moneyList').innerHTML=l.length?l.map(x=>`<div class="item"><div class="grow"><div class="title">${x.type==='income'?'＋':'－'} $${fmt(x.amount)} · ${esc(x.cat)}</div><div class="meta">${esc(x.date||'')} ${x.note?'· '+esc(x.note):''}</div></div><button class="iconbtn" onclick="delMoney(${x.id})">🗑️</button></div>`).join(''):`<div class="empty">還沒有記帳紀錄</div>`;
+}
+
+// Split
+function calcSplit(){
+  const total=Number($('#splitTotal').value),people=Number($('#splitPeople').value),extra=Number($('#splitExtra').value)||0;
+  if(!(total>=0)||!(people>0))return;
+  const sum=total+extra, each=sum/people;
+  $('#splitResult').innerHTML=`<div>每人平均</div><div class="num">$${fmt(each)}</div><small>總額 $${fmt(sum)} ÷ ${fmt(people)} 人</small>`;
+}
+
+// Food
+let currentRotation=0;
+function getFoodOptions(){return store.get('foodOptions',['便當','麵食','火鍋','燒肉','日式','小吃'])}
+function saveFoodOptions(){
+  const arr=$('#foodOptions').value.split(/[,，\n]/).map(s=>s.trim()).filter(Boolean).slice(0,30);
+  if(arr.length<2)return alert('至少需要 2 個選項');
+  store.set('foodOptions',arr);loadFood();
+}
+function loadFood(){
+  const arr=getFoodOptions();$('#foodOptions').value=arr.join(',');
+  $('#foodTags').innerHTML=arr.map(x=>`<span class="tag">${esc(x)}</span>`).join('');
+}
+function spinFood(){
+  const arr=getFoodOptions(),idx=Math.floor(Math.random()*arr.length);
+  currentRotation += 1440 + Math.floor(Math.random()*720);
+  $('#foodWheel').style.transform=`rotate(${currentRotation}deg)`;
+  setTimeout(()=>{$('#foodResult').innerHTML=`<div>今天就吃</div><div class="num" style="font-size:28px">${esc(arr[idx])}</div>`},3000);
+}
+
+let nearbyRestaurants=[];
+
+function distanceMeters(lat1,lon1,lat2,lon2){
+  const R=6371000;
+  const toRad=x=>x*Math.PI/180;
+  const dLat=toRad(lat2-lat1), dLon=toRad(lon2-lon1);
+  const a=Math.sin(dLat/2)**2+Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+  return 2*R*Math.asin(Math.sqrt(a));
+}
+
+function nearbyTypeLabel(tags={}){
+  const amenity=tags.amenity||'';
+  if(amenity==='restaurant')return '餐廳';
+  if(amenity==='fast_food')return '速食／小吃';
+  if(amenity==='cafe')return '咖啡／輕食';
+  if(amenity==='food_court')return '美食街';
+  return '餐飲';
+}
+
+async function fetchOverpassRestaurants(query){
+  const endpoints=[
+    'https://overpass.kumi.systems/api/interpreter',
+    'https://overpass-api.de/api/interpreter'
+  ];
+  let lastError=null;
+  for(const endpoint of endpoints){
+    try{
+      const r=await fetch(endpoint,{
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+        body:'data='+encodeURIComponent(query)
+      });
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      return await r.json();
+    }catch(e){lastError=e}
+  }
+  throw lastError||new Error('Overpass unavailable');
+}
+
+function getCurrentFoodPosition(){
+  return new Promise((resolve,reject)=>{
+    if(!navigator.geolocation){
+      reject(new Error('此瀏覽器不支援 GPS 定位'));
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(resolve,reject,{
+      enableHighAccuracy:true,
+      timeout:12000,
+      maximumAge:30000
+    });
+  });
+}
+
+async function searchNearbyRestaurants(){
+  const btn=$('#nearbySearchBtn');
+  const status=$('#nearbyStatus');
+  const listEl=$('#nearbyRestaurantList');
+  const addAll=$('#nearbyAddAllBtn');
+  const radius=Number($('#nearbyRadius').value)||1000;
+
+  btn.disabled=true;
+  btn.textContent='取得 GPS 中…';
+  status.textContent='正在取得目前位置，若手機跳出定位權限請選擇允許。';
+  listEl.innerHTML='';
+  addAll.style.display='none';
+
+  try{
+    const pos=await getCurrentFoodPosition();
+    const lat=pos.coords.latitude, lon=pos.coords.longitude;
+    btn.textContent='搜尋附近餐廳中…';
+    status.textContent=`定位成功，正在搜尋 ${radius>=1000?(radius/1000)+' 公里':radius+' 公尺'}內的餐廳…`;
+
+    const query=`[out:json][timeout:20];
+(
+  nwr(around:${Math.round(radius)},${lat},${lon})["amenity"~"^(restaurant|fast_food|cafe|food_court)$"]["name"];
+);
+out center tags;`;
+    const data=await fetchOverpassRestaurants(query);
+    const seen=new Set();
+
+    nearbyRestaurants=(data.elements||[]).map(el=>{
+      const rlat=el.lat ?? el.center?.lat;
+      const rlon=el.lon ?? el.center?.lon;
+      if(!Number.isFinite(rlat)||!Number.isFinite(rlon))return null;
+      const tags=el.tags||{};
+      const name=(tags['name:zh']||tags.name||tags.brand||'').trim();
+      if(!name)return null;
+      return {
+        name,
+        lat:rlat,
+        lon:rlon,
+        distance:distanceMeters(lat,lon,rlat,rlon),
+        type:nearbyTypeLabel(tags),
+        cuisine:(tags.cuisine||'').replaceAll(';','、')
+      };
+    }).filter(Boolean)
+      .sort((a,b)=>a.distance-b.distance)
+      .filter(x=>{
+        const k=x.name.toLowerCase()+'|'+Math.round(x.lat*10000)+'|'+Math.round(x.lon*10000);
+        if(seen.has(k))return false;
+        seen.add(k); return true;
+      }).slice(0,20);
+
+    if(!nearbyRestaurants.length){
+      status.textContent='這個範圍內沒有找到具名稱的餐廳資料，可改成 2～3 公里再試一次。';
+      return;
+    }
+    status.textContent=`找到 ${nearbyRestaurants.length} 間附近餐飲，依距離由近到遠排列。`;
+    renderNearbyRestaurants();
+    addAll.style.display='block';
+  }catch(e){
+    let msg='無法取得附近餐廳。';
+    if(e && typeof e.code==='number'){
+      if(e.code===1)msg='定位權限被拒絕，請到瀏覽器／手機設定允許此網站使用位置。';
+      else if(e.code===2)msg='目前無法判定 GPS 位置，請確認手機定位服務已開啟。';
+      else if(e.code===3)msg='GPS 定位逾時，請移到較容易收到定位訊號的位置後再試。';
+    }else{
+      msg='附近餐廳資料服務暫時沒有回應，請稍後再試。';
+    }
+    status.textContent=msg;
+  }finally{
+    btn.disabled=false;
+    btn.textContent='使用目前 GPS 搜尋';
+  }
+}
+
+function renderNearbyRestaurants(){
+  const el=$('#nearbyRestaurantList');
+  el.innerHTML=nearbyRestaurants.map((r,i)=>{
+    const dist=r.distance<1000?`${Math.round(r.distance)} 公尺`:`${(r.distance/1000).toFixed(1)} 公里`;
+    const cuisine=r.cuisine?` · ${esc(r.cuisine)}`:'';
+    const map=`https://www.openstreetmap.org/?mlat=${encodeURIComponent(r.lat)}&mlon=${encodeURIComponent(r.lon)}#map=18/${encodeURIComponent(r.lat)}/${encodeURIComponent(r.lon)}`;
+    return `<div class="nearby-card">
+      <div class="nearby-name">${i+1}. ${esc(r.name)}</div>
+      <div class="nearby-meta">${esc(r.type)}${cuisine} · 約 ${dist}</div>
+      <div class="nearby-actions">
+        <button class="mini-btn" onclick="addNearbyToWheel(${i})">＋ 加入轉盤</button>
+        <a class="mini-btn alt" href="${map}" target="_blank" rel="noopener" style="text-decoration:none">地圖</a>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function mergeFoodOptions(names){
+  const current=getFoodOptions();
+  const merged=[...current];
+  names.forEach(name=>{if(name && !merged.includes(name) && merged.length<30)merged.push(name)});
+  store.set('foodOptions',merged);
+  loadFood();
+  return merged.length-current.length;
+}
+
+function addNearbyToWheel(index){
+  const r=nearbyRestaurants[index];
+  if(!r)return;
+  const added=mergeFoodOptions([r.name]);
+  $('#nearbyStatus').textContent=added?`已將「${r.name}」加入轉盤。`:`「${r.name}」已經在轉盤內。`;
+}
+
+function addAllNearbyToWheel(){
+  const added=mergeFoodOptions(nearbyRestaurants.map(x=>x.name));
+  $('#nearbyStatus').textContent=added?`已將 ${added} 間餐廳加入轉盤（最多保留 30 個選項）。`:'這些餐廳都已經在轉盤內。';
+}
+
+// Parking
+let pendingCoords=null;
+function getLocation(){
+  if(!navigator.geolocation)return alert('此瀏覽器不支援定位');
+  navigator.geolocation.getCurrentPosition(p=>{pendingCoords={lat:p.coords.latitude,lng:p.coords.longitude};alert('已取得目前位置')},
+  ()=>alert('無法取得位置，請確認瀏覽器的位置權限'),{enableHighAccuracy:true,timeout:10000});
+}
+function saveParking(){
+  const d={note:$('#parkNote').value.trim(),time:new Date().toISOString(),coords:pendingCoords};
+  store.set('parking',d);renderParking();
+}
+function clearParking(){localStorage.removeItem('lifeBox_parking');pendingCoords=null;$('#parkNote').value='';renderParking()}
+function renderParking(){
+  const d=store.get('parking',null);
+  if(!d){$('#parkingInfo').innerHTML='<div class="empty">尚未儲存停車位置</div>';return}
+  const dt=new Date(d.time).toLocaleString('zh-TW');
+  const map=d.coords?`<a href="https://www.google.com/maps?q=${d.coords.lat},${d.coords.lng}" target="_blank" rel="noopener">在地圖開啟</a>`:'未儲存 GPS';
+  $('#parkingInfo').innerHTML=`<div class="title" style="font-weight:800;font-size:18px">${esc(d.note||'未填寫車格')}</div><div class="meta" style="margin-top:7px">${dt}</div><div style="margin-top:10px">${map}</div><button class="danger full" style="margin-top:14px" onclick="clearParking()">清除停車紀錄</button>`;
+}
+
+// Shopping
+function addShop(){
+  const text=$('#shopText').value.trim(),qty=Number($('#shopQty').value)||1;if(!text)return;
+  const l=store.get('shop',[]);l.push({id:Date.now(),text,qty,done:false});store.set('shop',l);$('#shopText').value='';$('#shopQty').value=1;renderShop();
+}
+function toggleShop(id){const l=store.get('shop',[]),x=l.find(x=>x.id===id);if(x)x.done=!x.done;store.set('shop',l);renderShop()}
+function delShop(id){store.set('shop',store.get('shop',[]).filter(x=>x.id!==id));renderShop()}
+function renderShop(){
+  const l=store.get('shop',[]);
+  $('#shopList').innerHTML=l.length?l.map(x=>`<div class="item ${x.done?'done':''}"><input type="checkbox" ${x.done?'checked':''} onchange="toggleShop(${x.id})"><div class="grow"><div class="title">${esc(x.text)}</div><div class="meta">數量 ${fmt(x.qty)}</div></div><button class="iconbtn" onclick="delShop(${x.id})">🗑️</button></div>`).join(''):`<div class="empty">購物清單是空的</div>`;
+}
+
+// Calculator
+function showCalc(name,el){
+  document.querySelectorAll('.calc-tabs button').forEach(x=>x.classList.remove('active'));el.classList.add('active');
+  document.querySelectorAll('.calc-panel').forEach(x=>x.classList.remove('active'));$('#calc-'+name).classList.add('active');
+}
+function calcDiscount(){
+  const pRaw=$('#discPrice').value.trim(), rRaw=$('#discRate').value.trim();
+  if(pRaw==='' || rRaw===''){
+    $('#discResult').innerHTML='<div class="num">—</div><small>請輸入原價與折數</small>';
+    return;
+  }
+  const p=Number(pRaw), r=Number(rRaw);
+  if(!Number.isFinite(p) || !Number.isFinite(r) || p<0 || r<0 || r>10){
+    $('#discResult').innerHTML='<div class="num">—</div><small>折數請輸入 0～10，例如 7 代表 7折</small>';
+    return;
+  }
+  const sale=p*r/10;
+  const saved=p-sale;
+  $('#discResult').innerHTML=`<div class="num">$${fmt(sale)}</div><small>省下 $${fmt(saved)}</small>`;
+}
+function calcPercent(){
+  const bRaw=$('#pctBase').value.trim(), rRaw=$('#pctRate').value.trim();
+  if(bRaw==='' || rRaw===''){
+    $('#pctResult').innerHTML='<div class="num">—</div><small>請輸入數值與百分比</small>';
+    return;
+  }
+  const b=Number(bRaw), r=Number(rRaw);
+  if(!Number.isFinite(b) || !Number.isFinite(r)){
+    $('#pctResult').innerHTML='<div class="num">—</div><small>請輸入正確數字</small>';
+    return;
+  }
+  $('#pctResult').innerHTML=`<div class="num">${fmt(b*r/100)}</div><small>${fmt(b)} 的 ${fmt(r)}%</small>`;
+}
+function calcArea(){
+  const raw=$('#sqm').value.trim();
+  if(raw===''){
+    $('#areaResult').innerHTML='<div class="num">—</div><small>請輸入平方公尺</small>';
+    return;
+  }
+  const sqm=Number(raw);
+  if(!Number.isFinite(sqm) || sqm<0){
+    $('#areaResult').innerHTML='<div class="num">—</div><small>請輸入正確數字</small>';
+    return;
+  }
+  const ping=sqm/3.305785;
+  $('#areaResult').innerHTML=`<div class="num">${fmt(ping)} 坪</div><small>${fmt(sqm)} m²</small>`;
+}
+
+
+// Humorous decision maker
+const DECISION_COMMENTS=[
+  '命運已蓋章。現在反悔的話，代表你其實早就有答案了。',
+  '宇宙沒有解釋，但它看起來很有自信。',
+  '好了，不准再開第二個分頁問別人。',
+  '這不是衝動，這叫做把猶豫外包。',
+  '結果出來了。你的理智正在遠方默默點頭。',
+  '別問為什麼，問就是演算法今天心情不錯。',
+  '如果你看到結果瞬間失望，那恭喜：你真正想選的是另一個。',
+  '命運只能給答案，後果還是要自己負責喔。',
+  '宇宙表示：我只負責抽，不負責售後。',
+  '人生很難，但按鈕很簡單。'
+];
+const DECISION_FACES=['😎','🫣','🤨','😏','🧙‍♂️','🎯','🪄','🫡'];
+const DECISION_SWEEP_COMMENTS=[
+  '3：0 完封。這已經不是建議，是命運直接把另一個選項請出會議室。',
+  '三票全數通過。宇宙今天沒有保留意見，連反對黨都沒來上班。',
+  '直接 3：0。看來命運怕你繼續猶豫，所以一次把門焊死了。',
+  '全勝通關。這個結果強烈到連「再想一下」都顯得很多餘。'
+];
+const DECISION_CLOSE_COMMENTS=[
+  '2：1 險勝。代表這不是絕對答案，只是命運稍微把天秤壓向這一邊。',
+  '兩票對一票。少數意見仍然存在，你若心裡不服，其實你已經知道自己想選什麼。',
+  '2：1 勝出。命運給了方向，但也故意留一票讓你保有後悔的空間。',
+  '驚險過關。三位虛構評審有一位不同意，但多數決還是得尊重一下。'
+];
+
+function buildBestOfThreeReport(rounds,a,b){
+  const aWins=rounds.filter(x=>x===a).length;
+  const bWins=3-aWins;
+  const winner=aWins>bWins?a:b;
+  const loser=winner===a?b:a;
+  const winnerWins=Math.max(aWins,bWins);
+  const loserWins=Math.min(aWins,bWins);
+  const score=`${winnerWins}:${loserWins}`;
+  const base=winnerWins===3
+    ? DECISION_SWEEP_COMMENTS[Math.floor(Math.random()*DECISION_SWEEP_COMMENTS.length)]
+    : DECISION_CLOSE_COMMENTS[Math.floor(Math.random()*DECISION_CLOSE_COMMENTS.length)];
+
+  const sequence=rounds.map((x,i)=>`第${i+1}戰「${x}」`).join('、');
+  return {
+    winner,
+    score,
+    html:`<b>最終判決：${esc(winner)}</b><br>
+      戰況：${esc(sequence)}<br>
+      比數：<b>${esc(winner)} ${score} ${esc(loser)}</b><br>
+      ${esc(base)}`
+  };
+}
+
+function resetDecisionRounds(){
+  const rounds=$('#decisionRounds'), report=$('#decisionFinalReport');
+  if(rounds) rounds.style.display='none';
+  if(report){report.style.display='none';report.innerHTML='';}
+  [1,2,3].forEach(i=>{
+    const box=$('#decisionRound'+i);
+    if(box){
+      box.classList.add('pending');
+      box.querySelector('.r-value').textContent='等待';
+    }
+  });
+}
+function setDecisionPreset(a,b,topic){
+  $('#decisionA').value=a;
+  $('#decisionB').value=b;
+  $('#decisionTopic').value=topic;
+  $('#decisionQuestion').textContent='題目已就位，請命運上工';
+  $('#decisionAnswer').textContent='準備好了';
+  $('#decisionComment').textContent='現在只差你勇敢按下去。';
+  $('#decisionFace').textContent='😏';
+  resetDecisionRounds();
+}
+function validDecisionOptions(){
+  const a=$('#decisionA').value.trim();
+  const b=$('#decisionB').value.trim();
+  if(!a || !b){alert('兩個選項都要填，命運不接受空白考卷。');return null}
+  if(a===b){alert('兩個選項一模一樣，這不是選擇，是自己騙自己。');return null}
+  return {a,b};
+}
+function pickDecision(a,b){
+  return Math.random()<0.5?a:b;
+}
+function saveDecisionHistory(result,mode='一局定生死'){
+  const topic=$('#decisionTopic').value.trim() || '無題目的世紀難題';
+  const h=store.get('decisionHistory',[]);
+  h.unshift({id:Date.now(),topic,result,mode,time:new Date().toISOString()});
+  store.set('decisionHistory',h.slice(0,8));
+  renderDecisionHistory();
+}
+function animateDecision(finalAnswer,extraComment='',mode='一局定生死'){
+  const stage=$('#decisionStage'),btn=$('#decisionBtn');
+  stage.classList.add('thinking');
+  btn.disabled=true;
+  $('#decisionFace').textContent='🌀';
+  $('#decisionQuestion').textContent=$('#decisionTopic').value.trim() || '命運正在讀取你的糾結…';
+  $('#decisionAnswer').textContent='思考中…';
+  $('#decisionComment').textContent='正在召集宇宙、直覺、運氣與一點點不負責任…';
+  let flips=0;
+  const opts=validDecisionOptions();
+  if(!opts){stage.classList.remove('thinking');btn.disabled=false;return}
+  const timer=setInterval(()=>{
+    $('#decisionAnswer').textContent=flips%2===0?opts.a:opts.b;
+    flips++;
+  },100);
+  setTimeout(()=>{
+    clearInterval(timer);
+    stage.classList.remove('thinking');
+    btn.disabled=false;
+    $('#decisionFace').textContent=DECISION_FACES[Math.floor(Math.random()*DECISION_FACES.length)];
+    $('#decisionAnswer').textContent=finalAnswer;
+    $('#decisionComment').textContent=extraComment || DECISION_COMMENTS[Math.floor(Math.random()*DECISION_COMMENTS.length)];
+    saveDecisionHistory(finalAnswer,mode);
+  },1050);
+}
+function makeDecision(){
+  const opts=validDecisionOptions();if(!opts)return;
+  resetDecisionRounds();
+  const answer=pickDecision(opts.a,opts.b);
+  animateDecision(answer);
+}
+async function bestOfThreeDecision(){
+  const opts=validDecisionOptions();if(!opts)return;
+
+  const stage=$('#decisionStage');
+  const btn=$('#decisionBtn');
+  const roundsBox=$('#decisionRounds');
+  const report=$('#decisionFinalReport');
+
+  resetDecisionRounds();
+  roundsBox.style.display='grid';
+  stage.classList.add('thinking');
+  btn.disabled=true;
+
+  $('#decisionFace').textContent='🌀';
+  $('#decisionQuestion').textContent=$('#decisionTopic').value.trim() || '三戰兩勝開打！';
+  $('#decisionAnswer').textContent='命運評審入場中…';
+  $('#decisionComment').textContent='三位評審都說自己很公正，但沒有人願意留下姓名。';
+
+  const rounds=[];
+  const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+
+  for(let i=1;i<=3;i++){
+    const box=$('#decisionRound'+i);
+    box.classList.remove('pending');
+    box.querySelector('.r-value').textContent='抽選中…';
+    $('#decisionAnswer').textContent=`第 ${i} 戰進行中…`;
+    $('#decisionFace').textContent=['🎲','🪙','🔮'][i-1];
+
+    await sleep(650);
+
+    const result=pickDecision(opts.a,opts.b);
+    rounds.push(result);
+    box.querySelector('.r-value').textContent=result;
+
+    $('#decisionComment').textContent=
+      i===1 ? `第一戰：「${result}」先馳得點。先別急，人生最怕第一集就下結論。` :
+      i===2 ? `第二戰：「${result}」。戰況開始有戲了，命運很懂節目效果。` :
+              `第三戰：「${result}」。三位評審投票完畢，準備開票。`;
+
+    await sleep(700);
+  }
+
+  const final=buildBestOfThreeReport(rounds,opts.a,opts.b);
+
+  stage.classList.remove('thinking');
+  btn.disabled=false;
+  $('#decisionFace').textContent=DECISION_FACES[Math.floor(Math.random()*DECISION_FACES.length)];
+  $('#decisionAnswer').textContent=final.winner;
+  $('#decisionComment').textContent=`三戰兩勝正式結束，${final.winner} 勝出。`;
+
+  report.style.display='block';
+  report.innerHTML=final.html;
+
+  saveDecisionHistory(final.winner,`三戰兩勝 ${final.score}`);
+}
+function deleteDecisionHistoryItem(id){
+  const h=store.get('decisionHistory',[]);
+  const next=h.filter(x=>String(x.id)!==String(id));
+  if(next.length===h.length)return false;
+  store.set('decisionHistory',next);
+  renderDecisionHistory();
+  return true;
+}
+
+function renderDecisionHistory(){
+  const el=$('#decisionHistory');if(!el)return;
+  const h=store.get('decisionHistory',[]);
+  el.innerHTML=h.length?h.map(x=>{
+    const t=new Date(x.time).toLocaleString('zh-TW',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    return `<div class="decision-history-item">
+      <div class="decision-history-main">
+        <b>${esc(x.result)}</b> · ${esc(x.topic)}<br>
+        <span style="color:var(--muted)">${esc(x.mode)} · ${esc(t)}</span>
+      </div>
+      <button type="button" class="decision-history-delete" data-decision-delete="${esc(String(x.id))}" title="刪除這筆紀錄">🗑️</button>
+    </div>`;
+  }).join(''):'<div class="empty" style="padding:10px 4px">還沒有紀錄。你的糾結目前仍然很純潔。</div>';
+}
+
+function clearDecisionHistory(){
+  store.set('decisionHistory',[]);
+  renderDecisionHistory();
+  resetDecisionRounds();
+}
+
+// 命運紀錄使用事件委派，避免本機 HTML 對動態 inline onclick / confirm 的相容性差異
+document.addEventListener('click',function(e){
+  const delBtn=e.target.closest('[data-decision-delete]');
+  if(delBtn){
+    e.preventDefault();
+    e.stopPropagation();
+    const id=delBtn.getAttribute('data-decision-delete');
+    if(deleteDecisionHistoryItem(id)){
+      const msg=$('#decisionComment');
+      if(msg)msg.textContent='這筆命運紀錄已經被丟進時空垃圾桶了。';
+    }
+    return;
+  }
+
+  const clearBtn=e.target.closest('#decisionClearAllBtn');
+  if(clearBtn){
+    e.preventDefault();
+    e.stopPropagation();
+    const h=store.get('decisionHistory',[]);
+    if(!h.length)return;
+    store.set('decisionHistory',[]);
+    renderDecisionHistory();
+    resetDecisionRounds();
+    const msg=$('#decisionComment');
+    if(msg)msg.textContent='命運黑歷史已全部清空，宇宙表示查無此事。';
+  }
+},false);
+
+// Packing assistant
+const PACK_PRESETS={
+  domestic:[
+    ['身分證／健保卡','證件'],['護照','證件'],['現金／信用卡','證件'],['換洗衣物','衣物'],['內衣褲／襪子','衣物'],
+    ['牙刷牙膏','盥洗'],['洗面乳／保養品','盥洗'],['網路卡','3C'],['充電線','3C'],['行動電源','3C'],
+    ['常用藥品','藥品'],['雨具','其他'],['保溫杯','其他']
+  ],
+  overseas:[
+    ['護照','證件'],['機票／電子登機證','證件'],['住宿資料','證件'],['旅遊保險資料','證件'],['外幣／信用卡','證件'],
+    ['換洗衣物','衣物'],['內衣褲／襪子','衣物'],['外套','衣物'],['牙刷牙膏','盥洗'],['洗面乳／保養品','盥洗'],
+    ['網路卡','3C'],['充電線','3C'],['行動電源','3C'],['萬國轉接頭','3C'],['耳機','3C'],
+    ['常用藥品','藥品'],['行李秤','其他'],['折疊購物袋','其他']
+  ],
+  business:[
+    ['身分證／護照','證件'],['交通／住宿資料','證件'],['公司證件／名片','證件'],['正式服裝','衣物'],
+    ['換洗衣物','衣物'],['盥洗用品','盥洗'],['筆電','3C'],['筆電充電器','3C'],['手機充電線','3C'],
+    ['行動電源','3C'],['簡報／工作文件','其他'],['筆記本／筆','其他'],['常用藥品','藥品']
+  ],
+  camping:[
+    ['證件／現金','證件'],['保暖衣物','衣物'],['替換衣物','衣物'],['盥洗用品','盥洗'],['網路卡','3C'],
+    ['行動電源','3C'],['頭燈／手電筒','3C'],['個人藥品','藥品'],['防蚊用品','藥品'],['帳篷／睡袋','其他'],
+    ['野餐墊／椅子','其他'],['飲用水','其他'],['餐具','其他'],['垃圾袋','其他']
+  ]
+};
+function applyPackPreset(force=false){
+  const key=$('#packPreset').value;
+  const current=store.get('pack',[]);
+  if(!force && current.length && !confirm('套用範本會取代目前的打包清單，確定繼續嗎？'))return;
+  const base=PACK_PRESETS[key]||PACK_PRESETS.domestic;
+  const list=base.map((x,i)=>({id:Date.now()+i,text:x[0],cat:x[1],done:false}));
+  store.set('pack',list);
+  store.set('packInitialized',true);
+  renderPack();
+}
+function migratePackV5(){
+  if(store.get('packV5Migrated',false))return;
+  let l=store.get('pack',[]);
+  if(l.length){
+    l=l.map(x=>{
+      const y={...x};
+      if(y.text==='手機')y.text='網路卡';
+      if(y.text==='水壺')y.text='保溫杯';
+      return y;
+    });
+    if(!l.some(x=>x.text==='護照')){
+      l.unshift({id:Date.now()+88,text:'護照',cat:'證件',done:false});
+    }
+    store.set('pack',l);
+  }
+  store.set('packV5Migrated',true);
+}
+function ensurePackInitialized(){
+  if(store.get('packInitialized',false)){migratePackV5();return;}
+  const base=PACK_PRESETS.domestic;
+  const list=base.map((x,i)=>({id:Date.now()+i,text:x[0],cat:x[1],done:false}));
+  store.set('pack',list);
+  store.set('packInitialized',true);
+  store.set('packV5Migrated',true);
+}
+function addPackItem(){
+  const text=$('#packText').value.trim();
+  if(!text)return;
+  const l=store.get('pack',[]);
+  l.push({id:Date.now(),text,cat:$('#packCat').value,done:false});
+  store.set('pack',l);
+  store.set('packInitialized',true);
+  $('#packText').value='';
+  renderPack();
+}
+function togglePack(id){
+  const l=store.get('pack',[]);
+  const x=l.find(x=>x.id===id);
+  if(x)x.done=!x.done;
+  store.set('pack',l);
+  renderPack();
+}
+function delPack(id){
+  store.set('pack',store.get('pack',[]).filter(x=>x.id!==id));
+  renderPack();
+}
+function uncheckAllPack(){
+  const l=store.get('pack',[]).map(x=>({...x,done:false}));
+  store.set('pack',l);
+  renderPack();
+}
+function clearPackedItems(){
+  store.set('pack',store.get('pack',[]).filter(x=>!x.done));
+  renderPack();
+}
+function renderPack(){
+  ensurePackInitialized();
+  const l=store.get('pack',[]);
+  const done=l.filter(x=>x.done).length;
+  const pct=l.length?Math.round(done/l.length*100):0;
+  $('#packProgressText').textContent=`${done} / ${l.length}（${pct}%）`;
+  $('#packProgressFill').style.width=pct+'%';
+  $('#packList').innerHTML=l.length?l.map(x=>`<div class="item ${x.done?'done':''}">
+    <input type="checkbox" ${x.done?'checked':''} onchange="togglePack(${x.id})">
+    <div class="grow"><div class="title">${esc(x.text)}</div><div class="meta">${esc(x.cat)}</div></div>
+    <button class="iconbtn" onclick="delPack(${x.id})">🗑️</button>
+  </div>`).join(''):`<div class="empty">目前沒有打包項目</div>`;
+}
+
+// Quote / tax calculator
+function calcQuoteTax(){
+  const unitEl=$('#quoteUnit');
+  if(!unitEl)return;
+  const raw=unitEl.value.trim();
+  const qty=Number($('#quoteQty').value);
+  const discount=Number($('#quoteDiscount').value);
+  const taxRate=Number($('#quoteTaxRate').value);
+  const costRaw=$('#quoteCost').value.trim();
+  const otherRaw=$('#quoteOtherExpense').value.trim();
+  const cost=costRaw===''?null:Number(costRaw);
+  const otherExpense=otherRaw===''?0:Number(otherRaw);
+
+  const clearMargins=()=>{
+    $('#quoteGrossProfit').textContent='—';
+    $('#quoteGrossMargin').textContent='—';
+    $('#quoteNetProfit').textContent='—';
+    $('#quoteNetMargin').textContent='—';
+    ['quoteGrossProfit','quoteGrossMargin','quoteNetProfit','quoteNetMargin'].forEach(id=>{
+      $('#'+id).classList.remove('margin-positive','margin-negative');
+    });
+  };
+
+  if(raw==='' || !Number.isFinite(qty) || qty<0 || !Number.isFinite(discount) || discount<0 || discount>100 ||
+     !Number.isFinite(taxRate) || taxRate<0 || (cost!==null && (!Number.isFinite(cost)||cost<0)) ||
+     !Number.isFinite(otherExpense) || otherExpense<0){
+    $('#quoteBefore').textContent='$0';
+    $('#quoteDiscountAmt').textContent='$0';
+    $('#quoteTaxAmt').textContent='$0';
+    $('#quoteTotal').textContent='$0';
+    clearMargins();
+    return;
+  }
+
+  const unit=Number(raw);
+  if(!Number.isFinite(unit)||unit<0){clearMargins();return;}
+  const mode=$('#quoteMode').value;
+  const rate=taxRate/100;
+  let before,discountAmt,tax,total;
+
+  if(mode==='before'){
+    const base=unit*qty;
+    discountAmt=base*(discount/100);
+    before=base-discountAmt;
+    tax=before*rate;
+    total=before+tax;
+  }else{
+    const gross=unit*qty;
+    discountAmt=gross*(discount/100);
+    total=gross-discountAmt;
+    before=total/(1+rate);
+    tax=total-before;
+  }
+
+  $('#quoteBefore').textContent='$'+fmt(before);
+  $('#quoteDiscountAmt').textContent='$'+fmt(discountAmt);
+  $('#quoteTaxAmt').textContent='$'+fmt(tax);
+  $('#quoteTotal').textContent='$'+fmt(total);
+
+  if(cost===null || before<=0){
+    clearMargins();
+    return;
+  }
+
+  const totalCost=cost*qty;
+  const grossProfit=before-totalCost;
+  const grossMargin=(grossProfit/before)*100;
+  const netProfit=grossProfit-otherExpense;
+  const netMargin=(netProfit/before)*100;
+
+  $('#quoteGrossProfit').textContent=(grossProfit<0?'−$':'$')+fmt(Math.abs(grossProfit));
+  $('#quoteGrossMargin').textContent=fmt(grossMargin)+'%';
+  $('#quoteNetProfit').textContent=(netProfit<0?'−$':'$')+fmt(Math.abs(netProfit));
+  $('#quoteNetMargin').textContent=fmt(netMargin)+'%';
+
+  [['quoteGrossProfit',grossProfit],['quoteGrossMargin',grossMargin],['quoteNetProfit',netProfit],['quoteNetMargin',netMargin]].forEach(([id,v])=>{
+    const el=$('#'+id);
+    el.classList.remove('margin-positive','margin-negative');
+    el.classList.add(v>=0?'margin-positive':'margin-negative');
+  });
+}
+
+// Password generator + local password history
+const pwdVisibleIds=new Set();
+
+function secureIndex(max){
+  if(max<=1)return 0;
+  if(window.crypto && crypto.getRandomValues){
+    const limit=Math.floor(4294967296/max)*max;
+    const a=new Uint32Array(1);
+    do{crypto.getRandomValues(a)}while(a[0]>=limit);
+    return a[0]%max;
+  }
+  return Math.floor(Math.random()*max);
+}
+function shuffleSecure(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=secureIndex(i+1);
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+function generatePassword(){
+  const len=Number($('#pwdLength').value)||16;
+  const avoid=$('#pwdAvoid').checked;
+  const sets=[];
+  const lower=avoid?'abcdefghijkmnopqrstuvwxyz':'abcdefghijklmnopqrstuvwxyz';
+  const upper=avoid?'ABCDEFGHJKLMNPQRSTUVWXYZ':'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const nums=avoid?'23456789':'0123456789';
+  const symbols='!@#$%^&*()-_=+[]{}?';
+
+  if($('#pwdLower').checked)sets.push(lower);
+  if($('#pwdUpper').checked)sets.push(upper);
+  if($('#pwdNumber').checked)sets.push(nums);
+  if($('#pwdSymbol').checked)sets.push(symbols);
+
+  if(!sets.length){
+    $('#pwdOutput').value='';
+    $('#pwdInfo').textContent='請至少選擇一種字元類型。';
+    return;
+  }
+
+  const pool=sets.join('');
+  const chars=sets.map(set=>set[secureIndex(set.length)]);
+  while(chars.length<len)chars.push(pool[secureIndex(pool.length)]);
+  shuffleSecure(chars);
+  $('#pwdOutput').value=chars.slice(0,len).join('');
+  $('#pwdInfo').textContent=`長度 ${len} 字元，使用 ${sets.length} 種字元類型；尚未保存。`;
+}
+function ensurePassword(){
+  if(!$('#pwdOutput').value)generatePassword();
+}
+
+async function copyTextValue(text){
+  if(!text)return false;
+  let ok=false;
+  try{
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(text);
+      ok=true;
+    }
+  }catch(e){}
+  if(!ok){
+    const ta=document.createElement('textarea');
+    ta.value=text;
+    ta.setAttribute('readonly','');
+    ta.style.position='fixed';
+    ta.style.opacity='0';
+    document.body.appendChild(ta);
+    ta.focus();ta.select();
+    try{ok=document.execCommand('copy')}catch(e){}
+    ta.remove();
+  }
+  return ok;
+}
+
+async function copyPassword(){
+  const out=$('#pwdOutput');
+  if(!out.value)return;
+  const ok=await copyTextValue(out.value);
+  $('#pwdInfo').textContent=ok?'已複製密碼。':'無法自動複製，請長按密碼後手動複製。';
+}
+
+function toggleManualPasswordVisibility(){
+  const input=$('#pwdManualInput');
+  const btn=$('#pwdManualToggleBtn');
+  if(!input || !btn)return;
+  const showing=input.type==='text';
+  input.type=showing?'password':'text';
+  btn.textContent=showing?'👁️ 顯示':'🙈 隱藏';
+}
+
+function saveCurrentPassword(){
+  const manual=$('#pwdManualInput').value;
+  const generated=$('#pwdOutput').value;
+  const password=manual || generated;
+
+  if(!password){
+    $('#pwdInfo').textContent='請手動輸入密碼，或先在上方產生一組新密碼。';
+    return;
+  }
+
+  const name=$('#pwdRecordName').value.trim() || '未命名密碼';
+  const account=$('#pwdRecordAccount').value.trim();
+
+  const list=store.get('passwordHistory',[]);
+  const now=Date.now();
+  list.unshift({
+    id:now,
+    name,
+    account,
+    password,
+    source:manual?'manual':'generated',
+    createdAt:new Date(now).toISOString()
+  });
+
+  // 上限 50 筆，避免 localStorage 無限制增長
+  store.set('passwordHistory',list.slice(0,50));
+
+  $('#pwdRecordName').value='';
+  $('#pwdRecordAccount').value='';
+  $('#pwdManualInput').value='';
+  $('#pwdManualInput').type='password';
+  $('#pwdManualToggleBtn').textContent='👁️ 顯示';
+
+  $('#pwdInfo').textContent=manual
+    ? `已保存「${name}」的手動輸入密碼。`
+    : `已保存「${name}」的產生密碼。`;
+
+  renderPasswordHistory();
+}
+
+function passwordMask(password){
+  const n=Math.min(Math.max(password.length,8),16);
+  return '•'.repeat(n);
+}
+
+function toggleSavedPassword(id){
+  if(pwdVisibleIds.has(id))pwdVisibleIds.delete(id);
+  else pwdVisibleIds.add(id);
+  renderPasswordHistory();
+}
+
+async function copySavedPassword(id){
+  const list=store.get('passwordHistory',[]);
+  const item=list.find(x=>x.id===id);
+  if(!item)return;
+  const ok=await copyTextValue(item.password);
+  $('#pwdInfo').textContent=ok?`已複製「${item.name}」的密碼。`:'無法自動複製此密碼。';
+}
+
+function deleteSavedPassword(id){
+  const list=store.get('passwordHistory',[]);
+  const item=list.find(x=>x.id===id);
+  if(!item)return;
+  if(!confirm(`確定刪除「${item.name}」這筆密碼紀錄？`))return;
+  store.set('passwordHistory',list.filter(x=>x.id!==id));
+  pwdVisibleIds.delete(id);
+  renderPasswordHistory();
+}
+
+function clearAllPasswordHistory(){
+  const list=store.get('passwordHistory',[]);
+  if(!list.length)return;
+  if(!confirm(`確定清除全部 ${list.length} 筆密碼紀錄？此動作無法復原。`))return;
+  store.set('passwordHistory',[]);
+  pwdVisibleIds.clear();
+  renderPasswordHistory();
+  $('#pwdInfo').textContent='已清除全部密碼紀錄。';
+}
+
+function renderPasswordHistory(){
+  const el=$('#pwdHistoryList');
+  if(!el)return;
+  const list=store.get('passwordHistory',[]);
+  $('#pwdHistoryCount').textContent=`${list.length} 筆`;
+  $('#pwdClearAllBtn').style.display=list.length?'block':'none';
+
+  if(!list.length){
+    el.innerHTML='<div class="empty">目前沒有保存的密碼紀錄</div>';
+    return;
+  }
+
+  el.innerHTML=list.map(item=>{
+    const visible=pwdVisibleIds.has(item.id);
+    const time=new Date(item.createdAt).toLocaleString('zh-TW',{
+      year:'numeric',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'
+    });
+    return `<div class="pwd-history-item">
+      <div class="pwd-history-title">${esc(item.name)}</div>
+      <div class="pwd-history-meta">${item.account?esc(item.account)+' · ':''}${esc(time)}</div>
+      <div class="pwd-history-secret">${visible?esc(item.password):passwordMask(item.password)}</div>
+      <div class="pwd-history-actions">
+        <button class="pwd-reveal" onclick="toggleSavedPassword(${item.id})">${visible?'🙈 隱藏':'👁️ 顯示'}</button>
+        <button class="pwd-copy" onclick="copySavedPassword(${item.id})">📋 複製</button>
+        <button class="pwd-delete" onclick="deleteSavedPassword(${item.id})">🗑️ 刪除</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+
+// Currency converter
+const FX_PRIORITY = ['twd','usd','jpy','krw','cny','hkd','eur','gbp','sgd','aud','cad','thb','vnd','myr','php','idr','nzd','chf','mop','inr'];
+const FX_FALLBACK_NAMES = {
+  twd:'新台幣',usd:'美元',jpy:'日圓',krw:'韓元',cny:'人民幣',hkd:'港幣',
+  eur:'歐元',gbp:'英鎊',sgd:'新加坡幣',aud:'澳幣',cad:'加拿大幣',thb:'泰銖',
+  vnd:'越南盾',myr:'馬來西亞令吉',php:'菲律賓披索',idr:'印尼盾',
+  nzd:'紐西蘭幣',chf:'瑞士法郎',mop:'澳門幣',inr:'印度盧比'
+};
+let fxReady=false;
+const fxMemoryCache={};
+let fxAutoTimer=null;
+
+async function fxFetch(primary, fallback){
+  try{
+    const r=await fetch(primary,{cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return await r.json();
+  }catch(e){
+    const r=await fetch(fallback,{cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return await r.json();
+  }
+}
+
+function fxCurrencyLabel(code,name){
+  const c=code.toUpperCase();
+  const zh=FX_FALLBACK_NAMES[code] || name || c;
+  return `${c}｜${zh}`;
+}
+
+async function initFx(){
+  if(fxReady) return;
+  const from=$('#fxFrom'),to=$('#fxTo');
+  if(!from || !to) return;
+
+  from.innerHTML='<option>載入幣別中…</option>';
+  to.innerHTML='<option>載入幣別中…</option>';
+
+  let currencies=store.get('fxCurrencies',null);
+  try{
+    currencies=await fxFetch(
+      'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.min.json',
+      'https://latest.currency-api.pages.dev/v1/currencies.min.json'
+    );
+    store.set('fxCurrencies',currencies);
+  }catch(e){
+    if(!currencies) currencies=FX_FALLBACK_NAMES;
+  }
+
+  const allCodes=Object.keys(currencies).map(x=>x.toLowerCase());
+  const priority=FX_PRIORITY.filter(c=>allCodes.includes(c));
+  const rest=allCodes.filter(c=>!priority.includes(c)).sort((a,b)=>
+    fxCurrencyLabel(a,currencies[a]).localeCompare(fxCurrencyLabel(b,currencies[b]),'zh-Hant')
+  );
+  const ordered=[...priority,...rest];
+
+  const options=ordered.map(code=>
+    `<option value="${esc(code)}">${esc(fxCurrencyLabel(code,currencies[code]))}</option>`
+  ).join('');
+
+  from.innerHTML=options;
+  to.innerHTML=options;
+
+  const prefs=store.get('fxPrefs',{from:'twd',to:'jpy'});
+  from.value=ordered.includes(prefs.from)?prefs.from:(ordered.includes('twd')?'twd':ordered[0]);
+  to.value=ordered.includes(prefs.to)?prefs.to:(ordered.includes('jpy')?'jpy':ordered[1]||ordered[0]);
+
+  fxReady=true;
+}
+
+function saveFxPrefs(){
+  const from=$('#fxFrom')?.value,to=$('#fxTo')?.value;
+  if(from&&to) store.set('fxPrefs',{from,to});
+}
+
+function swapFx(){
+  const from=$('#fxFrom'),to=$('#fxTo');
+  if(!from||!to)return;
+  const x=from.value;from.value=to.value;to.value=x;
+  saveFxPrefs();
+  scheduleFxConvert();
+}
+
+async function convertFx(forceRefresh=false){
+  await initFx();
+  const amount=Number($('#fxAmount').value);
+  const from=$('#fxFrom').value.toLowerCase();
+  const to=$('#fxTo').value.toLowerCase();
+  const btn=$('#fxConvertBtn');
+
+  if(!(amount>=0)) return alert('請輸入正確金額');
+  if(!from||!to) return;
+
+  if(from===to){
+    $('#fxResult').innerHTML=`<div>換算結果</div><div class="num" style="font-size:30px">${fmt(amount)} ${to.toUpperCase()}</div><small>${from.toUpperCase()} 與 ${to.toUpperCase()} 為相同幣別</small>`;
+    $('#fxRateInfo').textContent=`1 ${from.toUpperCase()} = 1 ${to.toUpperCase()}`;
+    return;
+  }
+
+  btn.classList.add('fx-loading');
+  btn.textContent='更新匯率中…';
+
+  const cacheKey='fxRate_'+from;
+  let data=null;
+  let usedCache=false;
+
+  if(!forceRefresh && fxMemoryCache[from]){
+    data=fxMemoryCache[from];
+  }else{
+    try{
+      data=await fxFetch(
+        `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${encodeURIComponent(from)}.min.json`,
+        `https://latest.currency-api.pages.dev/v1/currencies/${encodeURIComponent(from)}.min.json`
+      );
+      fxMemoryCache[from]=data;
+      store.set(cacheKey,data);
+    }catch(e){
+      data=store.get(cacheKey,null);
+      if(data) fxMemoryCache[from]=data;
+      usedCache=true;
+    }
+  }
+
+  btn.classList.remove('fx-loading');
+  btn.textContent='重新取得最新匯率';
+
+  if(!data || !data[from] || typeof data[from][to]!=='number'){
+    $('#fxResult').innerHTML='<div>換算失敗</div><div class="num" style="font-size:24px">無法取得匯率</div><small>請確認網路連線後再試一次</small>';
+    $('#fxRateInfo').textContent='';
+    return;
+  }
+
+  const rate=Number(data[from][to]);
+  const result=amount*rate;
+  const rateText=rate>=100 ? rate.toLocaleString('zh-TW',{maximumFractionDigits:4}) :
+                 rate>=1 ? rate.toLocaleString('zh-TW',{maximumFractionDigits:6}) :
+                 rate.toLocaleString('zh-TW',{maximumFractionDigits:8});
+
+  $('#fxResult').innerHTML=
+    `<div>${fmt(amount)} ${from.toUpperCase()} 可換約</div>`+
+    `<div class="num" style="font-size:30px">${fmt(result)} ${to.toUpperCase()}</div>`+
+    `<small>${usedCache?'使用上次成功取得的匯率':'使用最新可取得的參考匯率'}</small>`;
+
+  const date=data.date ? ` · 資料日期 ${esc(data.date)}` : '';
+  $('#fxRateInfo').innerHTML=`1 ${from.toUpperCase()} ≈ <b>${rateText} ${to.toUpperCase()}</b>${date}${usedCache?' · 離線快取':''}`;
+  saveFxPrefs();
+}
+
+// 即時計算：輸入數字後立即更新結果
+function scheduleFxConvert(){
+  clearTimeout(fxAutoTimer);
+  fxAutoTimer=setTimeout(()=>convertFx(false),450);
+}
+
+function initLiveCalculator(){
+  const bindings=[
+    ['discPrice',calcDiscount],
+    ['discRate',calcDiscount],
+    ['pctBase',calcPercent],
+    ['pctRate',calcPercent],
+    ['sqm',calcArea]
+  ];
+
+  bindings.forEach(([id,fn])=>{
+    const el=document.getElementById(id);
+    if(el && !el.dataset.liveBound){
+      el.addEventListener('input',fn);
+      el.dataset.liveBound='1';
+    }
+  });
+
+  const fxAmount=document.getElementById('fxAmount');
+  if(fxAmount && !fxAmount.dataset.liveBound){
+    fxAmount.addEventListener('input',scheduleFxConvert);
+    fxAmount.dataset.liveBound='1';
+  }
+
+  const quoteIds=['quoteMode','quoteUnit','quoteQty','quoteDiscount','quoteTaxRate','quoteCost','quoteOtherExpense'];
+  quoteIds.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el && !el.dataset.liveBound){
+      el.addEventListener(id==='quoteMode'?'change':'input',calcQuoteTax);
+      el.dataset.liveBound='1';
+    }
+  });
+
+  const pwdLength=document.getElementById('pwdLength');
+  if(pwdLength && !pwdLength.dataset.liveBound){
+    pwdLength.addEventListener('input',()=>{
+      $('#pwdLenText').textContent=pwdLength.value;
+      generatePassword();
+    });
+    pwdLength.dataset.liveBound='1';
+  }
+  ['pwdLower','pwdUpper','pwdNumber','pwdSymbol','pwdAvoid'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el && !el.dataset.liveBound){
+      el.addEventListener('change',generatePassword);
+      el.dataset.liveBound='1';
+    }
+  });
+
+  calcDiscount();
+  calcPercent();
+  calcArea();
+  calcQuoteTax();
+  $('#pwdLenText').textContent=$('#pwdLength').value;
+  ensurePassword();
+  renderPasswordHistory();
+}
+
+toggleMoneyCustomCat();
+renderDecisionHistory();
+initLiveCalculator();
+
+
+// ===== 全域按鍵點擊音效 =====
+let uiAudioCtx = null;
+
+function getUIAudioContext(){
+  if(!uiAudioCtx){
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if(!AudioCtx) return null;
+    uiAudioCtx = new AudioCtx();
+  }
+  if(uiAudioCtx.state === 'suspended'){
+    uiAudioCtx.resume().catch(()=>{});
+  }
+  return uiAudioCtx;
+}
+
+function playUIClickSound(kind='normal'){
+  const ctx = getUIAudioContext();
+  if(!ctx) return;
+
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  // 依按鈕類型給一點細微差異，但都保持短促、不刺耳
+  let startFreq = 720;
+  let endFreq = 520;
+  let peak = 0.032;
+  let duration = 0.055;
+
+  if(kind === 'primary'){
+    startFreq = 840;
+    endFreq = 610;
+    peak = 0.038;
+  }else if(kind === 'back'){
+    startFreq = 560;
+    endFreq = 430;
+    peak = 0.030;
+  }else if(kind === 'danger'){
+    startFreq = 470;
+    endFreq = 360;
+    peak = 0.030;
+  }else if(kind === 'tool'){
+    startFreq = 760;
+    endFreq = 560;
+    peak = 0.035;
+  }
+
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(startFreq, now);
+  osc.frequency.exponentialRampToValueAtTime(endFreq, now + duration);
+
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.exponentialRampToValueAtTime(peak, now + 0.008);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start(now);
+  osc.stop(now + duration + 0.01);
+}
+
+function detectUIButtonSoundKind(el){
+  if(el.classList.contains('primary')) return 'primary';
+  if(el.classList.contains('back')) return 'back';
+  if(el.classList.contains('danger')) return 'danger';
+  if(el.classList.contains('tool')) return 'tool';
+  return 'normal';
+}
+
+// 使用事件委派，確保現在與之後動態產生的按鈕都有音效
+document.addEventListener('click', function(e){
+  const target = e.target.closest('button, a.mini-btn');
+  if(!target) return;
+  if(target.disabled || target.getAttribute('aria-disabled') === 'true') return;
+  playUIClickSound(detectUIButtonSoundKind(target));
+}, {passive:true});
+
+// 讓第一次觸控時先解鎖 iPhone / Safari 的 Web Audio
+document.addEventListener('touchstart', function unlockAudio(){
+  getUIAudioContext();
+  document.removeEventListener('touchstart', unlockAudio);
+}, {passive:true});
+
+</script>
+</body>
+</html>
