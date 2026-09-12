@@ -1863,7 +1863,7 @@ body.date-wheel-open{
       <input id="adminHomeTitle" placeholder="我的生活工具箱">
 
       <label style="margin-top:10px">首頁副標題</label>
-      <input id="adminHomeSubtitle" placeholder="把每天的小事，變得更簡單。">
+      <input id="adminHomeSubtitle" placeholder="動動腦生活變得更簡單......Chien hung">
 
       <button class="primary full" style="margin-top:11px" onclick="saveAdminHomeText()">套用首頁文字</button>
     </div>
@@ -2152,7 +2152,7 @@ const store = {
   get(k, d){ try{return JSON.parse(localStorage.getItem("lifeBox_"+k)) ?? d}catch{return d} },
   set(k, v){ localStorage.setItem("lifeBox_"+k, JSON.stringify(v)) }
 };
-const ADMIN_DEFAULTS = {"homeTitle":"我的生活工具箱","homeSubtitle":"把每天的小事，變得更簡單。","cardOverrides":{},"customCards":[],"homeOrder":[],"deletedBuiltinCards":[]};
+const ADMIN_DEFAULTS = {"homeTitle":"我的生活工具箱","homeSubtitle":"動動腦生活變得更簡單......Chien hung","cardOverrides":{},"customCards":[],"homeOrder":[],"deletedBuiltinCards":[]};
 const ADMIN_EXPORT_REVISION = 'base-v37';
 const fmt = n => new Intl.NumberFormat('zh-TW',{maximumFractionDigits:2}).format(Number(n)||0);
 const pad = n => String(n).padStart(2,'0');
