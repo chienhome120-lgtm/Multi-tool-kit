@@ -225,6 +225,75 @@ footer{text-align:center;color:#a0928a;font-size:12px;padding:24px 0 8px}
   .pack-toolbar{grid-template-columns:1fr}
 }
 
+
+/* ===== v13 首頁功能字卡：圖示左、文字右、縮小版 ===== */
+#home .grid{
+  gap:8px;
+}
+
+#home .tool{
+  display:grid;
+  grid-template-columns:30px minmax(0,1fr);
+  grid-template-rows:auto auto;
+  column-gap:8px;
+  row-gap:2px;
+  align-content:center;
+  align-items:center;
+
+  min-height:82px;
+  padding:10px 10px;
+  border-radius:17px;
+  text-align:left;
+}
+
+#home .tool .icon{
+  grid-column:1;
+  grid-row:1 / span 2;
+  align-self:center;
+  justify-self:center;
+
+  display:block;
+  margin:0;
+  font-size:25px;
+  line-height:1;
+}
+
+#home .tool b{
+  grid-column:2;
+  grid-row:1;
+  min-width:0;
+
+  font-size:15px;
+  line-height:1.25;
+  font-weight:800;
+  margin:0;
+}
+
+#home .tool small{
+  grid-column:2;
+  grid-row:2;
+  min-width:0;
+
+  display:block;
+  margin:0;
+  font-size:11.5px;
+  line-height:1.25;
+  color:var(--muted);
+}
+
+/* 小螢幕再略微收斂，避免長標題擠壓 */
+@media(max-width:380px){
+  #home .tool{
+    grid-template-columns:27px minmax(0,1fr);
+    column-gap:6px;
+    min-height:78px;
+    padding:9px 8px;
+  }
+  #home .tool .icon{font-size:23px}
+  #home .tool b{font-size:14px}
+  #home .tool small{font-size:10.8px}
+}
+
 </style>
 </head>
 <body>
