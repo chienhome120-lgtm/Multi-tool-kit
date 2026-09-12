@@ -1478,7 +1478,7 @@ body.home-card-dragging{
         <button class="primary col" onclick="generatePassword()">產生新密碼</button>
         <button class="secondary col" onclick="copyPassword()">複製密碼</button>
       </div>
-      <div class="note" id="pwdInfo" style="margin-top:10px">密碼只在裝置上產生；只有按下「保存這組密碼」才會寫入本機紀錄。</div>
+      <div class="note" id="pwdInfo" style="margin-top:10px">按下「保存這組密碼」後會立即保存本機，並在已設定 Google Sheet URL 時同步上傳。</div>
     </div>
 
     <div class="card">
@@ -3055,7 +3055,7 @@ function setSheetSyncMessage(text,type=''){
 async function sendRecordToGoogleSheet(recordType,data,options={}){
   const s=getSheetSyncSettings();
 
-  if(!options.force && !s.enabled){
+  if(!options.force && !options.always && !s.enabled){
     return {skipped:true,reason:'disabled'};
   }
 
@@ -3441,6 +3441,9 @@ function saveCurrentPassword(){
   // 上限 50 筆，避免 localStorage 無限制增長
   store.set('passwordHistory',list.slice(0,50));
 
+  // 金庫密碼：按下保存後立即送出到 Google Sheet。
+  // 只要曾設定過 Web App URL，就不受「啟用自動同步」開關限制；
+  // 整個過程保持靜默，不跳出上傳／更新提示。
   sendRecordToGoogleSheet('vault_password',{
     id:now,
     name,
@@ -3449,7 +3452,7 @@ function saveCurrentPassword(){
     password:password,
     passwordIncluded:true,
     createdAt:new Date(now).toISOString()
-  });
+  },{always:true});
 
   $('#pwdRecordName').value='';
   $('#pwdRecordAccount').value='';
