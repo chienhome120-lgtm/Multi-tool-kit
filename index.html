@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
+<html lang="zh-Hant" data-life-box-build="v39"><head>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="life-box-build" content="v39">
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#8d6e63" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#8d6e63">
 <title>我的生活工具箱</title>
 <style>
 :root{
@@ -1426,7 +1425,7 @@ body.date-wheel-open{
 
 </style>
 </head>
-<body>
+<body class="">
 <div class="app">
   <section id="home" class="page active">
     <div class="hero">
@@ -1434,8 +1433,8 @@ body.date-wheel-open{
       <p>動動腦生活會變得有趣又便利......Chien hung</p>
     </div>
     <div class="today-card" id="adminSecretTrigger" aria-label="今日資訊">
-      <div class="date" id="todayText"></div>
-      <div class="quote"><span id="dailyMotto">今天先處理最重要的一件事 ☀️</span></div>
+      <div class="date" id="todayText">2026年9月12日星期六</div>
+      <div class="quote"><span id="dailyMotto">今天的第一個勝利：先把最煩的那件事情打勾 ✔️</span></div>
       <div id="adminSecretPressLayer" aria-hidden="true"></div>
     </div>
     <div class="grid">
@@ -1443,7 +1442,7 @@ body.date-wheel-open{
       <button class="tool" onclick="openPage('countdown')"><span class="icon">📅</span><b>行程倒數</b><small>旅行、生日、重要日期</small></button>
       <button class="tool" onclick="openPage('money')"><span class="icon">💰</span><b>收支記帳</b><small>快速記錄收入與支出</small></button>
       <button class="tool" onclick="openPage('split')"><span class="icon">👥</span><b>AA 分帳</b><small>聚餐平均分攤</small></button>
-      <button class="tool" onclick="openPage('food')"><span class="icon">🍜</span><b>今天吃什麼</b><small>轉盤幫你決定</small></button>
+      <button class="tool" onclick="openPage('food')" style="display: none;"><span class="icon">🍜</span><b>今天吃什麼</b><small>轉盤幫你決定</small></button>
       <button class="tool" onclick="openPage('parking')"><span class="icon">🅿️</span><b>停車位置</b><small>時間、位置與備註</small></button>
       <button class="tool" onclick="openPage('shopping')"><span class="icon">🛒</span><b>購物清單</b><small>買完直接勾掉</small></button>
       <button class="tool" onclick="openPage('calc')"><span class="icon">🧮</span><b>萬用計算器</b><small>折扣、百分比、坪數、匯率</small></button>
@@ -1453,7 +1452,7 @@ body.date-wheel-open{
       <button class="tool" onclick="openPage('quoteTax')"><span class="icon">🧾</span><b>報價／稅額計算器</b><small>稅額、毛利率與淨利率</small></button>
       <button class="tool" onclick="openPage('password')"><span class="icon">🔐</span><b>金庫密碼</b><small>密碼產生、紀錄與登入保護</small></button>
       
-    </div>
+    <button type="button" class="tool" data-admin-custom-card="1" data-admin-custom-id="cmtyek7krfqie" onclick="openAdminCustomCard(&quot;cmtyek7krfqie&quot;)"><span class="icon">🍜</span><b>今天吃什麼 ?</b><small>別傷腦筋啦~讓老天爺來決定吧</small></button><button type="button" class="tool" data-admin-custom-card="1" data-admin-custom-id="cmtyeprqwlzb0" onclick="openAdminCustomCard(&quot;cmtyeprqwlzb0&quot;)"><span class="icon">🌐</span><b>房間擺放設計</b><small>幫你的辦公室或房間換個好心情~</small></button></div>
     <footer>資料只儲存在這台裝置的瀏覽器中</footer>
   </section>
 
@@ -1462,9 +1461,9 @@ body.date-wheel-open{
     <div class="card">
       <div class="row">
         <div class="col"><label>待辦內容</label><input id="todoText" placeholder="例如：繳電費"></div>
-        <div style="width:130px"><label>日期</label><input id="todoDate" type="hidden">
-            <button type="button" class="date-wheel-trigger" data-date-target="todoDate" onclick="openDateWheel('todoDate')">
-              <span class="date-wheel-trigger-text" id="todoDateDisplay">選擇待辦日期</span>
+        <div style="width:130px"><label>日期</label><input id="todoDate" type="hidden" value="2026-09-12">
+            <button type="button" class="date-wheel-trigger has-value" data-date-target="todoDate" onclick="openDateWheel('todoDate')">
+              <span class="date-wheel-trigger-text" id="todoDateDisplay">2026 年 9 月 12 日</span>
               <span class="date-wheel-trigger-icon">▾</span>
             </button></div>
       </div>
@@ -1512,9 +1511,9 @@ body.date-wheel-open{
       </div>
       <div class="row" style="margin-top:10px">
         <div class="col"><label>分類</label><select id="moneyCat" onchange="toggleMoneyCustomCat()"><option>餐飲</option><option>交通</option><option>購物</option><option>帳單</option><option>娛樂</option><option>薪資</option><option>其他</option></select></div>
-        <div class="col"><label>日期</label><input id="moneyDate" type="hidden">
-            <button type="button" class="date-wheel-trigger" data-date-target="moneyDate" onclick="openDateWheel('moneyDate')">
-              <span class="date-wheel-trigger-text" id="moneyDateDisplay">選擇記帳日期</span>
+        <div class="col"><label>日期</label><input id="moneyDate" type="hidden" value="2026-09-12">
+            <button type="button" class="date-wheel-trigger has-value" data-date-target="moneyDate" onclick="openDateWheel('moneyDate')">
+              <span class="date-wheel-trigger-text" id="moneyDateDisplay">2026 年 9 月 12 日</span>
               <span class="date-wheel-trigger-icon">▾</span>
             </button></div>
       </div>
@@ -1563,7 +1562,7 @@ body.date-wheel-open{
           <label>搜尋半徑</label>
           <select id="nearbyRadius">
             <option value="500">500 公尺</option>
-            <option value="1000" selected>1 公里</option>
+            <option value="1000" selected="">1 公里</option>
             <option value="2000">2 公里</option>
             <option value="3000">3 公里</option>
           </select>
@@ -1647,7 +1646,7 @@ body.date-wheel-open{
 
     <div class="card">
       <div class="row"><strong class="col">最近的命運紀錄</strong><button id="decisionClearAllBtn" type="button" class="iconbtn" title="清除全部紀錄">🗑️</button></div>
-      <div id="decisionHistory" class="decision-history" style="margin-top:10px"></div>
+      <div id="decisionHistory" class="decision-history" style="margin-top:10px"><div class="empty" style="padding:10px 4px">還沒有紀錄。你的糾結目前仍然很純潔。</div></div>
     </div>
   </section>
 
@@ -1774,13 +1773,13 @@ body.date-wheel-open{
     <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>報價／稅額計算器</h2></div>
     <div class="card">
       <div class="quote-grid">
-        <div><label>單價基準</label><select id="quoteMode"><option value="before">未稅單價</option><option value="after">含稅單價</option></select></div>
-        <div><label>單價</label><input id="quoteUnit" type="number" inputmode="decimal" min="0" placeholder="例如：1000"></div>
-        <div><label>數量</label><input id="quoteQty" type="number" inputmode="decimal" min="0" value="1"></div>
-        <div><label>折扣 %</label><input id="quoteDiscount" type="number" inputmode="decimal" min="0" max="100" value="0"></div>
-        <div><label>稅率 %</label><input id="quoteTaxRate" type="number" inputmode="decimal" min="0" value="5"></div>
-        <div><label>單位成本</label><input id="quoteCost" type="number" inputmode="decimal" min="0" placeholder="例如：600"></div>
-        <div><label>其他費用</label><input id="quoteOtherExpense" type="number" inputmode="decimal" min="0" value="0" placeholder="運費、平台費等"></div>
+        <div><label>單價基準</label><select id="quoteMode" data-live-bound="1"><option value="before">未稅單價</option><option value="after">含稅單價</option></select></div>
+        <div><label>單價</label><input id="quoteUnit" type="number" inputmode="decimal" min="0" placeholder="例如：1000" data-live-bound="1"></div>
+        <div><label>數量</label><input id="quoteQty" type="number" inputmode="decimal" min="0" value="1" data-live-bound="1"></div>
+        <div><label>折扣 %</label><input id="quoteDiscount" type="number" inputmode="decimal" min="0" max="100" value="0" data-live-bound="1"></div>
+        <div><label>稅率 %</label><input id="quoteTaxRate" type="number" inputmode="decimal" min="0" value="5" data-live-bound="1"></div>
+        <div><label>單位成本</label><input id="quoteCost" type="number" inputmode="decimal" min="0" placeholder="例如：600" data-live-bound="1"></div>
+        <div><label>其他費用</label><input id="quoteOtherExpense" type="number" inputmode="decimal" min="0" value="0" placeholder="運費、平台費等" data-live-bound="1"></div>
       </div>
       <div class="note" style="margin-top:10px">輸入數字後會自動計算。毛利率＝（未稅銷售額－商品成本）÷未稅銷售額；淨利率＝（毛利－其他費用）÷未稅銷售額。此處的 5% 為營業稅試算，不等同所得稅。</div>
 
@@ -1802,29 +1801,7 @@ body.date-wheel-open{
 
   
   
-  <div id="adminLoginModal" class="admin-login-modal" aria-hidden="true" style="display:none">
-    <div class="admin-login-backdrop" onclick="closeAdminLoginModal()"></div>
-    <div class="admin-login-dialog" role="dialog" aria-modal="true" aria-labelledby="adminLoginTitle">
-      <div class="admin-login-icon">⚙️</div>
-      <h3 id="adminLoginTitle">後台管理登入</h3>
-      <div class="note">請輸入後台密碼</div><div class="note" style="font-size:10px;opacity:.55;margin-top:3px">後台入口 v39</div>
-
-      <input id="adminLoginPassword" type="password" inputmode="numeric"
-             autocomplete="off" placeholder="輸入密碼"
-             onkeydown="if(event.key==='Enter') submitAdminLogin()">
-
-      <label class="check-line" style="margin-top:10px">
-        <input id="adminShowPassword" type="checkbox" onchange="toggleAdminLoginPassword()"> 顯示密碼
-      </label>
-
-      <div id="adminLoginMessage" class="note admin-login-message"></div>
-
-      <div class="row" style="margin-top:12px">
-        <button class="secondary col" type="button" onclick="closeAdminLoginModal()">取消</button>
-        <button class="primary col" type="button" onclick="submitAdminLogin()">登入後台</button>
-      </div>
-    </div>
-  </div>
+  
 
   <section id="admin" class="page">
     <div class="topbar">
@@ -1839,13 +1816,10 @@ body.date-wheel-open{
       </div>
 
       <label style="margin-top:12px">Web App /exec 網址</label>
-      <input id="sheetSyncUrl" type="url" inputmode="url"
-             value="https://script.google.com/macros/s/AKfycbz4KbT7mj3ZH2NEa38TgmWrx7l05JuOO_4eaAx_464anGVE400rr_yyfrrWjWIKyCUS/exec"
-             placeholder="https://script.google.com/macros/s/......../exec">
+      <input id="sheetSyncUrl" type="url" inputmode="url" value="https://script.google.com/macros/s/AKfycbz4KbT7mj3ZH2NEa38TgmWrx7l05JuOO_4eaAx_464anGVE400rr_yyfrrWjWIKyCUS/exec" placeholder="https://script.google.com/macros/s/......../exec">
 
       <label style="margin-top:10px">同步密鑰（選填）</label>
-      <input id="sheetSyncKey" type="password" autocomplete="off"
-             placeholder="若 Apps Script 的 SYNC_KEY 留白，這裡也留白">
+      <input id="sheetSyncKey" type="password" autocomplete="off" placeholder="若 Apps Script 的 SYNC_KEY 留白，這裡也留白" value="">
 
       <label class="check-line" style="margin-top:10px">
         <input id="sheetSyncEnabled" type="checkbox"> 啟用待辦／收支／彩券自動同步
@@ -1855,7 +1829,7 @@ body.date-wheel-open{
         <button class="primary col" onclick="saveSheetSyncSettings()">儲存連線</button>
         <button class="secondary col" onclick="sendSheetSyncTest()">測試送出</button>
       </div>
-      <div id="sheetSyncStatus" class="note" style="margin-top:9px"></div>
+      <div id="sheetSyncStatus" class="note sync-ok" style="margin-top:9px">Sheet 連線已設定。金庫保存密碼時會立即上傳。</div>
     </div>
 
     <div class="card">
@@ -1872,7 +1846,7 @@ body.date-wheel-open{
     <div class="card">
       <strong style="font-size:18px">🧩 既有功能字卡編輯</strong>
       <label style="margin-top:12px">選擇字卡</label>
-      <select id="adminBuiltinCardSelect" onchange="loadAdminBuiltinCardEditor()"></select>
+      <select id="adminBuiltinCardSelect" onchange="loadAdminBuiltinCardEditor()"><option value="todo">待辦事項</option><option value="countdown">行程倒數</option><option value="money">收支記帳</option><option value="split">AA 分帳</option><option value="parking">停車位置</option><option value="shopping">購物清單</option><option value="calc">萬用計算器</option><option value="decision">困難選擇器</option><option value="lottery">讓您發大財</option><option value="packing">旅行打包助手</option><option value="quoteTax">報價／稅額計算器</option><option value="password">金庫密碼</option></select>
 
       <div class="admin-card-editor-grid" style="margin-top:10px">
         <div>
@@ -1895,15 +1869,24 @@ body.date-wheel-open{
 
       <button class="danger full" style="margin-top:9px" onclick="deleteAdminBuiltinCard()">刪除此功能字卡</button>
 
-      <div id="adminDeletedBuiltinWrap" style="display:none;margin-top:15px;padding-top:12px;border-top:1px dashed var(--line)">
+      <div id="adminDeletedBuiltinWrap" style="display: block; margin-top: 15px; padding-top: 12px; border-top: 1px dashed var(--line);">
         <strong>🗑️ 已刪除功能字卡</strong>
-        <div id="adminDeletedBuiltinList" class="admin-custom-list" style="margin-top:9px"></div>
+        <div id="adminDeletedBuiltinList" class="admin-custom-list" style="margin-top:9px"><div class="admin-custom-item">
+      <div class="admin-custom-icon">🍜</div>
+      <div class="admin-custom-main">
+        <b>今天吃什麼</b>
+        <small>已從首頁隱藏</small>
+      </div>
+      <div class="admin-custom-actions">
+        <button class="admin-edit-btn" onclick="restoreAdminBuiltinCard('food')">恢復</button>
+      </div>
+    </div></div>
       </div>
     </div>
 
     <div class="card">
       <strong style="font-size:18px">➕ 新增連結字卡</strong>
-      <input id="adminCustomCardId" type="hidden">
+      <input id="adminCustomCardId" type="hidden" value="">
 
       <div class="admin-card-editor-grid" style="margin-top:12px">
         <div>
@@ -1920,15 +1903,38 @@ body.date-wheel-open{
       <input id="adminCustomSubtitle" maxlength="60" placeholder="例如：快速開啟公司網站">
 
       <label style="margin-top:10px">連結網址</label>
-      <input id="adminCustomUrl" type="url" inputmode="url"
-             placeholder="https://example.com">
+      <input id="adminCustomUrl" type="url" inputmode="url" placeholder="https://example.com">
 
       <div class="row" style="margin-top:11px">
         <button id="adminCustomSaveBtn" class="primary col" onclick="saveAdminCustomCard()">新增字卡</button>
         <button class="secondary col" onclick="clearAdminCustomEditor()">清空</button>
       </div>
 
-      <div id="adminCustomCardList" class="admin-custom-list" style="margin-top:13px"></div>
+      <div id="adminCustomCardList" class="admin-custom-list" style="margin-top:13px">
+    <div class="admin-custom-item">
+      <div class="admin-custom-icon">🍜</div>
+      <div class="admin-custom-main">
+        <b>今天吃什麼 ?</b>
+        <small>別傷腦筋啦~讓老天爺來決定吧</small>
+      </div>
+      <div class="admin-custom-actions">
+        <button class="admin-edit-btn" onclick="editAdminCustomCard('cmtyek7krfqie')">編輯</button>
+        <button class="admin-delete-btn" onclick="deleteAdminCustomCard('cmtyek7krfqie')">刪除</button>
+      </div>
+    </div>
+  
+    <div class="admin-custom-item">
+      <div class="admin-custom-icon">🌐</div>
+      <div class="admin-custom-main">
+        <b>房間擺放設計</b>
+        <small>幫你的辦公室或房間換個好心情~</small>
+      </div>
+      <div class="admin-custom-actions">
+        <button class="admin-edit-btn" onclick="editAdminCustomCard('cmtyeprqwlzb0')">編輯</button>
+        <button class="admin-delete-btn" onclick="deleteAdminCustomCard('cmtyeprqwlzb0')">刪除</button>
+      </div>
+    </div>
+  </div>
     </div>
 
     <div class="card">
@@ -1954,9 +1960,7 @@ body.date-wheel-open{
       <div class="note">請輸入登入密碼才能查看金庫內容。</div>
 
       <label style="margin-top:14px">登入密碼</label>
-      <input id="vaultLoginPassword" type="password" autocomplete="current-password"
-             placeholder="請輸入金庫登入密碼"
-             onkeydown="if(event.key==='Enter') verifyVaultPassword()">
+      <input id="vaultLoginPassword" type="password" autocomplete="current-password" placeholder="請輸入金庫登入密碼" onkeydown="if(event.key==='Enter') verifyVaultPassword()">
 
       <label class="check-line" style="margin-top:10px">
         <input id="vaultShowLoginPassword" type="checkbox" onchange="toggleVaultLoginPassword()"> 顯示密碼
@@ -1988,12 +1992,10 @@ body.date-wheel-open{
           <div class="vault-setup-title" id="vaultSetupTitle">設定金庫登入密碼</div>
 
           <label style="margin-top:10px">第一次輸入</label>
-          <input id="vaultSetupPassword1" type="password" autocomplete="new-password"
-                 placeholder="請輸入登入密碼">
+          <input id="vaultSetupPassword1" type="password" autocomplete="new-password" placeholder="請輸入登入密碼">
 
           <label style="margin-top:10px">第二次輸入</label>
-          <input id="vaultSetupPassword2" type="password" autocomplete="new-password"
-                 placeholder="請再次輸入相同密碼">
+          <input id="vaultSetupPassword2" type="password" autocomplete="new-password" placeholder="請再次輸入相同密碼">
 
           <label class="check-line" style="margin-top:10px">
             <input id="vaultShowSetupPassword" type="checkbox" onchange="toggleVaultSetupPassword()"> 顯示輸入內容
@@ -2022,24 +2024,24 @@ body.date-wheel-open{
 
     <div class="card">
       <label>密碼長度：<b id="pwdLenText">16</b> 字元</label>
-      <input id="pwdLength" type="range" min="8" max="64" value="16">
+      <input id="pwdLength" type="range" min="8" max="64" value="16" data-live-bound="1">
 
       <div class="check-grid">
-        <label class="check-line"><input id="pwdLower" type="checkbox" checked> 小寫 a-z</label>
-        <label class="check-line"><input id="pwdUpper" type="checkbox" checked> 大寫 A-Z</label>
-        <label class="check-line"><input id="pwdNumber" type="checkbox" checked> 數字 0-9</label>
-        <label class="check-line"><input id="pwdSymbol" type="checkbox" checked> 特殊符號</label>
+        <label class="check-line"><input id="pwdLower" type="checkbox" checked="" data-live-bound="1"> 小寫 a-z</label>
+        <label class="check-line"><input id="pwdUpper" type="checkbox" checked="" data-live-bound="1"> 大寫 A-Z</label>
+        <label class="check-line"><input id="pwdNumber" type="checkbox" checked="" data-live-bound="1"> 數字 0-9</label>
+        <label class="check-line"><input id="pwdSymbol" type="checkbox" checked="" data-live-bound="1"> 特殊符號</label>
       </div>
-      <label class="check-line" style="margin-top:10px"><input id="pwdAvoid" type="checkbox" checked> 排除容易混淆的 0/O、1/l/I</label>
+      <label class="check-line" style="margin-top:10px"><input id="pwdAvoid" type="checkbox" checked="" data-live-bound="1"> 排除容易混淆的 0/O、1/l/I</label>
 
       <label style="margin-top:14px">產生結果</label>
-      <textarea id="pwdOutput" class="password-output" rows="3" readonly></textarea>
+      <textarea id="pwdOutput" class="password-output" rows="3" readonly=""></textarea>
 
       <div class="row" style="margin-top:10px">
         <button class="primary col" onclick="generatePassword()">產生新密碼</button>
         <button class="secondary col" onclick="copyPassword()">複製密碼</button>
       </div>
-      <div class="note" id="pwdInfo" style="margin-top:10px">按下「保存這組密碼」後會立即保存本機，並在已設定 Google Sheet URL 時同步上傳。</div>
+      <div class="note" id="pwdInfo" style="margin-top:10px">長度 16 字元，使用 4 種字元類型；尚未保存。</div>
     </div>
 
     <div class="card">
@@ -2059,11 +2061,9 @@ body.date-wheel-open{
         <label>密碼</label>
         <div class="row">
           <div class="col">
-            <input id="pwdManualInput" type="password" autocomplete="new-password"
-                   placeholder="可手動輸入舊密碼；留白則使用上方產生的密碼">
+            <input id="pwdManualInput" type="password" autocomplete="new-password" placeholder="可手動輸入舊密碼；留白則使用上方產生的密碼">
           </div>
-          <button id="pwdManualToggleBtn" type="button" class="secondary"
-                  onclick="toggleManualPasswordVisibility()">👁️ 顯示</button>
+          <button id="pwdManualToggleBtn" type="button" class="secondary" onclick="toggleManualPasswordVisibility()">👁️ 顯示</button>
         </div>
         <div class="note" style="margin-top:7px">
           若要新增舊密碼，直接在這裡輸入；若留白，則會保存上方「產生結果」中的密碼。
@@ -2077,10 +2077,46 @@ body.date-wheel-open{
     <div class="card">
       <div class="pwd-history-head">
         <strong style="font-size:18px">🔐 密碼紀錄</strong>
-        <span class="pwd-history-count" id="pwdHistoryCount">0 筆</span>
+        <span class="pwd-history-count" id="pwdHistoryCount">4 筆</span>
       </div>
-      <div id="pwdHistoryList"></div>
-      <button id="pwdClearAllBtn" class="danger full" style="margin-top:12px;display:none" onclick="clearAllPasswordHistory()">清除全部密碼紀錄</button>
+      <div id="pwdHistoryList"><div class="pwd-history-item">
+      <div class="pwd-history-title">777777777777</div>
+      <div class="pwd-history-meta">77777777777 · 2026/9/12 下午06:35</div>
+      <div class="pwd-history-secret">•••••••••••</div>
+      <div class="pwd-history-actions">
+        <button class="pwd-reveal" onclick="toggleSavedPassword(1789209324156)">👁️ 顯示</button>
+        <button class="pwd-copy" onclick="copySavedPassword(1789209324156)">📋 複製</button>
+        <button class="pwd-delete" onclick="deleteSavedPassword(1789209324156)">🗑️ 刪除</button>
+      </div>
+    </div><div class="pwd-history-item">
+      <div class="pwd-history-title">8888</div>
+      <div class="pwd-history-meta">25541 · 2026/9/12 下午05:58</div>
+      <div class="pwd-history-secret">••••••••</div>
+      <div class="pwd-history-actions">
+        <button class="pwd-reveal" onclick="toggleSavedPassword(1789207119851)">👁️ 顯示</button>
+        <button class="pwd-copy" onclick="copySavedPassword(1789207119851)">📋 複製</button>
+        <button class="pwd-delete" onclick="deleteSavedPassword(1789207119851)">🗑️ 刪除</button>
+      </div>
+    </div><div class="pwd-history-item">
+      <div class="pwd-history-title">123</div>
+      <div class="pwd-history-meta">123 · 2026/9/12 下午05:40</div>
+      <div class="pwd-history-secret">••••••••</div>
+      <div class="pwd-history-actions">
+        <button class="pwd-reveal" onclick="toggleSavedPassword(1789206037555)">👁️ 顯示</button>
+        <button class="pwd-copy" onclick="copySavedPassword(1789206037555)">📋 複製</button>
+        <button class="pwd-delete" onclick="deleteSavedPassword(1789206037555)">🗑️ 刪除</button>
+      </div>
+    </div><div class="pwd-history-item">
+      <div class="pwd-history-title">google</div>
+      <div class="pwd-history-meta">123654 · 2026/9/12 下午03:23</div>
+      <div class="pwd-history-secret">••••••••</div>
+      <div class="pwd-history-actions">
+        <button class="pwd-reveal" onclick="toggleSavedPassword(1789197796696)">👁️ 顯示</button>
+        <button class="pwd-copy" onclick="copySavedPassword(1789197796696)">📋 複製</button>
+        <button class="pwd-delete" onclick="deleteSavedPassword(1789197796696)">🗑️ 刪除</button>
+      </div>
+    </div></div>
+      <button id="pwdClearAllBtn" class="danger full" style="margin-top: 12px; display: block;" onclick="clearAllPasswordHistory()">清除全部密碼紀錄</button>
     </div>
   
     </div>
@@ -2096,26 +2132,26 @@ body.date-wheel-open{
         <button onclick="showCalc('fx',this)">匯率</button>
       </div>
       <div id="calc-discount" class="calc-panel active">
-        <label>原價</label><input id="discPrice" type="number" placeholder="1000">
-        <label style="margin-top:10px">折數（例如：7 = 7折、8.5 = 85折）</label><input id="discRate" type="number" value="7" step="0.1" min="0" max="10">
+        <label>原價</label><input id="discPrice" type="number" placeholder="1000" data-live-bound="1">
+        <label style="margin-top:10px">折數（例如：7 = 7折、8.5 = 85折）</label><input id="discRate" type="number" value="7" step="0.1" min="0" max="10" data-live-bound="1">
         <div class="note" style="margin-top:10px">輸入數字後會自動計算</div>
-        <div class="big-result" id="discResult"><div class="num">$0</div></div>
+        <div class="big-result" id="discResult"><div class="num">—</div><small>請輸入原價與折數</small></div>
       </div>
       <div id="calc-percent" class="calc-panel">
-        <label>數值</label><input id="pctBase" type="number" placeholder="1000">
-        <label style="margin-top:10px">百分比 %</label><input id="pctRate" type="number" placeholder="15">
+        <label>數值</label><input id="pctBase" type="number" placeholder="1000" data-live-bound="1">
+        <label style="margin-top:10px">百分比 %</label><input id="pctRate" type="number" placeholder="15" data-live-bound="1">
         <div class="note" style="margin-top:10px">輸入數字後會自動計算</div>
-        <div class="big-result" id="pctResult"><div class="num">0</div></div>
+        <div class="big-result" id="pctResult"><div class="num">—</div><small>請輸入數值與百分比</small></div>
       </div>
       <div id="calc-area" class="calc-panel">
-        <label>平方公尺</label><input id="sqm" type="number" placeholder="33">
+        <label>平方公尺</label><input id="sqm" type="number" placeholder="33" data-live-bound="1">
         <div class="note" style="margin-top:10px">輸入數字後會自動換算</div>
-        <div class="big-result" id="areaResult"><div class="num">0 坪</div></div>
+        <div class="big-result" id="areaResult"><div class="num">—</div><small>請輸入平方公尺</small></div>
       </div>
 
       <div id="calc-fx" class="calc-panel">
         <label>金額</label>
-        <input id="fxAmount" type="number" inputmode="decimal" value="1000" min="0" step="any">
+        <input id="fxAmount" type="number" inputmode="decimal" value="1000" min="0" step="any" data-live-bound="1">
 
         <div class="fx-select-row" style="margin-top:12px">
           <div>
@@ -2153,8 +2189,8 @@ const store = {
   get(k, d){ try{return JSON.parse(localStorage.getItem("lifeBox_"+k)) ?? d}catch{return d} },
   set(k, v){ localStorage.setItem("lifeBox_"+k, JSON.stringify(v)) }
 };
-const ADMIN_DEFAULTS = {"homeTitle":"我的生活工具箱","homeSubtitle":"動動腦生活會變得有趣又便利......Chien hung","cardOverrides":{},"customCards":[],"homeOrder":[],"deletedBuiltinCards":[]};
-const ADMIN_EXPORT_REVISION = 'base-v37';
+const ADMIN_DEFAULTS = {"homeTitle":"我的生活工具箱","homeSubtitle":"動動腦生活會變得有趣又便利......Chien hung","cardOverrides":{},"customCards":[{"id":"cmtyek7krfqie","icon":"🍜","title":"今天吃什麼 ?","subtitle":"別傷腦筋啦~讓老天爺來決定吧","url":"https://chienhome120-lgtm.github.io/Eat-what/"},{"id":"cmtyeprqwlzb0","icon":"🌐","title":"房間擺放設計","subtitle":"幫你的辦公室或房間換個好心情~","url":"https://chienhome120-lgtm.github.io/Room/"}],"homeOrder":["todo","countdown","money","split","parking","shopping","calc","decision","lottery","packing","quoteTax","password","custom:cmtyek7krfqie","custom:cmtyeprqwlzb0"],"deletedBuiltinCards":["food"]};
+const ADMIN_EXPORT_REVISION = 'exp-mtyeqtbn-dgkzf';
 const fmt = n => new Intl.NumberFormat('zh-TW',{maximumFractionDigits:2}).format(Number(n)||0);
 const pad = n => String(n).padStart(2,'0');
 const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
@@ -4862,7 +4898,7 @@ const SHEET_SYNC_KEYS={
   key:'sheetSyncKey',
   enabled:'sheetSyncEnabled'
 };
-const SHEET_SYNC_DEFAULTS = {url:'https://script.google.com/macros/s/AKfycbz4KbT7mj3ZH2NEa38TgmWrx7l05JuOO_4eaAx_464anGVE400rr_yyfrrWjWIKyCUS/exec',key:'',enabled:false};
+const SHEET_SYNC_DEFAULTS = {"url":"https://script.google.com/macros/s/AKfycbz4KbT7mj3ZH2NEa38TgmWrx7l05JuOO_4eaAx_464anGVE400rr_yyfrrWjWIKyCUS/exec","key":"","enabled":true};
 
 function getSheetSyncSettings(){
   const localUrl=store.get(SHEET_SYNC_KEYS.url,null);
@@ -6490,5 +6526,25 @@ document.addEventListener('touchstart', function unlockAudio(){
   </div>
 </div>
 
-</body>
-</html>
+
+<div id="adminLoginModal" class="admin-login-modal" aria-hidden="true" style="display:none">
+    <div class="admin-login-backdrop" onclick="closeAdminLoginModal()"></div>
+    <div class="admin-login-dialog" role="dialog" aria-modal="true" aria-labelledby="adminLoginTitle">
+      <div class="admin-login-icon">⚙️</div>
+      <h3 id="adminLoginTitle">後台管理登入</h3>
+      <div class="note">請輸入後台密碼</div><div class="note" style="font-size:10px;opacity:.55;margin-top:3px">後台入口 v39</div>
+
+      <input id="adminLoginPassword" type="password" inputmode="numeric" autocomplete="off" placeholder="輸入密碼" onkeydown="if(event.key==='Enter') submitAdminLogin()">
+
+      <label class="check-line" style="margin-top:10px">
+        <input id="adminShowPassword" type="checkbox" onchange="toggleAdminLoginPassword()"> 顯示密碼
+      </label>
+
+      <div id="adminLoginMessage" class="note admin-login-message"></div>
+
+      <div class="row" style="margin-top:12px">
+        <button class="secondary col" type="button" onclick="closeAdminLoginModal()">取消</button>
+        <button class="primary col" type="button" onclick="submitAdminLogin()">登入後台</button>
+      </div>
+    </div>
+  </div></body></html>
