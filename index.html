@@ -1431,7 +1431,7 @@ body.date-wheel-open{
   <section id="home" class="page active">
     <div class="hero">
       <h1>我的生活工具箱</h1>
-      <p>動動腦生活變得更簡單.........Chien hung</p>
+      <p>動動腦生活會變得有趣又便利......Chien hung</p>
     </div>
     <div class="today-card" id="adminSecretTrigger" aria-label="今日資訊">
       <div class="date" id="todayText"></div>
@@ -1840,6 +1840,7 @@ body.date-wheel-open{
 
       <label style="margin-top:12px">Web App /exec 網址</label>
       <input id="sheetSyncUrl" type="url" inputmode="url"
+             value="https://script.google.com/macros/s/AKfycbz4KbT7mj3ZH2NEa38TgmWrx7l05JuOO_4eaAx_464anGVE400rr_yyfrrWjWIKyCUS/exec"
              placeholder="https://script.google.com/macros/s/......../exec">
 
       <label style="margin-top:10px">同步密鑰（選填）</label>
@@ -1863,7 +1864,7 @@ body.date-wheel-open{
       <input id="adminHomeTitle" placeholder="我的生活工具箱">
 
       <label style="margin-top:10px">首頁副標題</label>
-      <input id="adminHomeSubtitle" placeholder="動動腦生活變得更簡單......Chien hung">
+      <input id="adminHomeSubtitle" placeholder="動動腦生活會變得有趣又便利......Chien hung">
 
       <button class="primary full" style="margin-top:11px" onclick="saveAdminHomeText()">套用首頁文字</button>
     </div>
@@ -2152,7 +2153,7 @@ const store = {
   get(k, d){ try{return JSON.parse(localStorage.getItem("lifeBox_"+k)) ?? d}catch{return d} },
   set(k, v){ localStorage.setItem("lifeBox_"+k, JSON.stringify(v)) }
 };
-const ADMIN_DEFAULTS = {"homeTitle":"我的生活工具箱","homeSubtitle":"動動腦生活變得更簡單......Chien hung","cardOverrides":{},"customCards":[],"homeOrder":[],"deletedBuiltinCards":[]};
+const ADMIN_DEFAULTS = {"homeTitle":"我的生活工具箱","homeSubtitle":"動動腦生活會變得有趣又便利......Chien hung","cardOverrides":{},"customCards":[],"homeOrder":[],"deletedBuiltinCards":[]};
 const ADMIN_EXPORT_REVISION = 'base-v37';
 const fmt = n => new Intl.NumberFormat('zh-TW',{maximumFractionDigits:2}).format(Number(n)||0);
 const pad = n => String(n).padStart(2,'0');
@@ -3558,9 +3559,18 @@ let adminUnlocked=false;
 let adminOriginalBuiltinCards=null;
 
 function getAdminConfig(){
-  const saved=store.get('adminConfig',null);
+  let saved=store.get('adminConfig',null);
   const base=JSON.parse(JSON.stringify(ADMIN_DEFAULTS));
   if(!saved)return base;
+  if(
+    saved.homeSubtitle==='把每天的小事，變得更簡單。' ||
+    saved.homeSubtitle==='把每天的小事，變得更簡單' ||
+    saved.homeSubtitle==='動動腦生活變得更簡單.........Chien hung' ||
+    saved.homeSubtitle==='動動腦生活變得更簡單......Chien hung'
+  ){
+    saved={...saved,homeSubtitle:ADMIN_DEFAULTS.homeSubtitle};
+    store.set('adminConfig',saved);
+  }
   return {
     ...base,
     ...saved,
@@ -4852,7 +4862,7 @@ const SHEET_SYNC_KEYS={
   key:'sheetSyncKey',
   enabled:'sheetSyncEnabled'
 };
-const SHEET_SYNC_DEFAULTS = {url:'',key:'',enabled:false};
+const SHEET_SYNC_DEFAULTS = {url:'https://script.google.com/macros/s/AKfycbz4KbT7mj3ZH2NEa38TgmWrx7l05JuOO_4eaAx_464anGVE400rr_yyfrrWjWIKyCUS/exec',key:'',enabled:false};
 
 function getSheetSyncSettings(){
   const localUrl=store.get(SHEET_SYNC_KEYS.url,null);
@@ -4860,7 +4870,7 @@ function getSheetSyncSettings(){
   const localEnabled=store.get(SHEET_SYNC_KEYS.enabled,null);
 
   return {
-    url:String(localUrl!==null ? localUrl : (SHEET_SYNC_DEFAULTS.url||'')).trim(),
+    url:String((localUrl!==null && String(localUrl).trim()) ? localUrl : (SHEET_SYNC_DEFAULTS.url||'')).trim(),
     key:String(localKey!==null ? localKey : (SHEET_SYNC_DEFAULTS.key||'')).trim(),
     enabled:localEnabled!==null ? localEnabled===true : SHEET_SYNC_DEFAULTS.enabled===true
   };
