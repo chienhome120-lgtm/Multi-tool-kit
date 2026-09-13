@@ -1594,6 +1594,33 @@ body.startup-ad-open{overflow:hidden!important}
 }
 
 </style>
+
+<style>
+/* ===== v56 AA 分帳：樂透請客／隨機各出幾成 ===== */
+.split-lucky-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.split-lucky-actions button{min-height:48px}
+.split-lucky-result{margin-top:12px;padding:15px;border-radius:18px;background:linear-gradient(145deg,#fff8f4,#eef3ee);border:1px solid var(--line);text-align:center}
+.split-lucky-result .split-lucky-name{font-size:28px;font-weight:900;line-height:1.25;word-break:break-word;margin:6px 0}
+.split-lucky-result.rolling .split-lucky-name{animation:splitLuckyPulse .16s ease-in-out infinite alternate}
+.split-share-list{display:flex;flex-direction:column;gap:8px;margin-top:10px;text-align:left}
+.split-share-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:13px;padding:10px 12px}
+.split-share-row strong{font-size:15px;word-break:break-word}
+.split-share-row span{font-size:13px;text-align:right;white-space:nowrap}
+@keyframes splitLuckyPulse{from{transform:translateY(-2px) scale(.99)}to{transform:translateY(2px) scale(1.025)}}
+@media(max-width:430px){.split-lucky-actions{grid-template-columns:1fr}.split-share-row{grid-template-columns:1fr}.split-share-row span{text-align:left;white-space:normal}}
+@media(prefers-reduced-motion:reduce){.split-lucky-result.rolling .split-lucky-name{animation:none}}
+
+/* ===== v57 AA 分帳：總金額／人數／服務費三欄同列 ===== */
+.split-basic-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;align-items:end}
+.split-basic-grid>div{min-width:0}
+.split-basic-grid label{min-height:34px;display:flex;align-items:flex-end;line-height:1.25;margin:0 0 6px}
+.split-basic-grid input{min-width:0;width:100%}
+@media(max-width:380px){
+  .split-basic-grid{gap:6px}
+  .split-basic-grid label{font-size:13px;min-height:48px}
+  .split-basic-grid input{padding-left:9px;padding-right:9px}
+}
+</style>
 </head>
 <body class="">
 
@@ -1712,11 +1739,27 @@ body.startup-ad-open{overflow:hidden!important}
   <section id="split" class="page">
     <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>AA 分帳</h2></div>
     <div class="card">
-      <label>總金額</label><input id="splitTotal" type="number" inputmode="decimal" placeholder="例如：1280">
-      <label style="margin-top:10px">人數</label><input id="splitPeople" type="number" min="1" value="2">
-      <label style="margin-top:10px">服務費／其他費用（可不填）</label><input id="splitExtra" type="number" inputmode="decimal" value="0">
+      <div class="split-basic-grid">
+        <div><label>總金額</label><input id="splitTotal" type="number" inputmode="decimal" placeholder="例如：1280"></div>
+        <div><label>人數</label><input id="splitPeople" type="number" min="1" value="2"></div>
+        <div><label>服務費／其他費用（可不填）</label><input id="splitExtra" type="number" inputmode="decimal" value="0"></div>
+      </div>
       <button class="primary full" style="margin-top:12px" onclick="calcSplit()">計算</button>
       <div class="big-result" id="splitResult"><div>每人平均</div><div class="num">$0</div><small>輸入金額後計算</small></div>
+    </div>
+
+    <div class="card">
+      <strong style="font-size:18px">🎰 不想 AA？交給運氣決定</strong>
+      <div class="note" style="margin-top:6px">輸入參與者姓名，可抽出誰請客，或隨機決定每個人各出幾成；比例總和固定為 100%。</div>
+      <label style="margin-top:12px">參與者（每行一位，或用逗號分隔）</label>
+      <textarea id="splitLuckyNames" rows="3" placeholder="例如：&#10;小明&#10;小美&#10;阿華"></textarea>
+      <div class="split-lucky-actions">
+        <button id="splitHostBtn" class="primary" type="button" onclick="drawSplitHost()">🎰 樂透抽誰請客</button>
+        <button id="splitRatioBtn" class="secondary" type="button" onclick="drawSplitRatios()">🎲 隨機各出幾成</button>
+      </div>
+      <div class="split-lucky-result" id="splitLuckyResult">
+        <div class="note">輸入至少 2 位參與者後開始抽獎</div>
+      </div>
     </div>
   </section>
 
@@ -2574,6 +2617,169 @@ function calcSplit(){
   if(!(total>=0)||!(people>0))return;
   const sum=total+extra, each=sum/people;
   $('#splitResult').innerHTML=`<div>每人平均</div><div class="num">$${fmt(each)}</div><small>總額 $${fmt(sum)} ÷ ${fmt(people)} 人</small>`;
+}
+
+// AA 分帳：不想 AA 時，交給樂透決定誰請客／各出幾成
+let splitLuckyRunning=false;
+let splitLuckyAudioCtx=null;
+
+function getSplitLuckyNames(){
+  const raw=($('#splitLuckyNames')?.value||'')
+    .split(/[,，\n]/)
+    .map(x=>x.trim())
+    .filter(Boolean);
+  const seen=new Set();
+  return raw.filter(name=>{
+    const key=name.toLocaleLowerCase();
+    if(seen.has(key))return false;
+    seen.add(key);
+    return true;
+  }).slice(0,20);
+}
+
+function splitLuckyTotal(){
+  const total=Number($('#splitTotal')?.value);
+  const extra=Number($('#splitExtra')?.value)||0;
+  return Number.isFinite(total) && total>=0 ? total+extra : null;
+}
+
+function prepareSplitLuckyAudio(){
+  try{
+    if(!splitLuckyAudioCtx){
+      const Ctx=window.AudioContext||window.webkitAudioContext;
+      if(Ctx)splitLuckyAudioCtx=new Ctx();
+    }
+    if(splitLuckyAudioCtx && splitLuckyAudioCtx.state==='suspended')splitLuckyAudioCtx.resume();
+  }catch(e){}
+}
+
+function playSplitLuckyTick(finalTick=false){
+  try{
+    if(!splitLuckyAudioCtx)return;
+    const ctx=splitLuckyAudioCtx;
+    const osc=ctx.createOscillator();
+    const gain=ctx.createGain();
+    osc.type=finalTick?'sine':'triangle';
+    osc.frequency.setValueAtTime(finalTick?1120:760+Math.random()*150,ctx.currentTime);
+    gain.gain.setValueAtTime(finalTick?0.08:0.035,ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+(finalTick?0.14:0.055));
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.start();osc.stop(ctx.currentTime+(finalTick?0.15:0.06));
+  }catch(e){}
+}
+
+function setSplitLuckyButtons(disabled){
+  if($('#splitHostBtn'))$('#splitHostBtn').disabled=disabled;
+  if($('#splitRatioBtn'))$('#splitRatioBtn').disabled=disabled;
+}
+
+function splitLuckyValidate(){
+  const names=getSplitLuckyNames();
+  if(names.length<2){
+    $('#splitLuckyResult').classList.remove('rolling');
+    $('#splitLuckyResult').innerHTML='<div class="note">請先輸入至少 2 位參與者。</div>';
+    return null;
+  }
+  return names;
+}
+
+function drawSplitHost(){
+  if(splitLuckyRunning)return;
+  const names=splitLuckyValidate();
+  if(!names)return;
+  splitLuckyRunning=true;
+  setSplitLuckyButtons(true);
+  prepareSplitLuckyAudio();
+  const result=$('#splitLuckyResult');
+  result.classList.add('rolling');
+  let step=0;
+  const maxSteps=24;
+  let shownIndex=Math.floor(Math.random()*names.length);
+
+  function spin(){
+    shownIndex=(shownIndex+1+Math.floor(Math.random()*Math.max(1,names.length-1)))%names.length;
+    result.innerHTML=`<div class="note">🎰 請客人選滾動中…</div><div class="split-lucky-name">${esc(names[shownIndex])}</div><div class="note">老天爺正在算這一餐該算誰的 😆</div>`;
+    playSplitLuckyTick(false);
+    step++;
+    if(step<maxSteps){
+      const progress=step/maxSteps;
+      const delay=55+Math.pow(progress,2.6)*360;
+      setTimeout(spin,delay);
+      return;
+    }
+
+    const winner=names[Math.floor(Math.random()*names.length)];
+    const sum=splitLuckyTotal();
+    result.classList.remove('rolling');
+    result.innerHTML=`<div class="note">🎉 本桌今日金主是</div><div class="split-lucky-name">${esc(winner)}</div><div style="font-size:15px;font-weight:800">${sum===null?'這餐就交給你啦！':`請客金額：$${fmt(sum)}（100%・10 成）`}</div><div class="note" style="margin-top:8px">願賭服輸，其他人記得負責說謝謝 😄</div>`;
+    playSplitLuckyTick(true);
+    if(navigator.vibrate)navigator.vibrate([35,35,70]);
+    splitLuckyRunning=false;
+    setSplitLuckyButtons(false);
+  }
+  spin();
+}
+
+function makeRandomSplitPercents(count){
+  const minimum=count<=20?1:0;
+  let remain=100-minimum*count;
+  const weights=Array.from({length:count},()=>-Math.log(Math.max(Math.random(),0.000001)));
+  const weightSum=weights.reduce((a,b)=>a+b,0)||1;
+  const extras=weights.map(w=>Math.floor(w/weightSum*remain));
+  let used=extras.reduce((a,b)=>a+b,0);
+  while(used<remain){
+    extras[Math.floor(Math.random()*count)]++;
+    used++;
+  }
+  return extras.map(x=>x+minimum);
+}
+
+function renderSplitRatioPreview(names){
+  const temp=makeRandomSplitPercents(names.length);
+  return '<div class="note">🎲 比例洗牌中…</div><div class="split-share-list">'+names.map((name,i)=>
+    `<div class="split-share-row"><strong>${esc(name)}</strong><span>${temp[i]}%</span></div>`
+  ).join('')+'</div>';
+}
+
+function drawSplitRatios(){
+  if(splitLuckyRunning)return;
+  const names=splitLuckyValidate();
+  if(!names)return;
+  splitLuckyRunning=true;
+  setSplitLuckyButtons(true);
+  prepareSplitLuckyAudio();
+  const result=$('#splitLuckyResult');
+  result.classList.add('rolling');
+  let step=0;
+  const maxSteps=15;
+
+  function spin(){
+    result.innerHTML=renderSplitRatioPreview(names);
+    playSplitLuckyTick(false);
+    step++;
+    if(step<maxSteps){
+      const progress=step/maxSteps;
+      const delay=70+Math.pow(progress,2.4)*330;
+      setTimeout(spin,delay);
+      return;
+    }
+
+    const pct=makeRandomSplitPercents(names.length);
+    const sum=splitLuckyTotal();
+    const rows=names.map((name,i)=>{
+      const cheng=(pct[i]/10);
+      const chengText=Number.isInteger(cheng)?String(cheng):cheng.toFixed(1);
+      const amount=sum===null?'':`・$${fmt(sum*pct[i]/100)}`;
+      return `<div class="split-share-row"><strong>${esc(name)}</strong><span>${pct[i]}%（${chengText} 成）${amount}</span></div>`;
+    }).join('');
+    result.classList.remove('rolling');
+    result.innerHTML=`<div class="note">🎉 今天不平均，讓運氣分配</div><div class="split-share-list">${rows}</div><div class="note" style="margin-top:9px">總比例：100%（10 成）${sum===null?'・輸入上方總金額後可同時顯示每人金額':`・總額 $${fmt(sum)}`}</div>`;
+    playSplitLuckyTick(true);
+    if(navigator.vibrate)navigator.vibrate([30,30,60]);
+    splitLuckyRunning=false;
+    setSplitLuckyButtons(false);
+  }
+  spin();
 }
 
 // Food
