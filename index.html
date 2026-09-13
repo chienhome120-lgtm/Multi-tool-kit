@@ -1603,9 +1603,7 @@ body.startup-ad-open{overflow:hidden!important}
     <div class="startup-ad-title">我的生活工具箱</div>
     <div class="startup-ad-copy">動動腦生活會變得有趣又便利</div>
     <div class="startup-ad-sign">Chien hung</div>
-
-
-    <div class="startup-ad-hint">輕觸畫面進入，長按字卡方塊可以調整位置</div>
+    <div class="startup-ad-hint">輕觸畫面進入，長按文字方塊可隨意調整位置</div>
   </div>
 </div>
 
@@ -1636,7 +1634,7 @@ body.startup-ad-open{overflow:hidden!important}
       
       
     <button class="tool" onclick="openPage('todo')"><span class="icon">✅</span><b>待辦事項</b><small>今天、明天、重要任務</small></button><button class="tool" onclick="openPage('countdown')"><span class="icon">📅</span><b>行程倒數</b><small>旅行、生日、重要日期</small></button><button class="tool" onclick="openPage('money')"><span class="icon">💰</span><b>收支記帳</b><small>快速記錄收入與支出</small></button><button class="tool" onclick="openPage('split')"><span class="icon">👥</span><b>AA 分帳</b><small>聚餐平均分攤</small></button><button class="tool" onclick="openPage('parking')"><span class="icon">🅿️</span><b>停車位置</b><small>時間、位置與備註</small></button><button class="tool" onclick="openPage('shopping')"><span class="icon">🛒</span><b>購物清單</b><small>買完直接勾掉</small></button><button class="tool" onclick="openPage('calc')"><span class="icon">🧮</span><b>萬用計算器</b><small>折扣、百分比、坪數、匯率</small></button><button class="tool" onclick="openPage('decision')"><span class="icon">🎭</span><b>困難選擇器</b><small>要不要？買不買？宇宙幫你決定</small></button><button class="tool" onclick="openPage('lottery')"><span class="icon">🧧</span><b>讓您發大財</b><small>大樂透・威力彩・539 選號靈感</small></button><button class="tool" onclick="openPage('packing')"><span class="icon">🧳</span><b>旅行打包助手</b><small>範本清單、勾選與進度</small></button><button class="tool" onclick="openPage('quoteTax')"><span class="icon">🧾</span><b>報價／稅額計算器</b><small>稅額、毛利率與淨利率</small></button><button class="tool" onclick="openPage('password')"><span class="icon">🔐</span><b>金庫密碼</b><small>密碼產生、紀錄與登入保護</small></button><button class="tool" onclick="openPage('food')" style="display: none;"><span class="icon">🍜</span><b>今天吃什麼</b><small>轉盤幫你決定</small></button><button type="button" class="tool" data-admin-custom-card="1" data-admin-custom-id="cmtyek7krfqie" onclick="openAdminCustomCard(&quot;cmtyek7krfqie&quot;)"><span class="icon">🍜</span><b>今天吃什麼 ?</b><small>別傷腦筋啦~讓老天爺來決定吧</small></button><button type="button" class="tool" data-admin-custom-card="1" data-admin-custom-id="cmtyeprqwlzb0" onclick="openAdminCustomCard(&quot;cmtyeprqwlzb0&quot;)"><span class="icon">🛋️</span><b>房間擺放設計</b><small>幫你的辦公室或房間換個好心情~</small></button><button type="button" class="tool" data-admin-custom-card="1" data-admin-custom-id="cmtygno93r1rk" onclick="openAdminCustomCard(&quot;cmtygno93r1rk&quot;)"><span class="icon">🔮</span><b>紫微斗數至聖仙師</b><small>正宗紫微斗數算出您的每日運勢與命盤</small></button></div>
-    <footer>資料只儲存在這台裝置的瀏覽器中，長按字卡方塊可隨意擺放</footer>
+    <footer>資料只儲存在這台裝置的瀏覽器中</footer>
   </section>
 
   <section id="todo" class="page">
@@ -2219,8 +2217,8 @@ body.startup-ad-open{overflow:hidden!important}
     
 
     <div class="card">
-      <label>密碼長度：<b id="pwdLenText">16</b> 字元</label>
-      <input id="pwdLength" type="range" min="8" max="64" value="16" data-live-bound="1">
+      <label>密碼長度：<b id="pwdLenText">8</b> 字元（4～20）</label>
+      <input id="pwdLength" type="range" min="4" max="20" step="1" value="8" oninput="document.getElementById('pwdLenText').textContent=this.value;generatePassword()">
 
       <div class="check-grid">
         <label class="check-line"><input id="pwdLower" type="checkbox" checked="" data-live-bound="1"> 小寫 a-z</label>
@@ -2237,7 +2235,7 @@ body.startup-ad-open{overflow:hidden!important}
         <button class="primary col" onclick="generatePassword()">產生新密碼</button>
         <button class="secondary col" onclick="copyPassword()">複製密碼</button>
       </div>
-      <div class="note" id="pwdInfo" style="margin-top:10px">長度 16 字元，使用 4 種字元類型；尚未保存。</div>
+      <div class="note" id="pwdInfo" style="margin-top:10px">長度 8 字元，使用 4 種字元類型；尚未保存。</div>
     </div>
 
     <div class="card">
@@ -2274,6 +2272,10 @@ body.startup-ad-open{overflow:hidden!important}
       <div class="pwd-history-head">
         <strong style="font-size:18px">🔐 密碼紀錄</strong>
         <span class="pwd-history-count" id="pwdHistoryCount">4 筆</span>
+      </div>
+      <div class="pwd-history-search" style="margin-bottom:12px">
+        <label for="pwdHistorySearch">關鍵字查詢</label>
+        <input id="pwdHistorySearch" type="search" placeholder="搜尋名稱／網站、帳號／用途" autocomplete="off" oninput="renderPasswordHistory()">
       </div>
       <div id="pwdHistoryList"><div class="pwd-history-item">
       <div class="pwd-history-title">777777777777</div>
@@ -5715,7 +5717,7 @@ function shuffleSecure(arr){
   return arr;
 }
 function generatePassword(){
-  const len=Number($('#pwdLength').value)||16;
+  const len=Math.min(20,Math.max(4,Number($('#pwdLength').value)||8));
   const avoid=$('#pwdAvoid').checked;
   const sets=[];
   const lower=avoid?'abcdefghijkmnopqrstuvwxyz':'abcdefghijklmnopqrstuvwxyz';
@@ -5808,8 +5810,8 @@ function saveCurrentPassword(){
     createdAt:new Date(now).toISOString()
   });
 
-  // 上限 50 筆，避免 localStorage 無限制增長
-  store.set('passwordHistory',list.slice(0,50));
+  // 不限制密碼紀錄筆數；實際可用容量仍由瀏覽器儲存空間決定。
+  store.set('passwordHistory',list);
 
   // 金庫密碼：按下保存後立即送出到 Google Sheet。
   // 只要曾設定過 Web App URL，就不受「啟用自動同步」開關限制；
@@ -5880,7 +5882,19 @@ function renderPasswordHistory(){
   const el=$('#pwdHistoryList');
   if(!el)return;
   const list=store.get('passwordHistory',[]);
-  $('#pwdHistoryCount').textContent=`${list.length} 筆`;
+  const query=String($('#pwdHistorySearch')?.value||'').trim().toLocaleLowerCase('zh-TW');
+  const filtered=query
+    ? list.filter(item=>{
+        const haystack=[item.name,item.account,item.source]
+          .map(v=>String(v||'').toLocaleLowerCase('zh-TW'))
+          .join(' ');
+        return haystack.includes(query);
+      })
+    : list;
+
+  $('#pwdHistoryCount').textContent=query
+    ? `找到 ${filtered.length}／共 ${list.length} 筆`
+    : `${list.length} 筆`;
   $('#pwdClearAllBtn').style.display=list.length?'block':'none';
 
   if(!list.length){
@@ -5888,7 +5902,12 @@ function renderPasswordHistory(){
     return;
   }
 
-  el.innerHTML=list.map(item=>{
+  if(!filtered.length){
+    el.innerHTML='<div class="empty">找不到符合關鍵字的密碼紀錄</div>';
+    return;
+  }
+
+  el.innerHTML=filtered.map(item=>{
     const visible=pwdVisibleIds.has(item.id);
     const time=new Date(item.createdAt).toLocaleString('zh-TW',{
       year:'numeric',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'
