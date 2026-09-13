@@ -1621,6 +1621,66 @@ body.startup-ad-open{overflow:hidden!important}
   .split-basic-grid input{padding-left:9px;padding-right:9px}
 }
 </style>
+
+<style>
+/* ===== v58 皮克敏打地鼠：立體舞台／燈光／手機震動 ===== */
+.pikmin-game-card{overflow:hidden}
+.pikmin-game-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.pikmin-mini-btn{padding:9px 11px;min-height:40px;white-space:nowrap;font-size:13px}
+.pikmin-hud{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0 10px}
+.pikmin-hud>div{position:relative;text-align:center;padding:10px 7px;border-radius:16px;background:linear-gradient(145deg,#fffdf9,#eee6de);border:1px solid rgba(255,255,255,.88);box-shadow:inset 1px 1px 0 rgba(255,255,255,.95),0 4px 8px rgba(62,48,42,.10)}
+.pikmin-hud small{display:block;color:var(--muted);font-size:13px}
+.pikmin-hud strong{font-size:25px;line-height:1.1;margin:3px 2px 0;display:inline-block;font-variant-numeric:tabular-nums}
+.pikmin-hud span{font-size:13px;color:var(--muted)}
+.pikmin-stage{position:relative;isolation:isolate;overflow:hidden;border-radius:24px;padding:13px 10px 15px;background:radial-gradient(circle at 50% -10%,rgba(255,255,255,.20),transparent 35%),linear-gradient(180deg,#26372d 0%,#17241d 52%,#0d1712 100%);border:1px solid rgba(255,255,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.20),inset 0 -18px 30px rgba(0,0,0,.34),0 10px 18px rgba(34,43,36,.22)}
+.pikmin-stage::before{content:"";position:absolute;inset:0;z-index:-1;background:repeating-linear-gradient(112deg,rgba(255,255,255,.025) 0 1px,transparent 1px 7px);opacity:.8}
+.pikmin-stage.playing{animation:pikminStageBreath 1.9s ease-in-out infinite alternate}
+.pikmin-stage.hit-flash::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 45%,rgba(255,244,177,.34),transparent 48%);animation:pikminHitFlash .16s ease-out}
+.pikmin-stage-glow{position:absolute;width:180px;height:180px;border-radius:50%;filter:blur(32px);opacity:.20;z-index:-1;pointer-events:none}
+.pikmin-stage-glow-a{left:-70px;top:20px;background:#76dbff;animation:pikminGlowA 2.2s ease-in-out infinite alternate}
+.pikmin-stage-glow-b{right:-70px;bottom:10px;background:#ff70a8;animation:pikminGlowB 2.6s ease-in-out infinite alternate}
+.pikmin-stage-title{text-align:center;color:#f4efe8;font-size:13px;font-weight:800;min-height:20px;text-shadow:0 2px 4px rgba(0,0,0,.45);margin-bottom:6px}
+.pikmin-hole-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;position:relative;z-index:2}
+.pikmin-hole{position:relative;min-width:0;height:104px;border:0;background:transparent;padding:0;overflow:hidden;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.pikmin-pit{position:absolute;left:8%;right:8%;bottom:7px;height:31px;border-radius:50%;background:radial-gradient(ellipse at 50% 42%,#050706 0 44%,#2b1e16 48%,#5a3f2a 64%,#1c1510 72%);box-shadow:0 7px 10px rgba(0,0,0,.38),inset 0 5px 9px rgba(0,0,0,.72),0 -2px 0 rgba(255,255,255,.05)}
+.pikmin-creature{--pk:#e54b45;--pk2:#86231f;--leaf:#6fd56f;position:absolute;left:50%;bottom:-83px;width:58px;height:92px;transform:translateX(-50%) scale(.84);transition:bottom .12s cubic-bezier(.2,.9,.3,1.15),transform .12s ease,filter .12s ease;pointer-events:none;filter:drop-shadow(0 7px 5px rgba(0,0,0,.38))}
+.pikmin-hole.active .pikmin-creature{bottom:20px;transform:translateX(-50%) scale(1)}
+.pikmin-hole.whacked .pikmin-creature{transform:translateX(-50%) scale(.82,.72) rotate(-8deg);filter:brightness(1.38) drop-shadow(0 0 12px var(--pk))}
+.pikmin-creature::before{content:"";position:absolute;left:11px;top:24px;width:36px;height:50px;border-radius:48% 52% 45% 45% / 40% 42% 58% 60%;background:radial-gradient(circle at 33% 26%,rgba(255,255,255,.78) 0 5%,transparent 6%),radial-gradient(circle at 62% 72%,rgba(255,255,255,.18),transparent 26%),linear-gradient(145deg,var(--pk),var(--pk2));box-shadow:inset 3px 3px 6px rgba(255,255,255,.28),inset -5px -7px 9px rgba(0,0,0,.20),0 2px 2px rgba(0,0,0,.22)}
+.pikmin-creature::after{content:"•  •";position:absolute;left:0;right:0;top:37px;text-align:center;color:#101312;font-size:18px;font-weight:900;letter-spacing:5px;text-shadow:0 -1px 0 rgba(255,255,255,.65)}
+.pikmin-hole .pikmin-creature .unused{display:none}
+.pikmin-creature{background:linear-gradient(var(--pk2),var(--pk2)) center 11px/3px 22px no-repeat}
+.pikmin-hole.active .pikmin-creature{animation:pikminBob .34s ease-in-out infinite alternate}
+.pikmin-creature > *{pointer-events:none}
+.pikmin-creature{border-radius:44%}
+.pikmin-creature .x{display:none}
+/* 葉片用 box-shadow 疊出，保持純 CSS 不需圖檔 */
+.pikmin-hole.active .pikmin-creature::marker{display:none}
+.pikmin-hole.active::before{content:"";position:absolute;z-index:4;left:50%;top:2px;width:22px;height:13px;border-radius:90% 10% 90% 10%;background:linear-gradient(145deg,#b8f28e,var(--leaf));transform:translateX(-48%) rotate(-26deg);transform-origin:50% 100%;box-shadow:inset 2px 2px 3px rgba(255,255,255,.42),0 2px 3px rgba(0,0,0,.18);animation:pikminLeaf .38s ease-in-out infinite alternate;pointer-events:none}
+.pikmin-hole.active.bonus::before{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle,#fff7a8 0 18%,#ffd66e 19% 32%,#ff8da9 33% 55%,#fff 56% 70%,transparent 71%);transform:translateX(-50%);box-shadow:0 0 16px #ffe585}
+.pikmin-hole.active.bonus .pikmin-creature{filter:drop-shadow(0 0 12px #ffe585) drop-shadow(0 7px 5px rgba(0,0,0,.35))}
+.pikmin-combo-pop{position:absolute;left:50%;top:48%;z-index:6;transform:translate(-50%,-50%) scale(.8);font-weight:1000;font-size:27px;color:#fff6bb;text-shadow:0 2px 3px #5f3517,0 0 13px #ffd665;opacity:0;pointer-events:none}
+.pikmin-combo-pop.show{animation:pikminComboPop .46s ease-out}
+.pikmin-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(145px,.75fr);gap:10px;align-items:end;margin-top:12px}
+.pikmin-controls button{min-height:47px}
+.pikmin-result-score{text-align:center}.pikmin-result-score span{font-size:14px;color:var(--muted)}.pikmin-result-score strong{font-size:42px;margin:0 7px;color:var(--wine);font-variant-numeric:tabular-nums}
+.pikmin-result-message{margin-top:10px;padding:13px;border-radius:16px;background:#f3ebe5;font-size:16px;font-weight:800;line-height:1.65;text-align:center}
+.pikmin-result-meta{text-align:center;margin-top:8px;font-size:13px;color:var(--muted)}
+.pikmin-history-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pikmin-history-head .note{margin-left:auto}
+.pikmin-history-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:11px 0;border-bottom:1px dashed var(--line)}
+.pikmin-history-item:last-child{border-bottom:0}.pikmin-history-main b{font-size:15px}.pikmin-history-main small{display:block;font-size:13px;color:var(--muted);margin-top:3px;line-height:1.45}.pikmin-history-delete{border:0;background:#f2dfdf;color:#8a4b4b;border-radius:11px;width:40px;height:40px;font-size:17px}
+@keyframes pikminBob{from{transform:translateX(-50%) translateY(1px) scale(1)}to{transform:translateX(-50%) translateY(-3px) scale(1.02)}}
+@keyframes pikminLeaf{from{rotate:-7deg}to{rotate:8deg}}
+@keyframes pikminStageBreath{from{box-shadow:inset 0 1px 0 rgba(255,255,255,.20),inset 0 -18px 30px rgba(0,0,0,.34),0 10px 18px rgba(34,43,36,.22)}to{box-shadow:inset 0 1px 0 rgba(255,255,255,.25),inset 0 -18px 30px rgba(0,0,0,.28),0 10px 26px rgba(73,119,88,.28)}}
+@keyframes pikminGlowA{from{transform:translate(-15px,5px);opacity:.14}to{transform:translate(55px,35px);opacity:.34}}
+@keyframes pikminGlowB{from{transform:translate(20px,-15px);opacity:.14}to{transform:translate(-55px,-35px);opacity:.32}}
+@keyframes pikminHitFlash{from{opacity:1}to{opacity:0}}
+@keyframes pikminComboPop{0%{opacity:0;transform:translate(-50%,-45%) scale(.55)}28%{opacity:1;transform:translate(-50%,-58%) scale(1.15)}100%{opacity:0;transform:translate(-50%,-90%) scale(.9)}}
+@media(max-width:430px){.pikmin-game-head{display:block}.pikmin-game-head .pikmin-mini-btn{margin-top:9px}.pikmin-hole{height:92px}.pikmin-creature{width:54px;height:88px}.pikmin-controls{grid-template-columns:1fr 1fr}.pikmin-result-score strong{font-size:36px}}
+@media(max-width:350px){.pikmin-hole-grid{gap:4px}.pikmin-hole{height:86px}.pikmin-controls{grid-template-columns:1fr}.pikmin-hud strong{font-size:21px}}
+@media(prefers-reduced-motion:reduce){.pikmin-stage.playing,.pikmin-hole.active .pikmin-creature,.pikmin-hole.active::before,.pikmin-stage-glow,.pikmin-combo-pop.show{animation:none!important}}
+</style>
+
 </head>
 <body class="">
 
@@ -1661,7 +1721,7 @@ body.startup-ad-open{overflow:hidden!important}
       
       
       
-    <button class="tool" onclick="openPage('todo')"><span class="icon">✅</span><b>待辦事項</b><small>今天、明天、重要任務</small></button><button class="tool" onclick="openPage('countdown')"><span class="icon">📅</span><b>行程倒數</b><small>旅行、生日、重要日期</small></button><button class="tool" onclick="openPage('money')"><span class="icon">💰</span><b>收支記帳</b><small>快速記錄收入與支出</small></button><button class="tool" onclick="openPage('split')"><span class="icon">👥</span><b>AA 分帳</b><small>聚餐平均分攤</small></button><button class="tool" onclick="openPage('parking')"><span class="icon">🅿️</span><b>停車位置</b><small>時間、位置與備註</small></button><button class="tool" onclick="openPage('shopping')"><span class="icon">🛒</span><b>購物清單</b><small>買完直接勾掉</small></button><button class="tool" onclick="openPage('calc')"><span class="icon">🧮</span><b>萬用計算器</b><small>折扣、百分比、坪數、重量、匯率</small></button><button class="tool" onclick="openPage('decision')"><span class="icon">🎭</span><b>困難選擇器</b><small>要不要？買不買？宇宙幫你決定</small></button><button class="tool" onclick="openPage('lottery')"><span class="icon">🧧</span><b>讓您發大財</b><small>大樂透・威力彩・539 選號靈感</small></button><button class="tool" onclick="openPage('packing')"><span class="icon">🧳</span><b>旅行打包助手</b><small>範本清單、勾選與進度</small></button><button class="tool" onclick="openPage('quoteTax')"><span class="icon">🧾</span><b>報價／稅額計算器</b><small>稅額、毛利率與淨利率</small></button><button class="tool" onclick="openPage('password')"><span class="icon">🔐</span><b>金庫密碼</b><small>密碼產生、紀錄與登入保護</small></button><button class="tool" onclick="openPage('food')" style="display: none;"><span class="icon">🍜</span><b>今天吃什麼</b><small>轉盤幫你決定</small></button><button type="button" class="tool" data-admin-custom-card="1" data-admin-custom-id="cmtyek7krfqie" onclick="openAdminCustomCard(&quot;cmtyek7krfqie&quot;)"><span class="icon">🍜</span><b>今天吃什麼 ?</b><small>別傷腦筋啦~讓老天爺來決定吧</small></button><button type="button" class="tool" data-admin-custom-card="1" data-admin-custom-id="cmtyeprqwlzb0" onclick="openAdminCustomCard(&quot;cmtyeprqwlzb0&quot;)"><span class="icon">🛋️</span><b>房間擺放設計</b><small>幫你的辦公室或房間換個好心情~</small></button><button type="button" class="tool" data-admin-custom-card="1" data-admin-custom-id="cmtygno93r1rk" onclick="openAdminCustomCard(&quot;cmtygno93r1rk&quot;)"><span class="icon">🔮</span><b>紫微斗數至聖仙師</b><small>正宗紫微斗數算出您的每日運勢與命盤</small></button></div>
+    <button class="tool" onclick="openPage('todo')"><span class="icon">✅</span><b>待辦事項</b><small>今天、明天、重要任務</small></button><button class="tool" onclick="openPage('countdown')"><span class="icon">📅</span><b>行程倒數</b><small>旅行、生日、重要日期</small></button><button class="tool" onclick="openPage('money')"><span class="icon">💰</span><b>收支記帳</b><small>快速記錄收入與支出</small></button><button class="tool" onclick="openPage('split')"><span class="icon">👥</span><b>AA 分帳</b><small>聚餐平均分攤</small></button><button class="tool" onclick="openPage('pikminWhack')"><span class="icon">🌱</span><b>皮克敏打地鼠</b><small>爆笑紓壓・燈光音效・震動連擊</small></button><button class="tool" onclick="openPage('parking')"><span class="icon">🅿️</span><b>停車位置</b><small>時間、位置與備註</small></button><button class="tool" onclick="openPage('shopping')"><span class="icon">🛒</span><b>購物清單</b><small>買完直接勾掉</small></button><button class="tool" onclick="openPage('calc')"><span class="icon">🧮</span><b>萬用計算器</b><small>折扣、百分比、坪數、重量、匯率</small></button><button class="tool" onclick="openPage('decision')"><span class="icon">🎭</span><b>困難選擇器</b><small>要不要？買不買？宇宙幫你決定</small></button><button class="tool" onclick="openPage('lottery')"><span class="icon">🧧</span><b>讓您發大財</b><small>大樂透・威力彩・539 選號靈感</small></button><button class="tool" onclick="openPage('packing')"><span class="icon">🧳</span><b>旅行打包助手</b><small>範本清單、勾選與進度</small></button><button class="tool" onclick="openPage('quoteTax')"><span class="icon">🧾</span><b>報價／稅額計算器</b><small>稅額、毛利率與淨利率</small></button><button class="tool" onclick="openPage('password')"><span class="icon">🔐</span><b>金庫密碼</b><small>密碼產生、紀錄與登入保護</small></button><button class="tool" onclick="openPage('food')" style="display: none;"><span class="icon">🍜</span><b>今天吃什麼</b><small>轉盤幫你決定</small></button><button type="button" class="tool" data-admin-custom-card="1" data-admin-custom-id="cmtyek7krfqie" onclick="openAdminCustomCard(&quot;cmtyek7krfqie&quot;)"><span class="icon">🍜</span><b>今天吃什麼 ?</b><small>別傷腦筋啦~讓老天爺來決定吧</small></button><button type="button" class="tool" data-admin-custom-card="1" data-admin-custom-id="cmtyeprqwlzb0" onclick="openAdminCustomCard(&quot;cmtyeprqwlzb0&quot;)"><span class="icon">🛋️</span><b>房間擺放設計</b><small>幫你的辦公室或房間換個好心情~</small></button><button type="button" class="tool" data-admin-custom-card="1" data-admin-custom-id="cmtygno93r1rk" onclick="openAdminCustomCard(&quot;cmtygno93r1rk&quot;)"><span class="icon">🔮</span><b>紫微斗數至聖仙師</b><small>正宗紫微斗數算出您的每日運勢與命盤</small></button></div>
     <footer>資料只儲存在這台裝置的瀏覽器中</footer>
   </section>
 
@@ -1760,6 +1820,75 @@ body.startup-ad-open{overflow:hidden!important}
       <div class="split-lucky-result" id="splitLuckyResult">
         <div class="note">輸入至少 2 位參與者後開始抽獎</div>
       </div>
+    </div>
+  </section>
+
+
+  <section id="pikminWhack" class="page">
+    <div class="topbar"><button class="back" onclick="leavePikminWhack()">←</button><h2>🌱 皮克敏打地鼠</h2></div>
+
+    <div class="card pikmin-game-card">
+      <div class="pikmin-game-head">
+        <div>
+          <strong style="font-size:18px">皮克敏突然集體探頭！</strong>
+          <div class="note" style="margin-top:4px">看到哪一隻冒出來就點哪一隻。連擊越高，分數加成越兇。</div>
+        </div>
+        <button id="pikminSoundBtn" type="button" class="secondary pikmin-mini-btn" onclick="togglePikminSound()">🔊 音效 ON</button>
+      </div>
+
+      <div class="pikmin-hud" aria-live="polite">
+        <div><small>剩餘</small><strong id="pikminTime">30.0</strong><span>秒</span></div>
+        <div><small>得分</small><strong id="pikminScore">0</strong><span>分</span></div>
+        <div><small>連擊</small><strong id="pikminCombo">0</strong><span>Combo</span></div>
+      </div>
+
+      <div class="pikmin-stage" id="pikminStage">
+        <div class="pikmin-stage-glow pikmin-stage-glow-a"></div>
+        <div class="pikmin-stage-glow pikmin-stage-glow-b"></div>
+        <div class="pikmin-stage-title" id="pikminStageText">準備好了就按開始，手指不要先抽筋。</div>
+        <div class="pikmin-hole-grid" id="pikminHoleGrid" aria-label="皮克敏打地鼠遊戲區">
+          <button class="pikmin-hole" type="button" onclick="hitPikmin(event,this)" aria-label="洞穴 1"><span class="pikmin-pit"></span><span class="pikmin-creature"></span></button>
+          <button class="pikmin-hole" type="button" onclick="hitPikmin(event,this)" aria-label="洞穴 2"><span class="pikmin-pit"></span><span class="pikmin-creature"></span></button>
+          <button class="pikmin-hole" type="button" onclick="hitPikmin(event,this)" aria-label="洞穴 3"><span class="pikmin-pit"></span><span class="pikmin-creature"></span></button>
+          <button class="pikmin-hole" type="button" onclick="hitPikmin(event,this)" aria-label="洞穴 4"><span class="pikmin-pit"></span><span class="pikmin-creature"></span></button>
+          <button class="pikmin-hole" type="button" onclick="hitPikmin(event,this)" aria-label="洞穴 5"><span class="pikmin-pit"></span><span class="pikmin-creature"></span></button>
+          <button class="pikmin-hole" type="button" onclick="hitPikmin(event,this)" aria-label="洞穴 6"><span class="pikmin-pit"></span><span class="pikmin-creature"></span></button>
+          <button class="pikmin-hole" type="button" onclick="hitPikmin(event,this)" aria-label="洞穴 7"><span class="pikmin-pit"></span><span class="pikmin-creature"></span></button>
+          <button class="pikmin-hole" type="button" onclick="hitPikmin(event,this)" aria-label="洞穴 8"><span class="pikmin-pit"></span><span class="pikmin-creature"></span></button>
+          <button class="pikmin-hole" type="button" onclick="hitPikmin(event,this)" aria-label="洞穴 9"><span class="pikmin-pit"></span><span class="pikmin-creature"></span></button>
+        </div>
+        <div class="pikmin-combo-pop" id="pikminComboPop"></div>
+      </div>
+
+      <div class="pikmin-controls">
+        <div>
+          <label>遊戲時間</label>
+          <select id="pikminDuration">
+            <option value="20">20 秒・暖身</option>
+            <option value="30" selected>30 秒・標準</option>
+            <option value="45">45 秒・手指健身房</option>
+            <option value="60">60 秒・拇指耐力賽</option>
+          </select>
+        </div>
+        <button id="pikminStartBtn" class="primary" type="button" onclick="startPikminGame()">🚀 開始暴打</button>
+      </div>
+      <div class="note" style="margin-top:10px">📳 支援震動的 Android 手機：擊中會震一下、連擊會震更爽。iPhone 瀏覽器若不支援震動，遊戲仍可正常玩。</div>
+    </div>
+
+    <div class="card" id="pikminResultCard" style="display:none">
+      <div class="pikmin-result-score"><span>本局得分</span><strong id="pikminFinalScore">0</strong><span>分</span></div>
+      <div class="pikmin-result-message" id="pikminResultMessage"></div>
+      <div class="pikmin-result-meta" id="pikminResultMeta"></div>
+      <button class="primary full" style="margin-top:12px" type="button" onclick="startPikminGame()">🔁 再玩一次，我不服</button>
+    </div>
+
+    <div class="card">
+      <div class="pikmin-history-head">
+        <strong style="font-size:18px">🏆 歷史戰績</strong>
+        <span class="note" id="pikminHistoryCount">0 筆</span>
+        <button class="danger pikmin-mini-btn" id="pikminClearHistoryBtn" type="button" onclick="clearPikminHistory()" style="display:none">全部刪除</button>
+      </div>
+      <div id="pikminHistoryList"><div class="empty">還沒有戰績，皮克敏目前笑得很安心。</div></div>
     </div>
   </section>
 
@@ -2447,7 +2576,7 @@ const store = {
   get(k, d){ try{return JSON.parse(localStorage.getItem("lifeBox_"+k)) ?? d}catch{return d} },
   set(k, v){ localStorage.setItem("lifeBox_"+k, JSON.stringify(v)) }
 };
-const ADMIN_DEFAULTS = {"homeTitle":"我的生活工具箱","homeSubtitle":"動動腦生活變得便利又有趣！...... Chien hung","cardOverrides":{},"customCards":[{"id":"cmtyek7krfqie","icon":"🍜","title":"今天吃什麼 ?","subtitle":"別傷腦筋啦~讓老天爺來決定吧","url":"https://chienhome120-lgtm.github.io/Eat-what/"},{"id":"cmtyeprqwlzb0","icon":"🛋️","title":"房間擺放設計","subtitle":"幫你的辦公室或房間換個好心情~","url":"https://chienhome120-lgtm.github.io/Room/"},{"id":"cmtygno93r1rk","icon":"🔮","title":"紫微斗數至聖仙師","subtitle":"正宗紫微斗數算出您的每日運勢與命盤","url":"https://chienhome120-lgtm.github.io/Zi-Wei/"}],"homeOrder":["todo","countdown","money","split","parking","shopping","calc","decision","lottery","packing","quoteTax","password","custom:cmtyek7krfqie","custom:cmtyeprqwlzb0","custom:cmtygno93r1rk"],"deletedBuiltinCards":["food"]};
+const ADMIN_DEFAULTS = {"homeTitle":"我的生活工具箱","homeSubtitle":"動動腦生活變得便利又有趣！...... Chien hung","cardOverrides":{},"customCards":[{"id":"cmtyek7krfqie","icon":"🍜","title":"今天吃什麼 ?","subtitle":"別傷腦筋啦~讓老天爺來決定吧","url":"https://chienhome120-lgtm.github.io/Eat-what/"},{"id":"cmtyeprqwlzb0","icon":"🛋️","title":"房間擺放設計","subtitle":"幫你的辦公室或房間換個好心情~","url":"https://chienhome120-lgtm.github.io/Room/"},{"id":"cmtygno93r1rk","icon":"🔮","title":"紫微斗數至聖仙師","subtitle":"正宗紫微斗數算出您的每日運勢與命盤","url":"https://chienhome120-lgtm.github.io/Zi-Wei/"}],"homeOrder":["todo","countdown","money","split","pikminWhack","parking","shopping","calc","decision","lottery","packing","quoteTax","password","custom:cmtyek7krfqie","custom:cmtyeprqwlzb0","custom:cmtygno93r1rk"],"deletedBuiltinCards":["food"]};
 const ADMIN_EXPORT_REVISION = 'exp-mtygswig-l3nqk';
 const fmt = n => new Intl.NumberFormat('zh-TW',{maximumFractionDigits:2}).format(Number(n)||0);
 const pad = n => String(n).padStart(2,'0');
@@ -2469,6 +2598,7 @@ function openPage(id){
   }
   if(id==='parking') renderParking();
   if(id==='shopping') renderShop();
+  if(id==='pikminWhack') initPikminWhack();
   if(id==='decision') renderDecisionHistory();
   if(id==='lottery'){renderLotteryRule();ensureLotteryBuyTime();}
   if(id==='packing') renderPack();
@@ -4120,6 +4250,267 @@ function calcQuoteTax(){
 
 
 
+
+
+
+// ===== v58 皮克敏打地鼠遊戲 =====
+const PIKMIN_TYPES=[
+  {name:'紅色皮克敏',c:'#ef554d',c2:'#922a25',leaf:'#74d56e',pts:10,tone:523},
+  {name:'黃色皮克敏',c:'#f2cf48',c2:'#9d731b',leaf:'#82dc71',pts:10,tone:587},
+  {name:'藍色皮克敏',c:'#4d8fe5',c2:'#28528e',leaf:'#73d974',pts:10,tone:659},
+  {name:'紫色皮克敏',c:'#9a66d8',c2:'#5d348a',leaf:'#7ad96f',pts:15,tone:698},
+  {name:'白色皮克敏',c:'#f3f0e9',c2:'#9b9092',leaf:'#7bd772',pts:15,tone:784},
+  {name:'粉紅皮克敏',c:'#ed86b2',c2:'#9f466f',leaf:'#7edd75',pts:20,tone:880}
+];
+let pikminGameState={running:false,score:0,hits:0,misses:0,combo:0,bestCombo:0,startAt:0,endAt:0,duration:30,timer:null,spawnTimer:null,musicTimer:null,audioCtx:null,sound:true,spawnSerial:0};
+
+function initPikminWhack(){
+  renderPikminHistory();
+  updatePikminHud();
+}
+
+function togglePikminSound(){
+  pikminGameState.sound=!pikminGameState.sound;
+  const b=$('#pikminSoundBtn');
+  if(b)b.textContent=pikminGameState.sound?'🔊 音效 ON':'🔇 音效 OFF';
+  if(!pikminGameState.sound)stopPikminMusic();
+  else if(pikminGameState.running)startPikminMusic();
+}
+
+function ensurePikminAudio(){
+  if(!pikminGameState.sound)return null;
+  try{
+    if(!pikminGameState.audioCtx){
+      const Ctx=window.AudioContext||window.webkitAudioContext;
+      if(Ctx)pikminGameState.audioCtx=new Ctx();
+    }
+    if(pikminGameState.audioCtx?.state==='suspended')pikminGameState.audioCtx.resume();
+  }catch(e){}
+  return pikminGameState.audioCtx;
+}
+
+function pikminTone(freq=520,duration=.07,type='sine',volume=.055,slide=0){
+  if(!pikminGameState.sound)return;
+  const ctx=ensurePikminAudio(); if(!ctx)return;
+  try{
+    const now=ctx.currentTime;
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.type=type;o.frequency.setValueAtTime(freq,now);
+    if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(45,freq+slide),now+duration);
+    g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(volume,now+.008);g.gain.exponentialRampToValueAtTime(.0001,now+duration);
+    o.connect(g);g.connect(ctx.destination);o.start(now);o.stop(now+duration+.02);
+  }catch(e){}
+}
+
+function startPikminMusic(){
+  stopPikminMusic();
+  if(!pikminGameState.sound||!pikminGameState.running)return;
+  ensurePikminAudio();
+  let step=0;
+  const notes=[196,247,294,330,294,247,220,262];
+  pikminGameState.musicTimer=setInterval(()=>{
+    if(!pikminGameState.running||!pikminGameState.sound)return;
+    const f=notes[step++%notes.length];
+    pikminTone(f,.11,'triangle',.018,20);
+    if(step%4===0)pikminTone(f/2,.08,'sine',.014,-12);
+  },245);
+}
+function stopPikminMusic(){if(pikminGameState.musicTimer){clearInterval(pikminGameState.musicTimer);pikminGameState.musicTimer=null}}
+
+function pikminVibrate(pattern){
+  try{if(navigator.vibrate)navigator.vibrate(pattern)}catch(e){}
+}
+
+function resetPikminHoles(){
+  document.querySelectorAll('#pikminHoleGrid .pikmin-hole').forEach(h=>{
+    h.classList.remove('active','whacked','bonus');
+    h.dataset.active='0';h.dataset.token='';h.dataset.points='';h.dataset.name='';
+    if(h._pikminHideTimer){clearTimeout(h._pikminHideTimer);h._pikminHideTimer=null}
+  });
+}
+
+function startPikminGame(){
+  if(pikminGameState.running)stopPikminGame(false,true);
+  const dur=Math.max(10,Math.min(120,Number($('#pikminDuration')?.value)||30));
+  pikminGameState={...pikminGameState,running:true,score:0,hits:0,misses:0,combo:0,bestCombo:0,startAt:performance.now(),endAt:performance.now()+dur*1000,duration:dur,spawnSerial:0};
+  $('#pikminResultCard').style.display='none';
+  $('#pikminStartBtn').disabled=true;$('#pikminStartBtn').textContent='🌪️ 激戰中…';
+  $('#pikminStage').classList.add('playing');
+  $('#pikminStageText').textContent='開打！皮克敏：等等，這不是迎新活動嗎？！';
+  resetPikminHoles();updatePikminHud();startPikminMusic();
+  pikminTone(330,.08,'square',.035,140);setTimeout(()=>pikminTone(494,.12,'triangle',.045,140),80);
+  pikminVibrate([30,30,45]);
+  spawnPikmin();
+  pikminGameState.timer=setInterval(tickPikminGame,50);
+}
+
+function tickPikminGame(){
+  if(!pikminGameState.running)return;
+  const left=Math.max(0,(pikminGameState.endAt-performance.now())/1000);
+  const timeEl=$('#pikminTime');if(timeEl)timeEl.textContent=left.toFixed(1);
+  if(left<=0)stopPikminGame(true,false);
+}
+
+function scheduleNextPikmin(){
+  if(!pikminGameState.running)return;
+  const elapsed=(performance.now()-pikminGameState.startAt)/1000;
+  const progress=Math.min(1,elapsed/pikminGameState.duration);
+  const delay=Math.max(220,620-progress*330 + Math.random()*180);
+  pikminGameState.spawnTimer=setTimeout(spawnPikmin,delay);
+}
+
+function spawnPikmin(){
+  if(!pikminGameState.running)return;
+  const holes=[...document.querySelectorAll('#pikminHoleGrid .pikmin-hole')];
+  const free=holes.filter(h=>h.dataset.active!=='1');
+  if(!free.length){scheduleNextPikmin();return}
+  const h=free[Math.floor(Math.random()*free.length)];
+  const type=PIKMIN_TYPES[Math.floor(Math.random()*PIKMIN_TYPES.length)];
+  const bonus=Math.random()<.10;
+  const token=String(++pikminGameState.spawnSerial);
+  h.dataset.active='1';h.dataset.token=token;h.dataset.points=String(bonus?type.pts+20:type.pts);h.dataset.name=bonus?'花朵 '+type.name:type.name;
+  h.style.setProperty('--pk',type.c);h.style.setProperty('--pk2',type.c2);h.style.setProperty('--leaf',type.leaf);
+  h.querySelector('.pikmin-creature')?.style.setProperty('--pk',type.c);
+  h.querySelector('.pikmin-creature')?.style.setProperty('--pk2',type.c2);
+  h.querySelector('.pikmin-creature')?.style.setProperty('--leaf',type.leaf);
+  h.classList.remove('whacked');h.classList.toggle('bonus',bonus);h.classList.add('active');
+  pikminTone(type.tone,.045,'sine',.012,25);
+  const elapsed=(performance.now()-pikminGameState.startAt)/1000;
+  const progress=Math.min(1,elapsed/pikminGameState.duration);
+  const stay=Math.max(360,870-progress*360+Math.random()*160);
+  h._pikminHideTimer=setTimeout(()=>{
+    if(h.dataset.token!==token)return;
+    if(h.dataset.active==='1'){
+      h.dataset.active='0';h.classList.remove('active','bonus');
+      pikminGameState.combo=0;updatePikminHud();
+    }
+  },stay);
+  scheduleNextPikmin();
+  if(progress>.55&&Math.random()<.30)setTimeout(()=>{if(pikminGameState.running)spawnExtraPikmin()},90+Math.random()*100);
+}
+
+function spawnExtraPikmin(){
+  const holes=[...document.querySelectorAll('#pikminHoleGrid .pikmin-hole')].filter(h=>h.dataset.active!=='1');
+  if(!holes.length)return;
+  const h=holes[Math.floor(Math.random()*holes.length)];
+  const type=PIKMIN_TYPES[Math.floor(Math.random()*PIKMIN_TYPES.length)];
+  const token='x'+(++pikminGameState.spawnSerial);
+  h.dataset.active='1';h.dataset.token=token;h.dataset.points=String(type.pts);h.dataset.name=type.name;
+  h.style.setProperty('--pk',type.c);h.style.setProperty('--pk2',type.c2);h.style.setProperty('--leaf',type.leaf);
+  const c=h.querySelector('.pikmin-creature');if(c){c.style.setProperty('--pk',type.c);c.style.setProperty('--pk2',type.c2);c.style.setProperty('--leaf',type.leaf)}
+  h.classList.remove('whacked','bonus');h.classList.add('active');
+  h._pikminHideTimer=setTimeout(()=>{if(h.dataset.token===token){h.dataset.active='0';h.classList.remove('active')}},480);
+}
+
+function hitPikmin(ev,h){
+  if(ev){ev.preventDefault();ev.stopPropagation()}
+  if(!pikminGameState.running)return;
+  if(h.dataset.active!=='1'){
+    pikminGameState.misses++;pikminGameState.combo=0;
+    pikminGameState.score=Math.max(0,pikminGameState.score-2);
+    updatePikminHud();pikminTone(120,.075,'sawtooth',.028,-35);pikminVibrate(12);
+    $('#pikminStageText').textContent='打到空氣！空氣表示：我招誰惹誰。';
+    return;
+  }
+  h.dataset.active='0';
+  if(h._pikminHideTimer){clearTimeout(h._pikminHideTimer);h._pikminHideTimer=null}
+  const base=Number(h.dataset.points)||10;
+  pikminGameState.combo++;
+  pikminGameState.hits++;
+  pikminGameState.bestCombo=Math.max(pikminGameState.bestCombo,pikminGameState.combo);
+  const mult=1+Math.min(2,Math.floor(pikminGameState.combo/5)*.25);
+  const gained=Math.round(base*mult);
+  pikminGameState.score+=gained;
+  h.classList.add('whacked');
+  $('#pikminStage').classList.remove('hit-flash');void $('#pikminStage').offsetWidth;$('#pikminStage').classList.add('hit-flash');
+  const typeName=h.dataset.name||'皮克敏';
+  $('#pikminStageText').textContent=`啪！${typeName} +${gained} 分，牠已向人資提出申訴。`;
+  updatePikminHud();showPikminCombo(gained);
+  const idx=Math.min(PIKMIN_TYPES.length-1,pikminGameState.combo%PIKMIN_TYPES.length);
+  pikminTone(PIKMIN_TYPES[idx].tone,.075,'square',.052,90+pikminGameState.combo*5);
+  if(pikminGameState.combo>=5)pikminTone(880,.06,'triangle',.025,180);
+  pikminVibrate(pikminGameState.combo>=10?[18,18,32]:18);
+  setTimeout(()=>{h.classList.remove('active','whacked','bonus')},115);
+}
+
+function updatePikminHud(){
+  if($('#pikminScore'))$('#pikminScore').textContent=String(pikminGameState.score||0);
+  if($('#pikminCombo'))$('#pikminCombo').textContent=String(pikminGameState.combo||0);
+  if($('#pikminTime')&&!pikminGameState.running)$('#pikminTime').textContent=(pikminGameState.duration||30).toFixed(1);
+}
+
+function showPikminCombo(gained){
+  const el=$('#pikminComboPop');if(!el)return;
+  el.textContent=pikminGameState.combo>=5?`🔥 ${pikminGameState.combo} COMBO  +${gained}`:`+${gained}`;
+  el.classList.remove('show');void el.offsetWidth;el.classList.add('show');
+}
+
+function getPikminResultMessage(score,hits,best){
+  const pools = score>=380 ? [
+    '你不是在打皮克敏，你是在進行高速人力資源重整。整座花園已集體遞辭呈。',
+    '恭喜！你的拇指已正式取得「皮克敏看見會自己鑽回土裡」國際認證。',
+    '這分數太離譜，皮克敏已把你的照片貼在洞口：看到此人，直接請病假。'
+  ] : score>=260 ? [
+    '超猛！皮克敏工會臨時開會，議題只有一個：如何躲過你的手指。',
+    '你的手速已經不是反應力，是自然災害。花園目前發布拇指警報。',
+    '恭喜進入高手區！下一步不是加油，是先跟皮克敏道歉。'
+  ] : score>=160 ? [
+    '打得漂亮！皮克敏嘴上說沒事，回家已經開始搜尋「職災怎麼申請」。',
+    '表現很可以！你的手速成功讓花園從休閒農場升級成生存實境秀。',
+    '有料！皮克敏現在探頭前都會先買保險。'
+  ] : score>=80 ? [
+    '不錯喔！至少有一批皮克敏已經記住你的臉，雖然不是因為喜歡你。',
+    '成績中上，屬於「有殺氣但還能一起吃飯」的安全範圍。',
+    '手感漸入佳境！皮克敏已從嘲笑改成保持安全距離。'
+  ] : score>0 ? [
+    '有打到就值得鼓掌！你今天走的是佛系路線：能放過一隻是一隻。',
+    '分數雖然樸實，但你的慈悲值非常華麗。皮克敏表示五星好評。',
+    '你的手速像星期一早上的腦袋：有上班，但靈魂還沒打卡。'
+  ] : [
+    '0 分！恭喜解鎖隱藏成就：「世界和平」。所有皮克敏一致推選你當榮譽市民。',
+    '一隻都沒打到？這不是失敗，這叫高級生態保育。',
+    '你的反應速度非常穩定——穩定地讓每一隻皮克敏安全回家。'
+  ];
+  const msg=pools[Math.floor(Math.random()*pools.length)];
+  return `${msg}（命中 ${hits} 隻，最高 ${best} 連擊）`;
+}
+
+function stopPikminGame(saveResult=true,silent=false){
+  if(!pikminGameState.running && !saveResult)return;
+  const wasRunning=pikminGameState.running;
+  pikminGameState.running=false;
+  if(pikminGameState.timer){clearInterval(pikminGameState.timer);pikminGameState.timer=null}
+  if(pikminGameState.spawnTimer){clearTimeout(pikminGameState.spawnTimer);pikminGameState.spawnTimer=null}
+  stopPikminMusic();resetPikminHoles();
+  $('#pikminStage')?.classList.remove('playing','hit-flash');
+  const btn=$('#pikminStartBtn');if(btn){btn.disabled=false;btn.textContent='🚀 開始暴打'}
+  if(!wasRunning||!saveResult)return;
+  const score=pikminGameState.score,hits=pikminGameState.hits,best=pikminGameState.bestCombo;
+  const message=getPikminResultMessage(score,hits,best);
+  const rec={id:Date.now(),score,hits,misses:pikminGameState.misses,bestCombo:best,duration:pikminGameState.duration,createdAt:new Date().toISOString(),message};
+  const history=store.get('pikminWhackScores',[]);history.unshift(rec);store.set('pikminWhackScores',history);
+  $('#pikminFinalScore').textContent=String(score);$('#pikminResultMessage').textContent=message;
+  $('#pikminResultMeta').textContent=`命中 ${hits} 隻・打空 ${pikminGameState.misses} 次・最高 ${best} Combo・${pikminGameState.duration} 秒`;
+  $('#pikminResultCard').style.display='block';$('#pikminStageText').textContent='本局結束。皮克敏正在集體確認勞保。';
+  pikminTone(score>=160?784:392,.16,'triangle',.055,score>=160?240:-80);pikminVibrate(score>=160?[45,35,55,35,80]:[30,45,30]);
+  renderPikminHistory();
+  if(!silent)setTimeout(()=>$('#pikminResultCard')?.scrollIntoView({behavior:'smooth',block:'nearest'}),120);
+}
+
+function leavePikminWhack(){if(pikminGameState.running)stopPikminGame(false,true);goHome()}
+
+function renderPikminHistory(){
+  const list=store.get('pikminWhackScores',[]);const wrap=$('#pikminHistoryList');if(!wrap)return;
+  $('#pikminHistoryCount').textContent=`${list.length} 筆`;
+  $('#pikminClearHistoryBtn').style.display=list.length?'inline-block':'none';
+  if(!list.length){wrap.innerHTML='<div class="empty">還沒有戰績，皮克敏目前笑得很安心。</div>';return}
+  wrap.innerHTML=list.map(x=>{
+    const dt=new Date(x.createdAt||x.id);const ds=isNaN(dt)?'':dt.toLocaleString('zh-TW',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    return `<div class="pikmin-history-item"><div class="pikmin-history-main"><b>${x.score||0} 分・最高 ${x.bestCombo||0} Combo</b><small>${esc(ds)}　命中 ${x.hits||0}／打空 ${x.misses||0}　${x.duration||30} 秒</small></div><button class="pikmin-history-delete" type="button" onclick="deletePikminScore(${Number(x.id)||0})" aria-label="刪除此戰績">🗑️</button></div>`
+  }).join('');
+}
+function deletePikminScore(id){store.set('pikminWhackScores',store.get('pikminWhackScores',[]).filter(x=>Number(x.id)!==Number(id)));renderPikminHistory()}
+function clearPikminHistory(){const l=store.get('pikminWhackScores',[]);if(!l.length)return;if(!confirm(`確定刪除全部 ${l.length} 筆皮克敏戰績？`))return;store.set('pikminWhackScores',[]);renderPikminHistory()}
 
 
 // ===== 隱藏後台管理與首頁編輯 =====
