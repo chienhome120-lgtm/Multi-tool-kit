@@ -80,7 +80,8 @@ input:focus,select:focus,textarea:focus{border-color:#a58a7e;box-shadow:0 0 0 3p
 .item:last-child{border-bottom:0}
 .item .grow{flex:1}
 .item .title{font-weight:700}
-.item .meta{font-size:12px;color:var(--muted);margin-top:3px}
+/* ===== v55 所有字卡文字最小 13px ===== */
+.item .meta{font-size:13px;color:var(--muted);margin-top:3px}
 .item.done .title{text-decoration:line-through;opacity:.55}
 .item input[type=checkbox]{width:20px;height:20px}
 .iconbtn{border:0;background:transparent;font-size:18px;padding:8px}
@@ -110,15 +111,15 @@ input:focus,select:focus,textarea:focus{border-color:#a58a7e;box-shadow:0 0 0 3p
 }
 .option-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .tag{background:#eee5df;border-radius:999px;padding:7px 10px;font-size:13px}
-.note{font-size:12px;color:var(--muted);line-height:1.5}
-.calc-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.note{font-size:13px;color:var(--muted);line-height:1.5}
+.calc-tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px}
 .calc-tabs button{border:0;border-radius:12px;padding:9px;background:#ece3dd;color:var(--ink)}
 .calc-tabs button.active{background:var(--blue);color:white}
 .calc-panel{display:none}.calc-panel.active{display:block}
 .fx-select-row{display:grid;grid-template-columns:1fr 46px 1fr;gap:8px;align-items:end}
 .fx-swap{border:0;background:#e7ddd6;color:var(--ink);height:46px;border-radius:14px;font-size:20px;font-weight:800}
 .fx-rate-line{margin-top:8px;font-size:14px;color:var(--muted);line-height:1.5}
-.fx-source{margin-top:9px;font-size:11px;color:#9b8d85;line-height:1.5}
+.fx-source{margin-top:9px;font-size:13px;color:#9b8d85;line-height:1.5}
 .fx-loading{opacity:.65;pointer-events:none}
 footer{text-align:center;color:#a0928a;font-size:12px;padding:24px 0 8px}
 @media(min-width:650px){
@@ -135,11 +136,11 @@ footer{text-align:center;color:#a0928a;font-size:12px;padding:24px 0 8px}
 .password-output{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:17px;letter-spacing:.03em;word-break:break-all}
 .pwd-save-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
 .pwd-history-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.pwd-history-count{margin-left:auto;color:var(--muted);font-size:12px}
+.pwd-history-count{margin-left:auto;color:var(--muted);font-size:13px}
 .pwd-history-item{padding:13px 0;border-bottom:1px dashed var(--line)}
 .pwd-history-item:last-child{border-bottom:0}
 .pwd-history-title{font-weight:800;font-size:16px;word-break:break-word}
-.pwd-history-meta{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.45;word-break:break-word}
+.pwd-history-meta{font-size:13px;color:var(--muted);margin-top:3px;line-height:1.45;word-break:break-word}
 .pwd-history-secret{
   margin-top:8px;padding:10px 11px;border-radius:12px;background:#f3ece7;
   font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
@@ -152,7 +153,7 @@ footer{text-align:center;color:#a0928a;font-size:12px;padding:24px 0 8px}
 .pwd-delete{background:#f2dfdf;color:#8a4b4b}
 .pwd-warning{
   margin-top:10px;padding:11px 12px;border-radius:13px;background:#fff2e8;
-  color:#775949;font-size:12px;line-height:1.55
+  color:#775949;font-size:13px;line-height:1.55
 }
 @media(max-width:460px){.pwd-save-grid{grid-template-columns:1fr}}
 
@@ -161,7 +162,7 @@ footer{text-align:center;color:#a0928a;font-size:12px;padding:24px 0 8px}
 .nearby-card{padding:12px 0;border-bottom:1px dashed var(--line)}
 .nearby-card:last-child{border-bottom:0}
 .nearby-name{font-weight:800;font-size:16px}
-.nearby-meta{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.45}
+.nearby-meta{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.45}
 .nearby-actions{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap}
 .mini-btn{border:0;border-radius:11px;padding:9px 11px;font-weight:700;background:#e5ece6;color:#405147}
 .mini-btn.alt{background:#eee5df;color:var(--ink)}
@@ -196,7 +197,7 @@ footer{text-align:center;color:#a0928a;font-size:12px;padding:24px 0 8px}
   background:#fff;border:1px solid var(--line);border-radius:15px;padding:10px 8px;text-align:center;
   min-height:74px;display:flex;flex-direction:column;justify-content:center
 }
-.decision-round .r-title{font-size:12px;color:var(--muted)}
+.decision-round .r-title{font-size:13px;color:var(--muted)}
 .decision-round .r-value{font-size:18px;font-weight:900;margin-top:4px;word-break:break-word}
 .decision-round.pending{opacity:.55}
 .decision-final-report{
@@ -271,17 +272,17 @@ footer{text-align:center;color:#a0928a;font-size:12px;padding:24px 0 8px}
   margin-top:13px;padding-top:11px;border-top:1px dashed var(--line)
 }
 .lottery-zone-label{
-  font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:700
+  font-size:13px;color:var(--muted);margin-bottom:8px;font-weight:700
 }
 .lottery-fortune{
   margin-top:13px;font-size:14px;line-height:1.6;color:#665b56
 }
 .lottery-meta{
-  margin-top:10px;font-size:12px;line-height:1.55;color:var(--muted)
+  margin-top:10px;font-size:13px;line-height:1.55;color:var(--muted)
 }
 .lottery-disclaimer{
   margin-top:10px;padding:11px 12px;border-radius:14px;
-  background:#fff2e8;color:#76594a;font-size:12px;line-height:1.55
+  background:#fff2e8;color:#76594a;font-size:13px;line-height:1.55
 }
 .lottery-now-row{
   display:flex;gap:8px;align-items:end
@@ -362,7 +363,7 @@ footer{text-align:center;color:#a0928a;font-size:12px;padding:24px 0 8px}
 
   display:block;
   margin:0;
-  font-size:11.5px;
+  font-size:13px;
   line-height:1.25;
   color:var(--muted);
 }
@@ -377,7 +378,7 @@ footer{text-align:center;color:#a0928a;font-size:12px;padding:24px 0 8px}
   }
   #home .tool .icon{font-size:23px}
   #home .tool b{font-size:14px}
-  #home .tool small{font-size:10.8px}
+  #home .tool small{font-size:13px}
 }
 
 
@@ -1601,7 +1602,7 @@ body.startup-ad-open{overflow:hidden!important}
     <div class="startup-ad-badge">廣告</div>
     <div class="startup-ad-icon">🧰</div>
     <div class="startup-ad-title">我的生活工具箱</div>
-    <div class="startup-ad-copy">動動腦生活會變得有趣又便利</div>
+    <div class="startup-ad-copy">動動腦生活變得便利又有趣！......</div>
     <div class="startup-ad-sign">Chien hung</div>
     <div class="startup-ad-hint">輕觸畫面進入，長按文字方塊可隨意調整位置</div>
   </div>
@@ -1611,7 +1612,7 @@ body.startup-ad-open{overflow:hidden!important}
   <section id="home" class="page active">
     <div class="hero">
       <h1>我的生活工具箱</h1>
-      <p>動動腦生活會變得有趣又便利......Chien hung</p>
+      <p>動動腦生活變得便利又有趣！...... Chien hung</p>
     </div>
     <div class="today-card" id="adminSecretTrigger" aria-label="今日資訊">
       <div class="date" id="todayText">2026年9月12日星期六</div>
@@ -1633,7 +1634,7 @@ body.startup-ad-open{overflow:hidden!important}
       
       
       
-    <button class="tool" onclick="openPage('todo')"><span class="icon">✅</span><b>待辦事項</b><small>今天、明天、重要任務</small></button><button class="tool" onclick="openPage('countdown')"><span class="icon">📅</span><b>行程倒數</b><small>旅行、生日、重要日期</small></button><button class="tool" onclick="openPage('money')"><span class="icon">💰</span><b>收支記帳</b><small>快速記錄收入與支出</small></button><button class="tool" onclick="openPage('split')"><span class="icon">👥</span><b>AA 分帳</b><small>聚餐平均分攤</small></button><button class="tool" onclick="openPage('parking')"><span class="icon">🅿️</span><b>停車位置</b><small>時間、位置與備註</small></button><button class="tool" onclick="openPage('shopping')"><span class="icon">🛒</span><b>購物清單</b><small>買完直接勾掉</small></button><button class="tool" onclick="openPage('calc')"><span class="icon">🧮</span><b>萬用計算器</b><small>折扣、百分比、坪數、匯率</small></button><button class="tool" onclick="openPage('decision')"><span class="icon">🎭</span><b>困難選擇器</b><small>要不要？買不買？宇宙幫你決定</small></button><button class="tool" onclick="openPage('lottery')"><span class="icon">🧧</span><b>讓您發大財</b><small>大樂透・威力彩・539 選號靈感</small></button><button class="tool" onclick="openPage('packing')"><span class="icon">🧳</span><b>旅行打包助手</b><small>範本清單、勾選與進度</small></button><button class="tool" onclick="openPage('quoteTax')"><span class="icon">🧾</span><b>報價／稅額計算器</b><small>稅額、毛利率與淨利率</small></button><button class="tool" onclick="openPage('password')"><span class="icon">🔐</span><b>金庫密碼</b><small>密碼產生、紀錄與登入保護</small></button><button class="tool" onclick="openPage('food')" style="display: none;"><span class="icon">🍜</span><b>今天吃什麼</b><small>轉盤幫你決定</small></button><button type="button" class="tool" data-admin-custom-card="1" data-admin-custom-id="cmtyek7krfqie" onclick="openAdminCustomCard(&quot;cmtyek7krfqie&quot;)"><span class="icon">🍜</span><b>今天吃什麼 ?</b><small>別傷腦筋啦~讓老天爺來決定吧</small></button><button type="button" class="tool" data-admin-custom-card="1" data-admin-custom-id="cmtyeprqwlzb0" onclick="openAdminCustomCard(&quot;cmtyeprqwlzb0&quot;)"><span class="icon">🛋️</span><b>房間擺放設計</b><small>幫你的辦公室或房間換個好心情~</small></button><button type="button" class="tool" data-admin-custom-card="1" data-admin-custom-id="cmtygno93r1rk" onclick="openAdminCustomCard(&quot;cmtygno93r1rk&quot;)"><span class="icon">🔮</span><b>紫微斗數至聖仙師</b><small>正宗紫微斗數算出您的每日運勢與命盤</small></button></div>
+    <button class="tool" onclick="openPage('todo')"><span class="icon">✅</span><b>待辦事項</b><small>今天、明天、重要任務</small></button><button class="tool" onclick="openPage('countdown')"><span class="icon">📅</span><b>行程倒數</b><small>旅行、生日、重要日期</small></button><button class="tool" onclick="openPage('money')"><span class="icon">💰</span><b>收支記帳</b><small>快速記錄收入與支出</small></button><button class="tool" onclick="openPage('split')"><span class="icon">👥</span><b>AA 分帳</b><small>聚餐平均分攤</small></button><button class="tool" onclick="openPage('parking')"><span class="icon">🅿️</span><b>停車位置</b><small>時間、位置與備註</small></button><button class="tool" onclick="openPage('shopping')"><span class="icon">🛒</span><b>購物清單</b><small>買完直接勾掉</small></button><button class="tool" onclick="openPage('calc')"><span class="icon">🧮</span><b>萬用計算器</b><small>折扣、百分比、坪數、重量、匯率</small></button><button class="tool" onclick="openPage('decision')"><span class="icon">🎭</span><b>困難選擇器</b><small>要不要？買不買？宇宙幫你決定</small></button><button class="tool" onclick="openPage('lottery')"><span class="icon">🧧</span><b>讓您發大財</b><small>大樂透・威力彩・539 選號靈感</small></button><button class="tool" onclick="openPage('packing')"><span class="icon">🧳</span><b>旅行打包助手</b><small>範本清單、勾選與進度</small></button><button class="tool" onclick="openPage('quoteTax')"><span class="icon">🧾</span><b>報價／稅額計算器</b><small>稅額、毛利率與淨利率</small></button><button class="tool" onclick="openPage('password')"><span class="icon">🔐</span><b>金庫密碼</b><small>密碼產生、紀錄與登入保護</small></button><button class="tool" onclick="openPage('food')" style="display: none;"><span class="icon">🍜</span><b>今天吃什麼</b><small>轉盤幫你決定</small></button><button type="button" class="tool" data-admin-custom-card="1" data-admin-custom-id="cmtyek7krfqie" onclick="openAdminCustomCard(&quot;cmtyek7krfqie&quot;)"><span class="icon">🍜</span><b>今天吃什麼 ?</b><small>別傷腦筋啦~讓老天爺來決定吧</small></button><button type="button" class="tool" data-admin-custom-card="1" data-admin-custom-id="cmtyeprqwlzb0" onclick="openAdminCustomCard(&quot;cmtyeprqwlzb0&quot;)"><span class="icon">🛋️</span><b>房間擺放設計</b><small>幫你的辦公室或房間換個好心情~</small></button><button type="button" class="tool" data-admin-custom-card="1" data-admin-custom-id="cmtygno93r1rk" onclick="openAdminCustomCard(&quot;cmtygno93r1rk&quot;)"><span class="icon">🔮</span><b>紫微斗數至聖仙師</b><small>正宗紫微斗數算出您的每日運勢與命盤</small></button></div>
     <footer>資料只儲存在這台裝置的瀏覽器中</footer>
   </section>
 
@@ -2020,7 +2021,7 @@ body.startup-ad-open{overflow:hidden!important}
       <input id="adminHomeTitle" placeholder="我的生活工具箱">
 
       <label style="margin-top:10px">首頁副標題</label>
-      <input id="adminHomeSubtitle" placeholder="動動腦生活會變得有趣又便利......Chien hung">
+      <input id="adminHomeSubtitle" placeholder="動動腦生活變得便利又有趣！...... Chien hung">
 
       <button class="primary full" style="margin-top:11px" onclick="saveAdminHomeText()">套用首頁文字</button>
     </div>
@@ -2327,6 +2328,7 @@ body.startup-ad-open{overflow:hidden!important}
         <button class="active" onclick="showCalc('discount',this)">折扣</button>
         <button onclick="showCalc('percent',this)">百分比</button>
         <button onclick="showCalc('area',this)">坪數</button>
+        <button onclick="showCalc('weight',this)">重量</button>
         <button onclick="showCalc('fx',this)">匯率</button>
       </div>
       <div id="calc-discount" class="calc-panel active">
@@ -2345,6 +2347,21 @@ body.startup-ad-open{overflow:hidden!important}
         <label>平方公尺</label><input id="sqm" type="number" placeholder="33" data-live-bound="1">
         <div class="note" style="margin-top:10px">輸入數字後會自動換算</div>
         <div class="big-result" id="areaResult"><div class="num">—</div><small>請輸入平方公尺</small></div>
+      </div>
+
+      <div id="calc-weight" class="calc-panel">
+        <div class="row">
+          <div class="col">
+            <label>公克（g）</label>
+            <input id="weightGram" type="number" inputmode="decimal" min="0" step="any" placeholder="例如：600" oninput="calcWeightFromGram()">
+          </div>
+          <div class="col">
+            <label>台灣兩</label>
+            <input id="weightLiang" type="number" inputmode="decimal" min="0" step="any" placeholder="例如：16" oninput="calcWeightFromLiang()">
+          </div>
+        </div>
+        <div class="note" style="margin-top:10px">台灣制：1 台斤 = 600 公克 = 16 兩；1 兩 = 37.5 公克。兩邊都可輸入，自動互相換算。</div>
+        <div class="big-result" id="weightResult"><div class="num">—</div><small>請輸入公克或兩數</small></div>
       </div>
 
       <div id="calc-fx" class="calc-panel">
@@ -2387,7 +2404,7 @@ const store = {
   get(k, d){ try{return JSON.parse(localStorage.getItem("lifeBox_"+k)) ?? d}catch{return d} },
   set(k, v){ localStorage.setItem("lifeBox_"+k, JSON.stringify(v)) }
 };
-const ADMIN_DEFAULTS = {"homeTitle":"我的生活工具箱","homeSubtitle":"動動腦生活會變得有趣又便利......Chien hung","cardOverrides":{},"customCards":[{"id":"cmtyek7krfqie","icon":"🍜","title":"今天吃什麼 ?","subtitle":"別傷腦筋啦~讓老天爺來決定吧","url":"https://chienhome120-lgtm.github.io/Eat-what/"},{"id":"cmtyeprqwlzb0","icon":"🛋️","title":"房間擺放設計","subtitle":"幫你的辦公室或房間換個好心情~","url":"https://chienhome120-lgtm.github.io/Room/"},{"id":"cmtygno93r1rk","icon":"🔮","title":"紫微斗數至聖仙師","subtitle":"正宗紫微斗數算出您的每日運勢與命盤","url":"https://chienhome120-lgtm.github.io/Zi-Wei/"}],"homeOrder":["todo","countdown","money","split","parking","shopping","calc","decision","lottery","packing","quoteTax","password","custom:cmtyek7krfqie","custom:cmtyeprqwlzb0","custom:cmtygno93r1rk"],"deletedBuiltinCards":["food"]};
+const ADMIN_DEFAULTS = {"homeTitle":"我的生活工具箱","homeSubtitle":"動動腦生活變得便利又有趣！...... Chien hung","cardOverrides":{},"customCards":[{"id":"cmtyek7krfqie","icon":"🍜","title":"今天吃什麼 ?","subtitle":"別傷腦筋啦~讓老天爺來決定吧","url":"https://chienhome120-lgtm.github.io/Eat-what/"},{"id":"cmtyeprqwlzb0","icon":"🛋️","title":"房間擺放設計","subtitle":"幫你的辦公室或房間換個好心情~","url":"https://chienhome120-lgtm.github.io/Room/"},{"id":"cmtygno93r1rk","icon":"🔮","title":"紫微斗數至聖仙師","subtitle":"正宗紫微斗數算出您的每日運勢與命盤","url":"https://chienhome120-lgtm.github.io/Zi-Wei/"}],"homeOrder":["todo","countdown","money","split","parking","shopping","calc","decision","lottery","packing","quoteTax","password","custom:cmtyek7krfqie","custom:cmtyeprqwlzb0","custom:cmtygno93r1rk"],"deletedBuiltinCards":["food"]};
 const ADMIN_EXPORT_REVISION = 'exp-mtygswig-l3nqk';
 const fmt = n => new Intl.NumberFormat('zh-TW',{maximumFractionDigits:2}).format(Number(n)||0);
 const pad = n => String(n).padStart(2,'0');
@@ -3111,6 +3128,34 @@ function calcArea(){
   }
   const ping=sqm/3.305785;
   $('#areaResult').innerHTML=`<div class="num">${fmt(ping)} 坪</div><small>${fmt(sqm)} m²</small>`;
+}
+
+function renderWeightResult(grams,liang){
+  const jin=grams/600;
+  $('#weightResult').innerHTML=`<div class="num">${fmt(liang)} 兩</div><small>${fmt(grams)} 公克 ≈ ${fmt(jin)} 台斤</small>`;
+}
+function clearWeightResult(){
+  $('#weightResult').innerHTML='<div class="num">—</div><small>請輸入公克或兩數</small>';
+}
+function calcWeightFromGram(){
+  const el=$('#weightGram');
+  const raw=el.value.trim();
+  if(raw===''){ $('#weightLiang').value=''; clearWeightResult(); return; }
+  const grams=Number(raw);
+  if(!Number.isFinite(grams) || grams<0){ clearWeightResult(); return; }
+  const liang=grams/37.5;
+  $('#weightLiang').value=Number(liang.toFixed(6)).toString();
+  renderWeightResult(grams,liang);
+}
+function calcWeightFromLiang(){
+  const el=$('#weightLiang');
+  const raw=el.value.trim();
+  if(raw===''){ $('#weightGram').value=''; clearWeightResult(); return; }
+  const liang=Number(raw);
+  if(!Number.isFinite(liang) || liang<0){ clearWeightResult(); return; }
+  const grams=liang*37.5;
+  $('#weightGram').value=Number(grams.toFixed(6)).toString();
+  renderWeightResult(grams,liang);
 }
 
 
@@ -3916,7 +3961,9 @@ function getAdminConfig(){
     saved.homeSubtitle==='把每天的小事，變得更簡單。' ||
     saved.homeSubtitle==='把每天的小事，變得更簡單' ||
     saved.homeSubtitle==='動動腦生活變得更簡單.........Chien hung' ||
-    saved.homeSubtitle==='動動腦生活變得更簡單......Chien hung'
+    saved.homeSubtitle==='動動腦生活變得更簡單......Chien hung' ||
+    saved.homeSubtitle==='動動腦生活會變得有趣又便利......Chien hung' ||
+    saved.homeSubtitle==='動動腦生活會變得有趣又便利...... Chien hung'
   ){
     saved={...saved,homeSubtitle:ADMIN_DEFAULTS.homeSubtitle};
     store.set('adminConfig',saved);
@@ -6131,6 +6178,7 @@ function initLiveCalculator(){
   calcDiscount();
   calcPercent();
   calcArea();
+  clearWeightResult();
   calcQuoteTax();
   $('#pwdLenText').textContent=$('#pwdLength').value;
   ensurePassword();
