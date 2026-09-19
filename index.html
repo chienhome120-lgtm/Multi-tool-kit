@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-Hant" data-life-box-build="v61"><head>
+<html lang="zh-Hant" data-life-box-build="v63"><head>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="life-box-build" content="v61">
+<meta name="life-box-build" content="v63">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#8d6e63">
@@ -1862,6 +1862,124 @@ input[type="number"]:not(:placeholder-shown){
   }
 }
 
+
+/* ===== v62 皮克敏遊戲結束：舞台中央跳出本局分數 ===== */
+.pikmin-final-score-overlay{
+  position:absolute;
+  left:50%;
+  top:50%;
+  z-index:30;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:7px;
+  min-width:150px;
+  padding:18px 24px 20px;
+  transform:translate(-50%,-50%) scale(.45);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  border-radius:28px;
+  color:#fffbe9;
+  background:
+    radial-gradient(circle at 34% 24%,rgba(255,255,255,.25),transparent 30%),
+    linear-gradient(145deg,rgba(87,125,84,.96),rgba(123,72,78,.96));
+  border:2px solid rgba(255,255,255,.62);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.35),
+    0 18px 42px rgba(20,28,23,.42),
+    0 0 0 7px rgba(255,244,186,.10);
+  text-shadow:0 3px 8px rgba(27,28,23,.38);
+}
+.pikmin-final-score-overlay strong{
+  font-size:72px;
+  line-height:.9;
+  font-weight:1000;
+  font-variant-numeric:tabular-nums;
+  letter-spacing:-.04em;
+}
+.pikmin-final-score-overlay span{
+  font-size:24px;
+  line-height:1.05;
+  font-weight:950;
+}
+.pikmin-final-score-overlay.show{
+  visibility:visible;
+  animation:pikminFinalScorePop .62s cubic-bezier(.17,.88,.26,1.28) forwards;
+}
+@keyframes pikminFinalScorePop{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.35) rotate(-7deg)}
+  58%{opacity:1;transform:translate(-50%,-50%) scale(1.15) rotate(2deg)}
+  78%{transform:translate(-50%,-50%) scale(.96) rotate(-1deg)}
+  100%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}
+}
+@media(max-width:390px){
+  .pikmin-final-score-overlay{min-width:132px;padding:16px 20px 18px}
+  .pikmin-final-score-overlay strong{font-size:62px}
+  .pikmin-final-score-overlay span{font-size:21px}
+}
+@media(prefers-reduced-motion:reduce){
+  .pikmin-final-score-overlay.show{animation:none;opacity:1;transform:translate(-50%,-50%) scale(1)}
+}
+
+
+/* ===== v63 金庫密碼：關鍵字即時查詢 ===== */
+.pwd-search-wrap{
+  position:relative;
+  margin:10px 0 6px;
+}
+.pwd-search-wrap input{
+  padding-left:42px;
+  padding-right:42px;
+}
+.pwd-search-icon{
+  position:absolute;
+  left:13px;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:2;
+  pointer-events:none;
+  font-size:18px;
+  opacity:.62;
+}
+.pwd-search-clear{
+  position:absolute;
+  right:7px;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:2;
+  width:34px;
+  height:34px;
+  padding:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  border:0;
+  border-radius:50%;
+  background:rgba(139,115,103,.11);
+  color:var(--muted);
+  font-size:18px;
+  font-weight:900;
+}
+.pwd-search-clear.show{display:flex}
+.pwd-search-status{
+  min-height:18px;
+  margin:4px 1px 7px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.45;
+}
+.pwd-history-item.pwd-search-match{
+  animation:pwdSearchMatch .18s ease;
+}
+@keyframes pwdSearchMatch{
+  from{opacity:.55;transform:translateY(2px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@media(prefers-reduced-motion:reduce){
+  .pwd-history-item.pwd-search-match{animation:none}
+}
+
 </style>
 </head>
 <body class="">
@@ -2303,13 +2421,6 @@ input[type="number"]:not(:placeholder-shown){
     <div class="topbar"><button class="back" onclick="goHome()">←</button><h2>🌱 皮克敏打地鼠</h2></div>
 
     <div class="card">
-      <div class="row" style="align-items:flex-start">
-        <div class="col">
-          <strong style="font-size:18px">今天誰敢冒頭？</strong>
-          <div class="note" style="margin-top:5px">敲中皮克敏得分；敲空扣 2 分並中斷 Combo。花朵皮克敏是高分目標。</div>
-        </div>
-      </div>
-
       <div class="pikmin-game-controls">
         <div>
           <label>遊戲時間</label>
@@ -2332,6 +2443,10 @@ input[type="number"]:not(:placeholder-shown){
       </div>
       <div id="pikminStage" class="pikmin-stage" aria-label="皮克敏打地鼠遊戲區">
         <div id="pikminComboBanner" class="pikmin-combo-banner">COMBO!</div>
+        <div id="pikminFinalScoreOverlay" class="pikmin-final-score-overlay" aria-live="assertive">
+          <strong id="pikminFinalScoreNumber">0</strong>
+          <span>分</span>
+        </div>
         <button type="button" class="pikmin-hole" data-pikmin-hole="0" onclick="whackPikmin(0)"></button>
         <button type="button" class="pikmin-hole" data-pikmin-hole="1" onclick="whackPikmin(1)"></button>
         <button type="button" class="pikmin-hole" data-pikmin-hole="2" onclick="whackPikmin(2)"></button>
@@ -2695,6 +2810,17 @@ input[type="number"]:not(:placeholder-shown){
         <strong style="font-size:18px">🔐 密碼紀錄</strong>
         <span class="pwd-history-count" id="pwdHistoryCount">0 筆</span>
       </div>
+
+      <div class="pwd-search-wrap">
+        <span class="pwd-search-icon">🔎</span>
+        <input id="pwdHistorySearch" type="search" autocomplete="off"
+               placeholder="輸入名稱、網站、帳號或用途關鍵字"
+               oninput="filterPasswordHistory()">
+        <button id="pwdHistorySearchClear" type="button" class="pwd-search-clear"
+                aria-label="清除搜尋" onclick="clearPasswordHistorySearch()">×</button>
+      </div>
+      <div id="pwdHistorySearchStatus" class="pwd-search-status">可依名稱／網站、帳號／用途即時查詢。</div>
+
       <div id="pwdHistoryList"><div class="empty">目前沒有保存的密碼紀錄</div></div>
       <button id="pwdClearAllBtn" class="danger full" style="margin-top: 12px; display: none;" onclick="clearAllPasswordHistory()">清除全部密碼紀錄</button>
     </div>
@@ -4614,6 +4740,8 @@ function startPikminGame(){
   $('#pikminScore').textContent='0';$('#pikminCombo').textContent='0';$('#pikminTime').textContent=duration.toFixed(1);
   $('#pikminStatus').textContent='開始！看到冒頭就敲，後半段會越來越瘋。';
   $('#pikminResult').classList.remove('show');$('#pikminResult').innerHTML='';
+  const finalOverlay=$('#pikminFinalScoreOverlay');
+  if(finalOverlay)finalOverlay.classList.remove('show');
   $('#pikminStartBtn').textContent='🔄 重新開始';
   $('#pikminStage').classList.add('pikmin-playing');
   startPikminMusic();pikminVibrate(45);
@@ -4674,6 +4802,16 @@ function endPikminGame(){
   $('#pikminStage').classList.remove('pikmin-playing');$('#pikminTime').textContent='0.0';$('#pikminStartBtn').textContent='🎮 再玩一局';
   const history=store.get('pikminScores',[]);history.unshift(record);store.set('pikminScores',history.slice(0,60));
   const msg=pikminEndMessage(record.score);
+
+  const finalOverlay=$('#pikminFinalScoreOverlay');
+  const finalNumber=$('#pikminFinalScoreNumber');
+  if(finalOverlay && finalNumber){
+    finalNumber.textContent=String(record.score);
+    finalOverlay.classList.remove('show');
+    void finalOverlay.offsetWidth;
+    finalOverlay.classList.add('show');
+  }
+
   $('#pikminResult').innerHTML=`<strong>${record.score} 分！</strong><div>${esc(msg)}<br><small>命中 ${record.hits} 次・打空 ${record.misses} 次・最高 Combo ${record.maxCombo}</small></div>`;
   $('#pikminResult').classList.add('show');$('#pikminStatus').textContent='本局已自動保存到歷史成績。';
   renderPikminHistory();playPikminEndSound();pikminVibrate([55,35,55,35,90]);
@@ -6745,28 +6883,94 @@ function clearAllPasswordHistory(){
   if(!confirm(`確定清除全部 ${list.length} 筆密碼紀錄？此動作無法復原。`))return;
   store.set('passwordHistory',[]);
   pwdVisibleIds.clear();
+  const search=$('#pwdHistorySearch');
+  if(search)search.value='';
   renderPasswordHistory();
   $('#pwdInfo').textContent='已清除全部密碼紀錄。';
+}
+
+function getPasswordHistorySearchKeyword(){
+  return ($('#pwdHistorySearch')?.value||'').trim().toLocaleLowerCase('zh-TW');
+}
+
+function passwordHistoryMatchesKeyword(item,keyword){
+  if(!keyword)return true;
+
+  // 安全考量：只搜尋「名稱／網站」與「帳號／用途」，
+  // 不以真正的密碼內容作為搜尋欄位，避免無意間暴露密碼。
+  const searchable=[
+    item?.name||'',
+    item?.account||''
+  ].join(' ').toLocaleLowerCase('zh-TW');
+
+  return searchable.includes(keyword);
+}
+
+function filterPasswordHistory(){
+  renderPasswordHistory();
+}
+
+function clearPasswordHistorySearch(){
+  const input=$('#pwdHistorySearch');
+  if(input){
+    input.value='';
+    input.focus();
+  }
+  renderPasswordHistory();
 }
 
 function renderPasswordHistory(){
   const el=$('#pwdHistoryList');
   if(!el)return;
+
   const list=store.get('passwordHistory',[]);
-  $('#pwdHistoryCount').textContent=`${list.length} 筆`;
-  $('#pwdClearAllBtn').style.display=list.length?'block':'none';
+  const keyword=getPasswordHistorySearchKeyword();
+  const filtered=keyword
+    ? list.filter(item=>passwordHistoryMatchesKeyword(item,keyword))
+    : list;
+
+  const countEl=$('#pwdHistoryCount');
+  if(countEl){
+    countEl.textContent=keyword
+      ? `${filtered.length} / ${list.length} 筆`
+      : `${list.length} 筆`;
+  }
+
+  const clearAll=$('#pwdClearAllBtn');
+  if(clearAll)clearAll.style.display=list.length?'block':'none';
+
+  const clearSearch=$('#pwdHistorySearchClear');
+  if(clearSearch)clearSearch.classList.toggle('show',!!keyword);
+
+  const status=$('#pwdHistorySearchStatus');
+  if(status){
+    if(!list.length){
+      status.textContent='尚未保存密碼紀錄。';
+    }else if(keyword){
+      status.textContent=filtered.length
+        ? `找到 ${filtered.length} 筆符合「${keyword}」的紀錄。`
+        : `找不到符合「${keyword}」的紀錄。`;
+    }else{
+      status.textContent='可依名稱／網站、帳號／用途即時查詢。';
+    }
+  }
 
   if(!list.length){
     el.innerHTML='<div class="empty">目前沒有保存的密碼紀錄</div>';
     return;
   }
 
-  el.innerHTML=list.map(item=>{
+  if(!filtered.length){
+    el.innerHTML='<div class="empty">🔎 沒有符合關鍵字的密碼紀錄</div>';
+    return;
+  }
+
+  el.innerHTML=filtered.map(item=>{
     const visible=pwdVisibleIds.has(item.id);
     const time=new Date(item.createdAt).toLocaleString('zh-TW',{
       year:'numeric',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'
     });
-    return `<div class="pwd-history-item">
+    return `<div class="pwd-history-item${keyword?' pwd-search-match':''}">
       <div class="pwd-history-title">${esc(item.name)}</div>
       <div class="pwd-history-meta">${item.account?esc(item.account)+' · ':''}${esc(time)}</div>
       <div class="pwd-history-secret">${visible?esc(item.password):passwordMask(item.password)}</div>
